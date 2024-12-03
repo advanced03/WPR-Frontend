@@ -14,20 +14,24 @@ const Login = () => {
                                 <Form.Label>Gebruikersnaam</Form.Label>
                                 <Form.Control 
                                     type="text" 
-                                    placeholder="Voer je gebruikersnaam in" 
+                                    placeholder="Voer uw gebruikersnaam in" 
                                 />
                             </Form.Group>
                             <Form.Group controlId="formPassword" className="mb-3">
                                 <Form.Label>Wachtwoord</Form.Label>
                                 <Form.Control 
                                     type="password" 
-                                    placeholder="Voer je wachtwoord in" 
+                                    placeholder="Voer uw wachtwoord in" 
                                 />
                             </Form.Group>
                             <Button variant="primary" type="submit" className="w-100">
                                 Inloggen
                             </Button>
                         </Form>
+                        {/* Voeg de tekst en de klikbare link hieronder toe */}
+                        <div className="mt-3 text-center">
+                            <span>Heeft u nog <a href="/register">geen account</a>?</span>
+                        </div>
                     </div>
                 </Col>
             </Row>

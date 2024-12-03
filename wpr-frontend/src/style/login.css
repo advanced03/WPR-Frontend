@@ -1,16 +1,16 @@
 .login-container {
-    margin-top: 100px;
+    margin-top: 20rem;
 }
 
 .login-card {
-    background-color: #f8f9fa;
+    background-color: #F4E9DAff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .login-card h2 {
-    color: #007bff;
+    color: #600339ff;
     font-weight: bold;
 }
 
@@ -19,11 +19,15 @@
 }
 
 .login-card .btn-primary {
-    background-color: #007bff;
+    background-color: #600339ff;
     border: none;
     transition: background-color 0.3s ease;
 }
 
 .login-card .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #55022f;
+}
+.login-card .btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 5px #55022f;
 }
