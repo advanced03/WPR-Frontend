@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import './login.css'; // Importeer je custom CSS
+import '../style/login.css'; 
 
 const Login = () => {
     return (
