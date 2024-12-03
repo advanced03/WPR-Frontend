@@ -31,3 +31,7 @@
     outline: none;
     box-shadow: 0 0 5px #55022f;
 }
+
+.login-container .login-card .mt-3 a {
+    text-decoration: none;
+}

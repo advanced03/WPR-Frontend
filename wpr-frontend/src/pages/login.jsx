@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import '../style/login.css'; 
+import { Link } from 'react-router-dom';
+import '../style/login.css';
 
 const Login = () => {
     return (
@@ -28,9 +29,8 @@ const Login = () => {
                                 Inloggen
                             </Button>
                         </Form>
-                        {/* Voeg de tekst en de klikbare link hieronder toe */}
                         <div className="mt-3 text-center">
-                            <span>Heeft u nog <a href="/register">geen account</a>?</span>
+                            <span>Heeft u nog <Link to="/register">geen account</Link>?</span>
                         </div>
                     </div>
                 </Col>
