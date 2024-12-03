@@ -1,0 +1,29 @@
+.login-container {
+    margin-top: 100px;
+}
+
+.login-card {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h2 {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.login-card .form-control {
+    border-radius: 5px;
+}
+
+.login-card .btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.login-card .btn-primary:hover {
+    background-color: #0056b3;
+}
