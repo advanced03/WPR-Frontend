@@ -25,7 +25,7 @@ const Register = () => {
                                 />
                             </Form.Group>
                             <Form.Group controlId="formEmail" className="mb-3">
-                                <Form.Label>E-Mail</Form.Label>
+                                <Form.Label>E-mail</Form.Label>
                                 <Form.Control 
                                     type="email" 
                                     placeholder="Voer uw e-mail in" 
