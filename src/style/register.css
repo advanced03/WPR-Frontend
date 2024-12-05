@@ -1,8 +1,8 @@
-.register-container {
-    margin-top: 20rem;
+.RegistratieContainer {
+    margin-top: 10rem;
 }
 
-.register-card {
+.RegistratieKaart {
     background-color: rgba(255, 255, 255, 0.5); 
     backdrop-filter: blur(12px);
     padding: 30px;
@@ -11,35 +11,35 @@
 }
 
 
-.register-card h2 {
+.RegistratieKaart h2 {
     color: #600339ff;
     font-weight: bold;
 }
 
-.register-card .form-control {
+.RegistratieKaart .form-control {
     border-radius: 5px;
 }
 
-.register-card .btn-primary {
+.RegistratieKaart .btn-primary {
     background-color: #600339ff;
     border: none;
     transition: background-color 0.3s ease;
     border-radius: 20px;
 }
 
-.register-card .btn-primary:hover {
+.RegistratieKaart .btn-primary:hover {
     background-color: #55022f;
 }
 
-.register-card .btn-primary:focus {
+.RegistratieKaart .btn-primary:focus {
     outline: none;
     box-shadow: 0 0 5px #55022f;
 }
 
-.link-to-login {
+.LoginLink {
     border: none;
     background: none;
-    color: #007bff;
+    color: blue;
     cursor: pointer;
     padding: 0;
     font-size: inherit;

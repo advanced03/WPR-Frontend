@@ -1,8 +1,8 @@
-.login-container {
-    margin-top: 24rem;
+.LoginContainer {
+    margin-top: 25rem;
 }
 
-.login-card {
+.LoginKaart {
     background-color: rgba(255, 255, 255, 0.5); 
     backdrop-filter: blur(12px);
     padding: 30px;
@@ -10,31 +10,31 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.login-card h2 {
+.LoginKaart h2 {
     color: #600339;
     font-weight: bold;
 }
 
-.login-card .form-control {
+.LoginKaart .form-control {
     border-radius: 5px;
 }
 
-.login-card .btn-primary {
+.LoginKaart .btn-primary {
     background-color: #600339ff;
     border: none;
     transition: background-color 0.3s ease;
     border-radius: 20px;
 }
 
-.login-card .btn-primary:hover {
+.LoginKaart .btn-primary:hover {
     background-color: #55022f;
 }
-.login-card .btn-primary:focus {
+.LoginKaart .btn-primary:focus {
     outline: none;
     box-shadow: 0 0 5px #55022f;
 }
 
-.login-container .login-card .mt-3 a {
+.Log .LoginKaart .mt-3 a {
     text-decoration: none;
 }
 

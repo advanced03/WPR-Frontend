@@ -1,15 +1,21 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 import '../style/login.css';
 import '../style/achtergrond.css';
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const handlePartRegisterDirect = () => {
+        navigate('/PartRegister');
+    };
+
     return (
-        <Container className="login-container">
+        <Container className="LoginContainer">
             <Row className="justify-content-center">
                 <Col md={6} lg={4}>
-                    <div className="login-card">
+                    <div className="LoginKaart">
                         <h2 className="text-center mb-4">Inloggen</h2>
                         <Form>
                             <Form.Group controlId="formUsername" className="mb-3">
@@ -31,7 +37,7 @@ const Login = () => {
                             </Button>
                         </Form>
                         <div className="mt-3 text-center">
-                            <span>Heeft u nog <Link to="/register">geen account</Link>?</span>
+                            <span>Heeft u nog <button onClick={handlePartRegisterDirect} className="LoginLink">geen account</button>?</span>
                         </div>
                     </div>
                 </Col>
