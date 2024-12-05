@@ -1,16 +1,17 @@
 .login-container {
-    margin-top: 20rem;
+    margin-top: 24rem;
 }
 
 .login-card {
-    background-color: #F4E9DAff;
+    background-color: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(12px);
     padding: 30px;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .login-card h2 {
-    color: #600339ff;
+    color: #600339;
     font-weight: bold;
 }
 
@@ -22,6 +23,7 @@
     background-color: #600339ff;
     border: none;
     transition: background-color 0.3s ease;
+    border-radius: 20px;
 }
 
 .login-card .btn-primary:hover {
@@ -35,3 +37,6 @@
 .login-container .login-card .mt-3 a {
     text-decoration: none;
 }
+
+
+  

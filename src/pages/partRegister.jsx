@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
-import '../style/register.css'; // Ensure the correct CSS file is imported
+import '../style/register.css';
+import '../style/achtergrond.css';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -29,6 +30,14 @@ const Register = () => {
                                 <Form.Control 
                                     type="email" 
                                     placeholder="Voer uw e-mail in" 
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formPhone" className="mb-3">
+                                <Form.Label>Telefoonnummer</Form.Label>
+                                <Form.Control 
+                                    type="tel" 
+                                    placeholder="Voer uw telefoonnummer in" 
+                                    pattern="^(?:\31|0)[1-9]{1}[0-9]{8}$"
                                 />
                             </Form.Group>
                             <Form.Group controlId="formPassword" className="mb-3">

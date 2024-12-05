@@ -1,15 +1,15 @@
-/* register.css */
-
 .register-container {
-    margin-top: 15rem;
+    margin-top: 20rem;
 }
 
 .register-card {
-    background-color: #F4E9DAff;
+    background-color: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(12px);
     padding: 30px;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 .register-card h2 {
     color: #600339ff;
@@ -24,6 +24,7 @@
     background-color: #600339ff;
     border: none;
     transition: background-color 0.3s ease;
+    border-radius: 20px;
 }
 
 .register-card .btn-primary:hover {
@@ -35,7 +36,6 @@
     box-shadow: 0 0 5px #55022f;
 }
 
-/* Style for the login redirect button */
 .link-to-login {
     border: none;
     background: none;
@@ -44,3 +44,4 @@
     padding: 0;
     font-size: inherit;
 }
+  
