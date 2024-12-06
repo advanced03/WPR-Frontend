@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
 import '../style/register.css';
-import '../style/achtergrond.css';
 
 const ZakelijkRegister = () => {
     const [rol, setRol] = useState('frontoffice'); // Standaard instellen op Frontoffice
@@ -15,7 +14,7 @@ const ZakelijkRegister = () => {
     return (
         <Container className="RegistratieContainer">
             <Row className="justify-content-center">
-                <Col md={6} lg={4}>
+                <Col>
                     <div className="RegistratieKaart">
                         <h2 className="text-center mb-4">Zakelijk Registreren</h2>
                         <Form>

@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
 import '../style/login.css';
-import '../style/achtergrond.css';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ const Login = () => {
     return (
         <Container className="LoginContainer">
             <Row className="justify-content-center">
-                <Col md={6} lg={4}>
+                <Col>
                     <div className="LoginKaart">
                         <h2 className="text-center mb-4">Inloggen</h2>
                         <Form>

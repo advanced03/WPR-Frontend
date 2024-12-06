@@ -1,10 +1,9 @@
 .RegistratieContainer {
     margin-top: 10rem;
+    max-width: 600px;
 }
 
 .RegistratieKaart {
-    background-color: rgba(255, 255, 255, 0.5); 
-    backdrop-filter: blur(12px);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
