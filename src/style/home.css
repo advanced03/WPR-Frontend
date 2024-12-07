@@ -9,28 +9,12 @@
 }
 
 .home-image-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   transform: translateY(10%);
   transition: transform 0.3s ease;
 }
 
 .home-image-container:hover::after {
   transform: translateY(0);
-}
-
-.home-titel {
-  text-align: center;
-  margin-bottom: 20rem;
-  margin-top: 2rem;
-}
-
-.home-titel h1 {
-  font-weight: bold;
 }
 
 .row {
@@ -51,4 +35,32 @@
 .home-btn:focus {
   outline: none;
   box-shadow: 0 0 5px #55022f;
+}
+
+.home-titel {
+  background-color: #55022f;
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.home-titel h1 {
+ font-weight: bold;
+}
+
+.home-inhoud {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: gray;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.foto-rij {
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
 }
