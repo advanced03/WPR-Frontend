@@ -11,6 +11,8 @@ const PartRegister = () => {
     };
 
     return (
+    <>
+        <div className='achtergrond'></div>
         <Container className="RegistratieContainer">
             <Row className="justify-content-center">
                 <Col>
@@ -64,6 +66,7 @@ const PartRegister = () => {
                 </Col>
             </Row>
         </Container>
+    </>
     );
 };
 

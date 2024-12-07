@@ -1,13 +1,32 @@
+.achtergrond {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/achtergrond.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(12px); 
+    z-index: -1; 
+}
+
 .LoginContainer {
-    margin-top: 25rem;
-    max-width: 600px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
 }
 
 .LoginKaart {
+    min-width: 500px;
+    background-color: white;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
 }
+
 
 .LoginKaart h2 {
     color: #600339;
@@ -36,6 +55,3 @@
 .Log .LoginKaart .mt-3 a {
     text-decoration: none;
 }
-
-
-  
