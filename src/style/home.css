@@ -1,0 +1,54 @@
+.home-image-container {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.home-image-container:hover {
+  transform: translateY(-10%);
+}
+
+.home-image-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(10%);
+  transition: transform 0.3s ease;
+}
+
+.home-image-container:hover::after {
+  transform: translateY(0);
+}
+
+.home-titel {
+  text-align: center;
+  margin-bottom: 20rem;
+  margin-top: 2rem;
+}
+
+.home-titel h1 {
+  font-weight: bold;
+}
+
+.row {
+  align-items: center;
+}
+
+.home-btn {
+  background-color: #600339ff;
+  border: none;
+  transition: background-color 0.3s ease;
+  border-radius: 20px;
+}
+
+.home-btn:hover {
+  background-color: #55022f;
+}
+
+.home-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px #55022f;
+}
