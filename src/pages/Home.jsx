@@ -2,6 +2,10 @@ import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/home.css';
+import auto from '../assets/auto.png';
+import caravan from '../assets/caravan.png';
+import camper from '../assets/camper.png';
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,17 +22,17 @@ const Home = () => {
       <Row className="justify-content-center foto-rij">
         <Col>
           <div className="home-image-container">
-            <img src="src/assets/auto.png" className="img-fluid" alt="Auto" />
+            <img src={auto} className="img-fluid" alt="Auto" />
           </div>
         </Col>
         <Col>
           <div className="home-image-container">
-            <img src="src/assets/caravan.png" className="img-fluid" alt="Caravan" />
+            <img src={caravan} className="img-fluid" alt="Caravan" />
           </div>
         </Col>
         <Col>
           <div className="home-image-container">
-            <img src="src/assets/camper.png" className="img-fluid" alt="Camper" />
+            <img src={camper} className="img-fluid" alt="Camper" />
           </div>
         </Col>
       </Row>
