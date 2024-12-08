@@ -33,7 +33,7 @@ const Login = () => {
                                         placeholder="Voer uw wachtwoord in"
                                     />
                                 </Form.Group>
-                                <Button variant="primary" type="submit" className="w-100">
+                                <Button type="submit" className="w-100">
                                     Inloggen
                                 </Button>
                             </Form>

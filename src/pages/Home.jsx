@@ -39,14 +39,12 @@ const Home = () => {
 
       <div className="text-center">
         <Button
-          variant="primary"
           className="mx-2 btn-lg home-btn"
           onClick={() => handleNavigation('/Login')}
         >
           Login
         </Button>
         <Button
-          variant="primary"
           className="mx-2 my-5 btn-lg home-btn"
           onClick={() => handleNavigation('/ZakelijkRegister')}
         >

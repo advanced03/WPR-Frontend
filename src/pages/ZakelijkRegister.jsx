@@ -91,7 +91,7 @@ const ZakelijkRegister = () => {
                                 />
                             </Form.Group>
 
-                            <Button variant="primary" type="submit" className="w-100">
+                            <Button type="submit" className="w-100">
                                 Registreren
                             </Button>
                         </Form>
