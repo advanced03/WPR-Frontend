@@ -102,7 +102,7 @@ const ZakelijkRegister = () => {
         <button
             type="button"
             onClick={() => handleLoginRedirect('/Login')}
-            className="LoginLink"
+            className="Link"
         >
             account
         </button>

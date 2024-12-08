@@ -38,7 +38,7 @@ const Login = () => {
                                 </Button>
                             </Form>
                             <div className="mt-3 text-center">
-                                <span>Heeft u al een <button onClick={() => handleNavigation('/PartRegister')} className="LoginLink">account</button>?</span>
+                                <span>Heeft u al een <button onClick={() => handleNavigation('/PartRegister')} className="Link">account</button>?</span>
                             </div>
 
                         </div>

@@ -65,7 +65,7 @@ const PartRegister = () => {
                                     <button
                                         type="button"
                                         onClick={() => handleNavigation('/login')}
-                                        className="LoginLink"
+                                        className="Link"
                                     >
                                         account
                                     </button>
