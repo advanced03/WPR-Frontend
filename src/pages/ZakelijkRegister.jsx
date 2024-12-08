@@ -7,10 +7,10 @@ const ZakelijkRegister = () => {
     const [rol, setRol] = useState('frontoffice'); // Standaard instellen op Frontoffice
     const navigate = useNavigate();
 
-    const handleLoginRedirect = () => {
-        navigate('/Login');
+    const handleLoginRedirect = (path) => {
+        navigate(path);
     };
-
+    
     return (
     <>
         <div className='achtergrond'></div>
@@ -97,8 +97,19 @@ const ZakelijkRegister = () => {
                         </Form>
 
                         <div className="mt-3 text-center">
-                            <span>Heeft u al een <button onClick={handleLoginRedirect} className="LoginLink">account</button>?</span>
-                        </div>
+    <span>
+        Heeft u al een{' '}
+        <button
+            type="button"
+            onClick={() => handleLoginRedirect('/Login')}
+            className="LoginLink"
+        >
+            account
+        </button>
+        ?
+    </span>
+</div>
+
                     </div>
                 </Col>
             </Row>
