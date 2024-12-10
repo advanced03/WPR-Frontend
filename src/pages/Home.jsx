@@ -24,26 +24,26 @@ const Home = () => {
           <Col xs={12} md={4} className="mb-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2 text-center">Auto's</h3>
-              <img src={auto} className="img-fluid" alt="Auto" />
+              <img src={auto} className="img-fluid p-1" alt="Auto" />
             </div>
           </Col>
           <Col xs={12} md={4} className="mb-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2 text-center">Caravans</h3>
-              <img src={caravan} className="img-fluid" alt="Caravan" />
+              <img src={caravan} className="img-fluid p-1" alt="Caravan" />
             </div>
           </Col>
           <Col xs={12} md={4} className="mb-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2 text-center">Campers</h3>
-              <img src={camper} className="img-fluid" alt="Camper" />
+              <img src={camper} className="img-fluid p-1" alt="Camper" />
             </div>
           </Col>
         </Row>
       </Container>
 
       <div className="text-center">
-  <Row className="justify-content-center">
+  <Row className="justify-content-center mx-3">
     <Col xs={12} md={2} className="mb-2">
       <Button
         className="btn-lg home-btn w-100"
@@ -64,7 +64,7 @@ const Home = () => {
 </div>
 
 
-      <div className="text-center fixed-bottom home-inhoud">
+      <div className="text-center home-inhoud">
         <Container>
           <Row>
             <Col xs={12} md={6}>
