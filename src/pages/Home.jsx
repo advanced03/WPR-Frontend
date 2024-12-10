@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/home.css';
 import auto from '../assets/auto.png';
@@ -15,82 +15,79 @@ const Home = () => {
 
   return (
     <>
-      <div className='achtergrond2'></div>
-      <div className="home-titel">
+      <div className="achtergrond2"></div>
+      <div className="home-titel text-center">
         <h1>Welkom bij Car And All!</h1>
       </div>
-      <Row className="justify-content-center foto-rij">
-        <Col>
-          <div className="home-image-container">
-            <h3 className='HomeFotoTekst'>Auto's</h3>
-            <img src={auto} className="img-fluid" alt="Auto" />
-          </div>
-        </Col>
-        <Col>
-          <div className="home-image-container">
-            <h3 className='HomeFotoTekst'>Caravans</h3>
-            <img src={caravan} className="img-fluid" alt="Caravan" />
-          </div>
-        </Col>
-        <Col>
-          <div className="home-image-container">
-            <h3 className='HomeFotoTekst'>Campers</h3>
-            <img src={camper} className="img-fluid" alt="Camper" />
-          </div>
-        </Col>
-      </Row>
-
-      <div className="button-div text-center">
-        <Button
-          className="mx-2 btn-lg home-btn"
-          onClick={() => handleNavigation('/Login')}
-        >
-          Login
-        </Button>
-        <Button
-          className="btn-lg home-btn"
-          onClick={() => handleNavigation('/ZakelijkRegister')}
-        >
-          Medewerker
-        </Button>
-
-        <div className="text-center mt-3">
-          <span>
-            Werkt u voor Car And All?{' '}
-            <button
-              onClick={() => handleNavigation('/ZakelijkRegister')}
-              className="Link"
-            >
-              Klik hier
-            </button>{' '}
-            om u aan te melden voor een werknemer account.
-          </span>
-        </div>
-      </div>
-
-      <div className="text-center home-inhoud">
-        <Row>
-          <Col md={6}>
-          <h3>Over ons</h3>
-            <p>
-              Welkom bij Car And All! Wij bieden een uitgebreid assortiment auto's, caravans en campers tegen scherpe huurprijzen.
-              Of je nu een weekendtrip plant of een langere reis, wij hebben het perfecte voertuig voor jou.
-              Maak vandaag nog een account aan en begin jouw avontuur op de weg!
-            </p>
+      <Container>
+        <Row className="justify-content-center p-4 mt-5 foto-rij">
+          <Col xs={12} md={4} className="mb-4">
+            <div className="home-image-container">
+              <h3 className="HomeFotoTekst mt-2 text-center">Auto's</h3>
+              <img src={auto} className="img-fluid" alt="Auto" />
+            </div>
           </Col>
-          <Col md={6}>
-            <h3>Waarom kiezen voor Car And All?</h3>
-            <ul className="list-unstyled">
-              <li>✔ Groot aanbod aan voertuigen</li>
-              <li>✔ Flexibele en transparante voorwaarden</li>
-              <li>✔  Altijd hulp van onze vriendelijke klantenservice</li>
-            </ul>
+          <Col xs={12} md={4} className="mb-4">
+            <div className="home-image-container">
+              <h3 className="HomeFotoTekst mt-2 text-center">Caravans</h3>
+              <img src={caravan} className="img-fluid" alt="Caravan" />
+            </div>
+          </Col>
+          <Col xs={12} md={4} className="mb-4">
+            <div className="home-image-container">
+              <h3 className="HomeFotoTekst mt-2 text-center">Campers</h3>
+              <img src={camper} className="img-fluid" alt="Camper" />
+            </div>
           </Col>
         </Row>
-      </div>
+      </Container>
 
+      <div className="text-center">
+  <Row className="justify-content-center">
+    <Col xs={12} md={2} className="mb-2">
+      <Button
+        className="btn-lg home-btn w-100"
+        onClick={() => handleNavigation('/Login')}
+      >
+        Login
+      </Button>
+    </Col>
+    <Col xs={12} md={2} className="mb-2">
+      <Button
+        className="btn-lg home-btn w-100"
+        onClick={() => handleNavigation('/ZakelijkRegister')}
+      >
+        Medewerker
+      </Button>
+    </Col>
+  </Row>
+</div>
+
+
+      <div className="text-center fixed-bottom home-inhoud">
+        <Container>
+          <Row>
+            <Col xs={12} md={6}>
+              <h3>Over ons</h3>
+              <p>
+                Welkom bij Car And All! Wij bieden een uitgebreid assortiment auto's, caravans en campers tegen scherpe huurprijzen.
+                Of je nu een weekendtrip plant of een langere reis, wij hebben het perfecte voertuig voor jou.
+                Maak vandaag nog een account aan en begin jouw avontuur op de weg!
+              </p>
+            </Col>
+            <Col xs={12} md={6}>
+              <h3>Waarom kiezen voor Car And All?</h3>
+              <ul className="list-unstyled">
+                <li>✔ Groot aanbod aan voertuigen</li>
+                <li>✔ Flexibele en transparante voorwaarden</li>
+                <li>✔ Altijd hulp van onze vriendelijke klantenservice</li>
+              </ul>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </>
   );
-}
+};
 
 export default Home;
