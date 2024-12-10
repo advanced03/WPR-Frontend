@@ -17,7 +17,7 @@ const Huren = () => {
         } else {
             setError('');
             setSucces(true);
-            // Hier kun je logica toevoegen om de reservering te verwerken
+            // Nog een snel begin nog niet de eindversie!
         }
     };
 
