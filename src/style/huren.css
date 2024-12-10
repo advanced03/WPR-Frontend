@@ -1,0 +1,11 @@
+.huren-achtergrond {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.huur-kaart {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
