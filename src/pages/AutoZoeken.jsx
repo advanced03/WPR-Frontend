@@ -4,10 +4,8 @@ import '../style/huren.css';
 
 function AutoZoeken() {
     return (
-        <div>
-            <div className="achtergrond2"></div>
             <div className="huren-container">
-                <Container fluid className="d-flex justify-content-center align-items-center vh-100 huren-background">
+                <Container fluid className="d-flex justify-content-center align-items-center huren-background">
                     <Row>
                         <Col className="huren-box mx-3 p-5">
                             <h1 className="text-center huren-titel mb-3">Huren</h1>
@@ -45,7 +43,6 @@ function AutoZoeken() {
                     </Row>
                 </Container>
             </div>
-        </div>
     );
 }
 
