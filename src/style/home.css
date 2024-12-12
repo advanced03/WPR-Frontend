@@ -7,13 +7,13 @@
   background-repeat: no-repeat;
   background-position: center;
   filter: blur(12px);
-  z-index: -1;
+  z-index: -1
 }
 
 .home-image-container {
   overflow: hidden;
   border-radius: 20px;
-  background: linear-gradient(90deg, #4a003a, #c77c5f);
+  background-color: #600339;
 }
 
 .home-image-container img {
@@ -22,31 +22,31 @@
   display: block;
 }
 
-.home-btn {
-  background-color: #600339ff;
+.knop {
+  background-color: #600339;
   border: none;
-  border-radius: 20px;
+  border-radius: 12px;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.home-btn:hover {
-  background-color: #55022f;
+.knop:hover {
+  background-color: #6F1C4C;
   transform: scale(1.05);
 }
 
-.home-btn:focus {
+.knop:focus {
   outline: none;
-  box-shadow: 0 0 5px #55022f;
+  box-shadow: 0 0 5px #6F1C4C;
 }
 
 .home-titel {
-  background: linear-gradient(90deg, #55022f, #6e1332);
+  background-color: #600339;
   color: white;
   padding: 10px;
 }
 
 .home-inhoud {
-  background: linear-gradient(90deg, #4a003a, #c77c5f);
+  background-color: #600339;
   color: white;
   padding: 1.5rem;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);

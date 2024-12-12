@@ -38,22 +38,6 @@
     border-radius: 5px;
 }
 
-.RegistratieKaart .btn-primary {
-    background-color: #600339ff;
-    border: none;
-    transition: background-color 0.3s ease;
-    border-radius: 20px;
-}
-
-.RegistratieKaart .btn-primary:hover {
-    background-color: #55022f;
-}
-
-.RegistratieKaart .btn-primary:focus {
-    outline: none;
-    box-shadow: 0 0 5px #55022f;
-}
-
 .Link {
     border: none;
     background: none;

@@ -6,7 +6,9 @@ import PartRegister from './pages/partRegister.jsx';
 import Login from './pages/login.jsx';
 import ZakelijkRegister from './pages/ZakelijkRegister.jsx';
 import Home from './pages/Home.jsx';
-import Huren from './pages/Huren.jsx';
+import AutoZoeken from './pages/AutoZoeken.jsx';
+import AutoVinden from './pages/AutoVinden.jsx';
+import HuurVerzoek from './pages/HuurVerzoek.jsx';
 
 const App = () => {
     return (
@@ -16,7 +18,9 @@ const App = () => {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
                 <Route path="/ZakelijkRegister" element={<ZakelijkRegister />} />
-                <Route path="/Huren" element={<Huren />} />
+                <Route path="/AutoZoeken" element={<AutoZoeken />} />
+                <Route path="/AutoVinden" element={<AutoVinden />} />
+                <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
             </Routes>
         </Router>
     );

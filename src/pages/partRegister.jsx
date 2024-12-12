@@ -71,7 +71,7 @@ const PartRegister = () => {
                             )}
                             <Form onSubmit={handleRegister}>
                                 <Form.Group controlId="formUsername" className="mb-3">
-                                    <Form.Label>Gebruikersnaam</Form.Label>
+                                    <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
@@ -80,7 +80,7 @@ const PartRegister = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formEmail" className="mb-3">
-                                    <Form.Label>E-mail</Form.Label>
+                                    <Form.Label>📧 E-Mail</Form.Label>
                                     <Form.Control
                                         type="email"
                                         placeholder="Voer uw e-mail in"
@@ -89,7 +89,7 @@ const PartRegister = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPhone" className="mb-3">
-                                    <Form.Label>Telefoonnummer</Form.Label>
+                                    <Form.Label>📞 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
@@ -98,7 +98,7 @@ const PartRegister = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
-                                    <Form.Label>Wachtwoord</Form.Label>
+                                    <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Kies een wachtwoord"
@@ -107,7 +107,7 @@ const PartRegister = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
-                                    <Form.Label>Bevestig wachtwoord</Form.Label>
+                                    <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
@@ -115,8 +115,8 @@ const PartRegister = () => {
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Button type="submit" className="w-100">
-                                    Registreren
+                                <Button type="submit" className="w-100 knop">
+                                    Registreren 🔑
                                 </Button>
                             </Form>
                             <div className="mt-3 text-center">

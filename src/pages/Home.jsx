@@ -45,7 +45,7 @@ const Home = () => {
       <div className="text-center">
   <Row className="justify-content-center mx-3 mt-5">
     <Col xs={12} md={2} className="mb-2">
-      <Button className="btn-lg home-btn w-100" onClick={() => handleNavigation('/Login')}>Login</Button>
+      <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/Login')}>Login</Button>
     </Col>
   </Row>
 </div>

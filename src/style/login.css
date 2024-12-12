@@ -37,21 +37,6 @@
     border-radius: 5px;
 }
 
-.LoginKaart .btn-primary {
-    background-color: #600339ff;
-    border: none;
-    transition: background-color 0.3s ease;
-    border-radius: 20px;
-}
-
-.LoginKaart .btn-primary:hover {
-    background-color: #55022f;
-}
-.LoginKaart .btn-primary:focus {
-    outline: none;
-    box-shadow: 0 0 5px #55022f;
-}
-
 .Log .LoginKaart .mt-3 a {
     text-decoration: none;
 }

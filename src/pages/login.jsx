@@ -51,7 +51,7 @@ const Login = () => {
                             {error && <Alert variant="danger">{error}</Alert>}
                             <Form onSubmit={handleLogin}>
                                 <Form.Group controlId="formUsername" className="mb-3">
-                                    <Form.Label>Gebruikersnaam</Form.Label>
+                                    <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Voer uw gebruikersnaam in"
@@ -60,7 +60,7 @@ const Login = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
-                                    <Form.Label>Wachtwoord</Form.Label>
+                                    <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Voer uw wachtwoord in"
@@ -68,7 +68,7 @@ const Login = () => {
                                         onChange={(e) => setPassword(e.target.value)} // Update state
                                     />
                                 </Form.Group>
-                                <Button type="submit" className="w-100">
+                                <Button type="submit" className="w-100 knop">
                                     Inloggen
                                 </Button>
                             </Form>
