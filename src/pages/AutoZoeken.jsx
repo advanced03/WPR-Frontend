@@ -15,25 +15,24 @@ function AutoZoeken() {
     <div className="achtergrond2"></div>
       <Container
         fluid
-        className="d-flex justify-content-center align-items-center huren-background"
-      >
+        className="d-flex justify-content-center align-items-center huren-background">
         <Row>
           <Col className="huren-box mx-3 p-5">
             <h1 className="text-center huren-titel mb-3">Huren</h1>
             <Form>
               <Form.Group className="mb-3 text-center">
-                <Form.Label className="mb-3">
+                <Form.Label className="mb-4">
                   Kies het type voertuig dat u wilt huren:
                 </Form.Label>
                 <div className="toggle-center">
                   {/*Als het accounttype overeenkomt met zakelijk moet de disabled prop van react bootstrap gepast worden aan de buttons om ze uit te schakelen*/}
                   <ButtonGroup className="mb-3">
-                    <Button className="knop">Auto</Button>
+                    <Button className="knop">Auto 🚗</Button>
                     <Button className="knop" disabled>
-                      Caravan
+                      Caravan ⛺
                     </Button>
                     <Button className="knop" disabled>
-                      Camper
+                      Camper 🚐
                     </Button>
                   </ButtonGroup>
                 </div>

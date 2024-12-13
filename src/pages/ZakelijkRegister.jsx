@@ -76,7 +76,7 @@ const ZakelijkRegister = () => {
                             )}
                             <Form onSubmit={handleRegister}>
                                 <Form.Group controlId="formRol" className="mb-3">
-                                    <Form.Label>Rol</Form.Label>
+                                    <Form.Label>🛢 Rol</Form.Label>
                                     <Form.Select
                                         value={rol}
                                         onChange={(e) => setRol(e.target.value)}
@@ -88,7 +88,7 @@ const ZakelijkRegister = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="formUsername" className="mb-3">
-                                    <Form.Label>Gebruikersnaam</Form.Label>
+                                    <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
@@ -98,7 +98,7 @@ const ZakelijkRegister = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="formEmail" className="mb-3">
-                                    <Form.Label>E-mail</Form.Label>
+                                    <Form.Label>📧 E-Mail</Form.Label>
                                     <Form.Control
                                         type="email"
                                         placeholder="Voer uw e-mail in"
@@ -109,7 +109,7 @@ const ZakelijkRegister = () => {
 
                                 {rol === 'wagenparkbeheerder' && (
                                     <Form.Group controlId="formBedrijfEmail" className="mb-3">
-                                        <Form.Label>Bedrijf E-mail Tag</Form.Label>
+                                        <Form.Label>📧 Bedrijf E-mail Tag</Form.Label>
                                         <Form.Control
                                             type="email"
                                             placeholder="Voer uw E-Mail tag in (@bedrijf)"
@@ -120,7 +120,7 @@ const ZakelijkRegister = () => {
                                 )}
 
                                 <Form.Group controlId="formBedrijfsnaam" className="mb-3">
-                                    <Form.Label>Bedrijfsnaam</Form.Label>
+                                    <Form.Label>🏢 Bedrijfsnaam</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Voer uw bedrijfsnaam in"
@@ -130,7 +130,7 @@ const ZakelijkRegister = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="formPhone" className="mb-3">
-                                    <Form.Label>Telefoonnummer</Form.Label>
+                                    <Form.Label>📞 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
@@ -140,7 +140,7 @@ const ZakelijkRegister = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="formPassword" className="mb-3">
-                                    <Form.Label>Wachtwoord</Form.Label>
+                                    <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Kies een wachtwoord"
@@ -150,7 +150,7 @@ const ZakelijkRegister = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
-                                    <Form.Label>Bevestig wachtwoord</Form.Label>
+                                    <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"

@@ -45,7 +45,7 @@ const Home = () => {
       <div className="text-center">
   <Row className="justify-content-center mx-3 mt-5">
     <Col xs={12} md={2} className="mb-2">
-      <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/Login')}>Login</Button>
+      <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/Login')}>Login 🔓</Button>
     </Col>
   </Row>
 </div>
@@ -55,7 +55,7 @@ const Home = () => {
         <Container>
           <Row>
             <Col xs={12} md={6}>
-              <h3>Over ons</h3>
+              <h3>Over ons 🌍</h3>
               <p>
                 Welkom bij Car And All! Wij bieden een uitgebreid assortiment auto's, caravans en campers tegen scherpe huurprijzen.
                 Of je nu een weekendtrip plant of een langere reis, wij hebben het perfecte voertuig voor jou.
@@ -63,7 +63,7 @@ const Home = () => {
               </p>
             </Col>
             <Col xs={12} md={6}>
-              <h3>Waarom kiezen voor Car And All?</h3>
+              <h3>Waarom kiezen voor Car And All? 🤔</h3>
               <ul className="list-unstyled">
                 <li>✔ Groot aanbod aan voertuigen</li>
                 <li>✔ Flexibele en transparante voorwaarden</li>

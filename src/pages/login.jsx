@@ -69,7 +69,7 @@ const Login = () => {
                                     />
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop">
-                                    Inloggen
+                                    Inloggen 🔓
                                 </Button>
                             </Form>
                             <div className="mt-3 text-center">

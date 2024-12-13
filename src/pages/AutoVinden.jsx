@@ -14,7 +14,7 @@ const AutoVinden = () => {
     <>
       <div className="achtergrond2"></div>
       <Container fluid>
-        <h1 className="huren-titel text-center">Kies een Auto om te Huren</h1>
+      <h1 className="huren-titel text-center"><br/> Kies een Auto om te Huren</h1>
         <Row className="justify-content-center my-5">
           {wagens.map(wagen => (
             <Col key={wagen.VoertuigId} sm={12} md={6} lg={4} className="my-5">
@@ -23,7 +23,7 @@ const AutoVinden = () => {
                 <Card.Body>
                   <Card.Title>{wagen.Merk} {wagen.model}</Card.Title>
                   <p>Kleur: {wagen.kleur}</p>
-                  <Button className="knop mt-3">Huren</Button>
+                  <Button className="knop mt-3">Huren 🚗</Button>
                 </Card.Body>
               </Card>
             </Col>
