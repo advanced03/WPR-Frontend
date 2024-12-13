@@ -11,7 +11,8 @@ import '../style/huren.css';
 
 const AutoVinden = () => {
   return (
-      <div className="huren-container">    
+    <>
+      <div className="achtergrond2"></div>
       <Container fluid>
         <h1 className="huren-titel text-center">Kies een Auto om te Huren</h1>
         <Row className="justify-content-center my-5">
@@ -29,7 +30,7 @@ const AutoVinden = () => {
           ))}
         </Row>
       </Container>
-      </div>
+    </>
   );
 };
 

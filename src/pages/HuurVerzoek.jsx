@@ -22,7 +22,8 @@ const HuurVerzoek = () => {
   };
 
   return (
-    <div className="huren-container">
+    <>
+      <div className="achtergrond2"></div>
       <Container fluid>
         <h1 className="huren-titel text-center">Uw keuze:</h1>
         <Row>
@@ -104,7 +105,7 @@ const HuurVerzoek = () => {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 };
 

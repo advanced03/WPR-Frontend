@@ -42,7 +42,7 @@ const Login = () => {
 
     return (
         <>
-            <div className="achtergrond"></div>
+            <div className="achtergrond1"></div>
             <Container className="LoginContainer">
                 <Row className="justify-content-center">
                     <Col>
