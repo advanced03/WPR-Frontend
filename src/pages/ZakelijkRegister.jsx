@@ -119,6 +119,18 @@ const ZakelijkRegister = () => {
                                     </Form.Group>
                                 )}
 
+                                {rol === 'wagenparkbeheerder' && (
+                                    <Form.Group controlId="formKVK" className="mb-3">
+                                        <Form.Label>📧 Bedrijf E-mail Tag</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Voer het KVK nummer van uw bedrijf in:"
+                                            value={bedrijfEmail}
+                                            onChange={(e) => setBedrijfEmail(e.target.value)}
+                                        />
+                                    </Form.Group>
+                                )}
+
                                 <Form.Group controlId="formBedrijfsnaam" className="mb-3">
                                     <Form.Label>🏢 Bedrijfsnaam</Form.Label>
                                     <Form.Control
