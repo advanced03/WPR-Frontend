@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import Axios
 import '../style/login.css';
 
 const Login = () => {
@@ -14,24 +15,22 @@ const Login = () => {
         setError(null); // Reset error state
 
         try {
-            const response = await fetch('http://your-backend-url/api/login', { //verander dit naar de echte url van de backend
-                method: 'POST',
+            const response = await axios.post('https://localhost:7281/api/account/Login', { username, password }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }), // Send JSON payload
             });
 
-            if (!response.ok) {
+            if (response.status === 200) {
+                console.log('Login successful:', response.data);
+
+                // Navigate to a different page on success (e.g., dashboard)
+                navigate('/AutoZoeken');
+            } else {
                 throw new Error('Login failed. Please check your credentials.');
             }
-
-            const data = await response.json();
-            console.log('Login successful:', data);
-
-            // Navigate to a different page on success (e.g., dashboard)
-            navigate('/dashboard');
         } catch (error) {
+            console.error('Error logging in:', error);
             setError(error.message); // Display error message
         }
     };
@@ -68,7 +67,7 @@ const Login = () => {
                                         onChange={(e) => setPassword(e.target.value)} // Update state
                                     />
                                 </Form.Group>
-                                <Button type="submit" className="w-100 knop">
+                                <Button type="submit" className="w-100 knop" disabled={!username || !password}>
                                     Inloggen 🔓
                                 </Button>
                             </Form>
