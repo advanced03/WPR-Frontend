@@ -18,11 +18,11 @@ const PartRegister = () => {
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
-        e.preventDefault(); // Prevent page refresh
+        e.preventDefault();
         setError(null);
         setSuccess(false);
 
-        // Validate passwords
+        // Wachtwoorden controleren
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
             return;
@@ -90,6 +90,7 @@ const PartRegister = () => {
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
+                                        required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
                                         value={username}
@@ -99,6 +100,7 @@ const PartRegister = () => {
                                 <Form.Group controlId="formEmail" className="mb-3">
                                     <Form.Label>📧 E-Mail</Form.Label>
                                     <Form.Control
+                                        required
                                         type="email"
                                         placeholder="Voer uw e-mail in"
                                         value={email}
@@ -108,6 +110,7 @@ const PartRegister = () => {
                                 <Form.Group controlId="formPhone" className="mb-3">
                                     <Form.Label>📞 Telefoonnummer</Form.Label>
                                     <Form.Control
+                                        required
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
                                         value={phone}
@@ -117,6 +120,7 @@ const PartRegister = () => {
                                 <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Kies een wachtwoord"
                                         value={password}
@@ -126,6 +130,7 @@ const PartRegister = () => {
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
                                         value={confirmPassword}
