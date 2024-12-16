@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
+import axios from 'axios';
 
 const PartRegister = () => {
     const [username, setUsername] = useState('');
@@ -25,29 +26,42 @@ const PartRegister = () => {
         }
 
         try {
-            const response = await fetch('http://your-backend-url/api/register', { //zet hier de echte link van de backend
-                method: 'POST',
+            const response = await axios.post(`https://localhost:7281/api/account/registerParticulier`, {
+                username,
+                email,
+                phone,
+                password,
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, email, phone, password }), // Send JSON payload
             });
 
-            if (!response.ok) {
-                throw new Error('Registratie mislukt. Probeer het opnieuw.');
+            if (response.status === 201) { // 201 Created
+                setSuccess(true); // Indicate success
+                setUsername('');
+                setEmail('');
+                setPhone('');
+                setPassword('');
+                setConfirmPassword('');
+
+                // Navigate to the login page after registration
+                setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
+            } else {
+                setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
             }
-
-            setSuccess(true); // Indicate success
-            setUsername('');
-            setEmail('');
-            setPhone('');
-            setPassword('');
-            setConfirmPassword('');
-
-            // Navigate to the login page after registration
-            setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
         } catch (error) {
-            setError(error.message); // Show error message
+            console.error('Error during registration:', error);
+            if (error.response) {
+                // Server error
+                setError(error.response.data.message || 'Er is een fout opgetreden tijdens registratie.');
+            } else if (error.request) {
+                // No response from server
+                setError('Geen antwoord van de server. Probeer het later opnieuw.');
+            } else {
+                // Other errors
+                setError(error.message);
+            }
         }
     };
 
