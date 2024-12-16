@@ -13,6 +13,7 @@
   overflow: hidden;
   border-radius: 20px;
   background-color: #600339;
+  height: 100%;
 }
 
 .home-image-container img {
