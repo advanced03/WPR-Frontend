@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
 
+
+// Miss een bericht laten zien als het account succesvol is aangemaakt?
+
 const PartRegister = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');

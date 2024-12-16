@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import '../style/huren.css';
 
 {/* Uiteindelijk moet dit de auto's van de database ophalen en de huurknop moet de data opslaan voor de volgende pagina*/}
+// Pagina's ook om een of andere manier beveiligen zodat je niet zomaar de url kan invullen en echt stap voor stap moet + alleen ingelogde gebruikers.
   const wagens = [
     { VoertuigId: 1, Merk: 'Ford', model: 'Fiesta', kleur: 'Blauw' },
     { VoertuigId: 2, Merk: 'Volkswagen', model: 'Golf', kleur: 'Geel' },

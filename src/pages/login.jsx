@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import '../style/login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null); // For handling errors
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent page refresh
-        setError(null); // Reset error state
+        e.preventDefault();
+        setError(null);
 
         try {
             const response = await axios.post('https://localhost:7281/api/account/Login', { username, password }, {
@@ -24,14 +24,13 @@ const Login = () => {
             if (response.status === 200) {
                 console.log('Login successful:', response.data);
 
-                // Navigate to a different page on success (e.g., dashboard)
                 navigate('/AutoZoeken');
             } else {
                 throw new Error('Login failed. Please check your credentials.');
             }
         } catch (error) {
             console.error('Error logging in:', error);
-            setError(error.message); // Display error message
+            setError(error.message);
         }
     };
 
@@ -55,7 +54,7 @@ const Login = () => {
                                         type="text"
                                         placeholder="Voer uw gebruikersnaam in"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)} // Update state
+                                        onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
@@ -64,7 +63,7 @@ const Login = () => {
                                         type="password"
                                         placeholder="Voer uw wachtwoord in"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)} // Update state
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop" disabled={!username || !password}>
@@ -73,7 +72,7 @@ const Login = () => {
                             </Form>
                             <div className="mt-3 text-center">
                                 <span>
-                                    Heeft u al een{' '}
+                                    Heeft u nog geen{' '}
                                     <button
                                         onClick={() => handleNavigation('/PartRegister')}
                                         className="Link"

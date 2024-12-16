@@ -18,7 +18,7 @@ const ZakelijkRegister = () => {
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
-        e.preventDefault(); // Prevent form submission refresh
+        e.preventDefault();
         setError(null);
         setSuccess(false);
 
@@ -33,16 +33,16 @@ const ZakelijkRegister = () => {
                 rol,
                 username,
                 email,
-                bedrijfEmail: rol === 'wagenparkbeheerder' ? bedrijfEmail : null, // Include only for wagenparkbeheerder
+                bedrijfEmail: rol === 'wagenparkbeheerder' ? bedrijfEmail : null, 
                 bedrijfsnaam,
                 phone,
                 password,
             };
 
-            const response = await fetch('http://your-backend-url/api/register', {// schrijf hier de url van de backend
+            const response = await fetch('http://your-backend-url/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload), // Send JSON payload
+                body: JSON.stringify(payload), 
             });
 
             if (!response.ok) {
@@ -50,7 +50,7 @@ const ZakelijkRegister = () => {
             }
 
             setSuccess(true); // Indicate success
-            setTimeout(() => navigate('/Login'), 2000); // Redirect after 2 seconds
+            setTimeout(() => navigate('/Login'), 2000);
         } catch (error) {
             setError(error.message);
         }
@@ -59,7 +59,7 @@ const ZakelijkRegister = () => {
     const handleLoginRedirect = (path) => {
         navigate(path);
     };
-
+// Zakelijk register in de part register zetten omdat het eigenlijk een particuliere gebruiker is maar alleen auto's kan huren.
     return (
         <>
             <div className="achtergrond1"></div>
