@@ -8,31 +8,35 @@ const HuurGeschiedenis = () => {
       merk: "Volkswagen",
       model: "Golf",
       kleur: "Blauw",
-      periode: "01-12-2024 t/m 10-12-2024",
+      startdatum: "01-12-2024",
+      einddatum: "10-12-2024",
       prijs: 250,
-      status: "Goedgekeurd",
+      status: "In Behandeling",
     },
     {
       merk: "BMW",
       model: "X5",
       kleur: "Zwart",
-      periode: "12-08-2024 t/m 19-08-2024",
+      startdatum: "12-08-2024",
+      einddatum: "19-08-2024",
       prijs: 500,
-      status: "In Behandeling",
+      status: "Goedgekeurd",
     },
     {
       merk: "Mercedes",
       model: "Sprinter",
       kleur: "Wit",
-      periode: "05-10-2024 t/m 15-10-2024",
+      startdatum: "05-10-2024",
+      einddatum: "15-10-2024",
       prijs: 450,
-      status: "Afgekeurd",
+      status: "Goedgekeurd",
     },
     {
       merk: "Audi",
       model: "A3",
       kleur: "Rood",
-      periode: "10-07-2024 t/m 18-07-2024",
+      startdatum: "10-07-2024",
+      einddatum: "18-07-2024",
       prijs: 300,
       status: "Goedgekeurd",
     },
@@ -40,9 +44,10 @@ const HuurGeschiedenis = () => {
       merk: "Peugeot",
       model: "208",
       kleur: "Grijs",
-      periode: "18-04-2024 t/m 25-04-2024",
+      startdatum: "18-04-2024",
+      einddatum: "25-04-2024",
       prijs: 240,
-      status: "In Behandeling",
+      status: "Afgekeurd",
     },
   ]);
 
@@ -51,6 +56,9 @@ const HuurGeschiedenis = () => {
     Afgekeurd: "red",
     "In Behandeling": "gray",
   };
+
+  // Huurdata sorteren
+  const sortedHuurData = [...huurData].sort((a, b) => new Date(b.einddatum) - new Date(a.einddatum));
 
   const handleAnnuleren = (index) => {
     const bevestigen = window.confirm("Weet je zeker dat je dit huurverzoek wilt annuleren?");
@@ -72,20 +80,22 @@ const HuurGeschiedenis = () => {
               <th>Merk</th>
               <th>Model</th>
               <th>Kleur</th>
-              <th>Huurperiode</th>
+              <th>Startdatum</th>
+              <th>Einddatum</th>
               <th>Prijs</th>
               <th>Status</th>
               <th>Actie</th>
             </tr>
           </thead>
           <tbody>
-            {huurData.map((item, index) => (
+            {sortedHuurData.map((item, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.merk}</td>
                 <td>{item.model}</td>
                 <td>{item.kleur}</td>
-                <td>{item.periode}</td>
+                <td>{item.startdatum}</td>
+                <td>{item.einddatum}</td>
                 <td>€{item.prijs}</td>
                 <td style={{ color: statusKleur[item.status] }}>
                   {item.status}
