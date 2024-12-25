@@ -9,6 +9,7 @@ import Home from './pages/Home.jsx';
 import AutoZoeken from './pages/AutoZoeken.jsx';
 import AutoVinden from './pages/AutoVinden.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
+import Profiel from './pages/Profiel.jsx';
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="/AutoZoeken" element={<AutoZoeken />} />
                 <Route path="/AutoVinden" element={<AutoVinden />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
+                <Route path="/Profiel" element={<Profiel />} />
             </Routes>
         </Router>
     );
