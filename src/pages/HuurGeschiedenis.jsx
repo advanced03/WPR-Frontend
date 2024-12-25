@@ -1,10 +1,9 @@
-import React from "react";
-import { Container, Table } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Table, Button } from "react-bootstrap";
 import "../style/huurgeschiedenis.css";
 
 const HuurGeschiedenis = () => {
-  // Mock data met extra velden
-  const huurData = [
+  const [huurData, setHuurData] = useState([
     {
       merk: "Volkswagen",
       model: "Golf",
@@ -12,14 +11,6 @@ const HuurGeschiedenis = () => {
       periode: "01-12-2024 t/m 10-12-2024",
       prijs: 250,
       status: "Goedgekeurd",
-    },
-    {
-      merk: "Mercedes",
-      model: "Sprinter",
-      kleur: "Wit",
-      periode: "05-10-2024 t/m 15-10-2024",
-      prijs: 450,
-      status: "Afgekeurd",
     },
     {
       merk: "BMW",
@@ -30,27 +21,19 @@ const HuurGeschiedenis = () => {
       status: "In Behandeling",
     },
     {
+      merk: "Mercedes",
+      model: "Sprinter",
+      kleur: "Wit",
+      periode: "05-10-2024 t/m 15-10-2024",
+      prijs: 450,
+      status: "Afgekeurd",
+    },
+    {
       merk: "Audi",
       model: "A3",
       kleur: "Rood",
       periode: "10-07-2024 t/m 18-07-2024",
       prijs: 300,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Opel",
-      model: "Corsa",
-      kleur: "Groen",
-      periode: "21-06-2024 t/m 28-06-2024",
-      prijs: 200,
-      status: "Afgekeurd",
-    },
-    {
-      merk: "Ford",
-      model: "Fiesta",
-      kleur: "Geel",
-      periode: "01-05-2024 t/m 10-05-2024",
-      prijs: 220,
       status: "Goedgekeurd",
     },
     {
@@ -61,116 +44,21 @@ const HuurGeschiedenis = () => {
       prijs: 240,
       status: "In Behandeling",
     },
-    {
-      merk: "Renault",
-      model: "Clio",
-      kleur: "Wit",
-      periode: "03-03-2024 t/m 10-03-2024",
-      prijs: 210,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Tesla",
-      model: "Model 3",
-      kleur: "Zilver",
-      periode: "12-02-2024 t/m 20-02-2024",
-      prijs: 600,
-      status: "Afgekeurd",
-    },
-    {
-      merk: "Mazda",
-      model: "CX-5",
-      kleur: "Blauw",
-      periode: "25-01-2024 t/m 01-02-2024",
-      prijs: 350,
-      status: "In Behandeling",
-    },
-    {
-      merk: "Nissan",
-      model: "Qashqai",
-      kleur: "Zwart",
-      periode: "10-12-2023 t/m 17-12-2023",
-      prijs: 330,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Honda",
-      model: "Civic",
-      kleur: "Rood",
-      periode: "05-11-2023 t/m 12-11-2023",
-      prijs: 280,
-      status: "Afgekeurd",
-    },
-    {
-      merk: "Hyundai",
-      model: "Ioniq",
-      kleur: "Grijs",
-      periode: "20-10-2023 t/m 27-10-2023",
-      prijs: 320,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Kia",
-      model: "Sportage",
-      kleur: "Oranje",
-      periode: "15-09-2023 t/m 22-09-2023",
-      prijs: 360,
-      status: "In Behandeling",
-    },
-    {
-      merk: "Fiat",
-      model: "Panda",
-      kleur: "Zilver",
-      periode: "30-08-2023 t/m 06-09-2023",
-      prijs: 180,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Volvo",
-      model: "XC60",
-      kleur: "Blauw",
-      periode: "12-07-2023 t/m 19-07-2023",
-      prijs: 550,
-      status: "Afgekeurd",
-    },
-    {
-      merk: "Jeep",
-      model: "Cherokee",
-      kleur: "Rood",
-      periode: "25-06-2023 t/m 02-07-2023",
-      prijs: 490,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Mazda",
-      model: "MX-5",
-      kleur: "Zwart",
-      periode: "10-05-2023 t/m 17-05-2023",
-      prijs: 350,
-      status: "In Behandeling",
-    },
-    {
-      merk: "Land Rover",
-      model: "Discovery",
-      kleur: "Grijs",
-      periode: "01-04-2023 t/m 08-04-2023",
-      prijs: 600,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Subaru",
-      model: "Forester",
-      kleur: "Groen",
-      periode: "10-03-2023 t/m 17-03-2023",
-      prijs: 420,
-      status: "Afgekeurd",
-    },
-  ];
+  ]);
 
   const statusKleur = {
     Goedgekeurd: "green",
     Afgekeurd: "red",
-    "In Behandeling": "graqy",
+    "In Behandeling": "gray",
+  };
+
+  const handleAnnuleren = (index) => {
+    const bevestigen = window.confirm("Weet je zeker dat je dit huurverzoek wilt annuleren?");
+    if (bevestigen) {
+      const nieuweHuurData = [...huurData];
+      nieuweHuurData[index].status = "Geannuleerd";
+      setHuurData(nieuweHuurData);
+    }
   };
 
   return (
@@ -187,6 +75,7 @@ const HuurGeschiedenis = () => {
               <th>Huurperiode</th>
               <th>Prijs</th>
               <th>Status</th>
+              <th>Actie</th>
             </tr>
           </thead>
           <tbody>
@@ -200,6 +89,16 @@ const HuurGeschiedenis = () => {
                 <td>€{item.prijs}</td>
                 <td style={{ color: statusKleur[item.status] }}>
                   {item.status}
+                </td>
+                <td>
+                  {item.status !== "Afgekeurd" && item.status !== "Geannuleerd" && (
+                    <Button
+                      variant="danger"
+                      onClick={() => handleAnnuleren(index)}
+                    >
+                      Annuleren
+                    </Button>
+                  )}
                 </td>
               </tr>
             ))}

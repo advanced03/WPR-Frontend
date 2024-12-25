@@ -24,7 +24,7 @@ const Login = () => {
             if (response.status === 200) {
                 console.log('Login successful:', response.data);
 
-                navigate('/AutoZoeken');
+                navigate('/Home');
             } else {
                 throw new Error('Login failed. Please check your credentials.');
             }
