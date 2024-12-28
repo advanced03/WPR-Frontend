@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Table, Button } from "react-bootstrap";
-import "../style/huurgeschiedenis.css";
+import "../style/tabel.css";
 
 const HuurGeschiedenis = () => {
   const [huurData, setHuurData] = useState([

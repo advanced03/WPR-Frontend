@@ -10,7 +10,7 @@ import AutoZoeken from './pages/AutoZoeken.jsx';
 import AutoVinden from './pages/AutoVinden.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
 import Profiel from './pages/Profiel.jsx';
-import FoVoertuig from './pages/FoVoertuig.jsx';
+import FoVoertuigStatus from './pages/frontoffice/FoVoertuigStatus.jsx';
 
 const App = () => {
     return (
@@ -24,7 +24,7 @@ const App = () => {
                 <Route path="/AutoVinden" element={<AutoVinden />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
                 <Route path="/Profiel" element={<Profiel />} />
-                <Route path="/FoVoertuig" element={<FoVoertuig />} />
+                <Route path="/FoVoertuigStatus" element={<FoVoertuigStatus />} />
             </Routes>
         </Router>
     );
