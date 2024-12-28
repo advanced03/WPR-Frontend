@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Table, Button, Modal, Row, Col, Card, Form } from 'react-bootstrap';
-import "./././../../style/tabel.css";
+import { Container, Table, Button, Modal, Row, Col, Form } from 'react-bootstrap';
+import "././././../../style/tabel.css";
 
 const FoVoertuigStatus = () => {
   // Mock data voor voertuigen, 5 voertuigen per type
-  const wagens = [
+  const [wagens, setWagens] = useState([
     // Auto's
     {
       id: '1',
@@ -14,6 +14,7 @@ const FoVoertuigStatus = () => {
       color: 'Blauw',
       purchaseYear: '2020',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '2',
@@ -23,6 +24,7 @@ const FoVoertuigStatus = () => {
       color: 'Zwart',
       purchaseYear: '2019',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '3',
@@ -32,6 +34,7 @@ const FoVoertuigStatus = () => {
       color: 'Wit',
       purchaseYear: '2021',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '4',
@@ -41,6 +44,7 @@ const FoVoertuigStatus = () => {
       color: 'Grijs',
       purchaseYear: '2018',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '5',
@@ -50,6 +54,7 @@ const FoVoertuigStatus = () => {
       color: 'Rood',
       purchaseYear: '2022',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
 
     // Caravans
@@ -61,6 +66,7 @@ const FoVoertuigStatus = () => {
       color: 'Wit',
       purchaseYear: '2018',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '7',
@@ -70,6 +76,7 @@ const FoVoertuigStatus = () => {
       color: 'Grijs',
       purchaseYear: '2021',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '8',
@@ -79,6 +86,7 @@ const FoVoertuigStatus = () => {
       color: 'Blauw',
       purchaseYear: '2020',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '9',
@@ -88,6 +96,7 @@ const FoVoertuigStatus = () => {
       color: 'Groen',
       purchaseYear: '2019',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '10',
@@ -97,6 +106,7 @@ const FoVoertuigStatus = () => {
       color: 'Rood',
       purchaseYear: '2022',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
 
     // Campers
@@ -108,6 +118,7 @@ const FoVoertuigStatus = () => {
       color: 'Grijs',
       purchaseYear: '2022',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '12',
@@ -117,6 +128,7 @@ const FoVoertuigStatus = () => {
       color: 'Blauw',
       purchaseYear: '2020',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '13',
@@ -126,6 +138,7 @@ const FoVoertuigStatus = () => {
       color: 'Wit',
       purchaseYear: '2019',
       hasDamage: 'Ja',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '14',
@@ -135,6 +148,7 @@ const FoVoertuigStatus = () => {
       color: 'Rood',
       purchaseYear: '2021',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
     {
       id: '15',
@@ -144,8 +158,9 @@ const FoVoertuigStatus = () => {
       color: 'Zwart',
       purchaseYear: '2022',
       hasDamage: 'Nee',
+      note: '', // Notitieveld toegevoegd
     },
-  ];
+  ]);
 
   const [showModal, setShowModal] = useState(false); // Modal show state
   const [currentwagen, setCurrentwagen] = useState(null); // Huidig geselecteerd voertuig
@@ -154,8 +169,8 @@ const FoVoertuigStatus = () => {
   // Functie om modal te openen met voertuiggegevens
   const handleShowModal = (wagen) => {
     setCurrentwagen(wagen);
+    setNote(wagen.note || ''); // Laad notitie van het geselecteerde voertuig
     setShowModal(true); // Modal openen
-    setNote(''); // Reset notitieveld wanneer de modal opent
   };
 
   // Functie om modal te sluiten
@@ -167,8 +182,16 @@ const FoVoertuigStatus = () => {
   // Functie om notitie toe te voegen
   const handleAddNote = () => {
     if (note.trim()) {
+      const updatedWagens = wagens.map((wagen) => {
+        if (wagen.id === currentwagen.id) {
+          return { ...wagen, note }; // Werk de notitie bij voor het geselecteerde voertuig
+        }
+        return wagen;
+      });
+      setWagens(updatedWagens); // Update de voertuigenlijst
       alert(`Notitie toegevoegd: ${note}`); // Dit is waar je je logica voor het opslaan van notities zou kunnen implementeren
       setNote(''); // Reset notitieveld na toevoegen
+      setShowModal(false); // Sluit modal na toevoegen
     }
   };
 
@@ -185,7 +208,7 @@ const FoVoertuigStatus = () => {
               <th>Kleur</th>
               <th>Aanschafjaar</th>
               <th>Schade</th>
-              <th>Acties</th>
+              <th>Voeg notitie toe</th>
             </tr>
           </thead>
           <tbody>
@@ -198,8 +221,8 @@ const FoVoertuigStatus = () => {
                 <td>{wagen.purchaseYear}</td>
                 <td>{wagen.hasDamage}</td>
                 <td>
-                  <Button className='knop' onClick={() => handleShowModal(wagen)}>
-                    Toon Gegevens
+                  <Button variant='light' onClick={() => handleShowModal(wagen)}>
+                    🖊️
                   </Button>
                 </td>
               </tr>
@@ -207,73 +230,14 @@ const FoVoertuigStatus = () => {
           </tbody>
         </Table>
       </Container>
-
-      {/* Modal met voertuigdetails */}
+      
       {currentwagen && (
         <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
           <Modal.Header closeButton>
-            {/* Dynamische titel: Details van (Bouwjaar) Kleur Merk Model */}
-            <Modal.Title>{`Gegevens over ${currentwagen.color}e ${currentwagen.brand} ${currentwagen.model} (${currentwagen.purchaseYear}) `}</Modal.Title>
+            <Modal.Title>{`Gegevens over ${currentwagen.brand} ${currentwagen.model} ${currentwagen.purchaseYear} ${currentwagen.color}`}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Container>
-              <Row className="mb-4">
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Type</strong></Card.Title>
-                      <Card.Text>{currentwagen.type}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Merk</strong></Card.Title>
-                      <Card.Text>{currentwagen.brand}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-
-              <Row className="mb-4">
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Model</strong></Card.Title>
-                      <Card.Text>{currentwagen.model}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Kleur</strong></Card.Title>
-                      <Card.Text>{currentwagen.color}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-
-              <Row className="mb-4">
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Aanschafjaar</strong></Card.Title>
-                      <Card.Text>{currentwagen.purchaseYear}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={6}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title><strong>Schade</strong></Card.Title>
-                      <Card.Text>{currentwagen.hasDamage}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-
               <Row className="mb-4">
                 <Col>
                   <Form.Group controlId="formNotitie">
