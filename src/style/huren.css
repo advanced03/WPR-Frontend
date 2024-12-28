@@ -11,12 +11,19 @@
 }
 
 .huren-titel {
-    font-weight: bold;
-    color: #600339;
-}
+    font-size: 3rem; 
+    font-weight: bold; 
+    color: #600339; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0); 
+  }
+  
 
 .knop:disabled {
     background-color: #6c757d; 
     border-color: #6c757d; 
     color: #fff;
+}
+
+.titel-achtergrond {
+    background-color: white;
 }

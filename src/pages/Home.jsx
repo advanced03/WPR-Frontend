@@ -48,7 +48,7 @@ const Home = () => {
       <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/Login')}>Login 🔓</Button>
     </Col>
     <Col xs={12} md={2} className="mb-2">
-      <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/AutoZoeken')}>Voertuig huren 🚗</Button>
+      <Button className="knop w-100 btn-lg" onClick={() => handleNavigation('/AutoZoeken')}>Huren 🚗</Button>
     </Col>
   </Row>
 </div>
