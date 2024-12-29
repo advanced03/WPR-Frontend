@@ -1,27 +1,56 @@
 import React, { useState } from 'react';
-import { Container, Col, Card, Button } from 'react-bootstrap';
+import { Container, Col, Card, Button, Modal } from 'react-bootstrap';
 import '../style/backoffice.css'; // Zorg ervoor dat je dit CSS-bestand importeert
 
-// Simulatie van 20 huurverzoeken
-const initialVerzoeken = Array.from({ length: 20 }, (_, index) => ({
-  id: index + 1,
-  naam: `Klant ${index + 1}`,
-  voertuig: index % 2 === 0 ? 'Ford Fiesta' : 'Volkswagen Golf', // Afwisseling van voertuigen
-  adres: `Straatnaam ${index + 1}, Stad ${index + 1}`,
-  rijbewijsNummer: `1234567890${index}`,
-  aardVanRij: index % 2 === 0 ? 'Vakantie' : 'Zakelijk',
-  versteBestemming: index % 2 === 0 ? 'Frankrijk' : 'Duitsland',
-  verwachteKilometers: `${(index + 1) * 100}`,
-  status: 'Wachten', // Alle verzoeken beginnen als 'Wachten'
-}));
+// Huurverzoeken met goedkeuren en afwijzen status
+const huurverzoeken = [
+  {
+    id: 1,
+    naam: 'Klant 1',
+    voertuig: 'Ford Fiesta',
+    adres: 'Straatnaam 1, Stad 1',
+    rijbewijsNummer: '12345678901',
+    aardVanRij: 'Vakantie',
+    versteBestemming: 'Frankrijk',
+    verwachteKilometers: '300',
+    goedgekeurd: false, // Standaard goedgekeurd is false
+    afgewezen: false, // Standaard afgewezen is false
+  },
+  {
+    id: 2,
+    naam: 'Klant 2',
+    voertuig: 'Volkswagen Golf',
+    adres: 'Straatnaam 2, Stad 2',
+    rijbewijsNummer: '12345678902',
+    aardVanRij: 'Zakelijk',
+    versteBestemming: 'Duitsland',
+    verwachteKilometers: '500',
+    goedgekeurd: false,
+    afgewezen: false,
+  },
+  {
+    id: 3,
+    naam: 'Klant 3',
+    voertuig: 'Ford Fiesta',
+    adres: 'Straatnaam 3, Stad 3',
+    rijbewijsNummer: '12345678903',
+    aardVanRij: 'Vakantie',
+    versteBestemming: 'Italië',
+    verwachteKilometers: '400',
+    goedgekeurd: false,
+    afgewezen: false,
+  },
+];
 
 const BoHuurVerzoekBehandeling = () => {
-  const [verzoeken, setVerzoeken] = useState(initialVerzoeken);
+  const [verzoeken, setVerzoeken] = useState(huurverzoeken);
+  const [showModal, setShowModal] = useState(false); // Standaard geen modal tonen
+  const [selectedVerzoek, setSelectedVerzoek] = useState(null); // Het geselecteerde verzoek dat goedgekeurd of afgewezen wordt
 
   // Functie om verzoek goed te keuren
   const goedkeuren = (id) => {
     const updatedVerzoeken = verzoeken.map((verzoek) =>
-      verzoek.id === id ? { ...verzoek, status: 'Goedgekeurd' } : verzoek
+      verzoek.id === id ? { ...verzoek, goedgekeurd: true } : verzoek
     );
     setVerzoeken(updatedVerzoeken);
   };
@@ -29,10 +58,40 @@ const BoHuurVerzoekBehandeling = () => {
   // Functie om verzoek af te wijzen
   const afwijzen = (id) => {
     const updatedVerzoeken = verzoeken.map((verzoek) =>
-      verzoek.id === id ? { ...verzoek, status: 'Afgewezen' } : verzoek
+      verzoek.id === id ? { ...verzoek, afgewezen: true } : verzoek
     );
     setVerzoeken(updatedVerzoeken);
   };
+
+  // Functie om de bevestigingsmodal te tonen
+  const handleShowModal = (verzoek, action) => {
+    setSelectedVerzoek({ verzoek, action });
+    setShowModal(true);
+  };
+
+  // Functie om de modal te sluiten zonder actie
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedVerzoek(null);
+  };
+
+  // Functie om actie te bevestigen en modal te sluiten
+  const handleConfirmAction = () => {
+    if (selectedVerzoek) {
+      const { verzoek, action } = selectedVerzoek;
+      if (action === 'goedgekeuren') {
+        goedkeuren(verzoek.id);
+      } else if (action === 'afwijzen') {
+        afwijzen(verzoek.id);
+      }
+    }
+    handleCloseModal(); // Sluit de modal na bevestiging
+  };
+
+  // Filter alleen de onbehandelde verzoeken
+  const onbehandeldeVerzoeken = verzoeken.filter(
+    (verzoek) => !verzoek.goedgekeurd && !verzoek.afgewezen
+  );
 
   return (
     <div className="achtergrond2">
@@ -42,8 +101,8 @@ const BoHuurVerzoekBehandeling = () => {
           <Card className="huren-box p-3 mt-5">
             <Card.Body>
               <div className="verzoeken-lijst">
-                {verzoeken.length > 0 ? (
-                  verzoeken.map((verzoek) => (
+                {onbehandeldeVerzoeken.length > 0 ? (
+                  onbehandeldeVerzoeken.map((verzoek) => (
                     <Card key={verzoek.id} className="mb-3">
                       <Card.Body>
                         <Card.Title><strong>Naam:</strong> {verzoek.naam}</Card.Title>
@@ -53,22 +112,19 @@ const BoHuurVerzoekBehandeling = () => {
                         <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardVanRij}</Card.Text>
                         <Card.Text><strong>Verste bestemming:</strong> {verzoek.versteBestemming}</Card.Text>
                         <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachteKilometers}</Card.Text>
-                        <Card.Text><strong>Status:</strong> {verzoek.status}</Card.Text>
 
                         <div className="d-flex justify-content-start">
                           <Button
                             className="mx-1"
                             variant="success"
-                            onClick={() => goedkeuren(verzoek.id)}
-                            disabled={verzoek.status !== 'Wachten'}
+                            onClick={() => handleShowModal(verzoek, 'goedgekeuren')}
                           >
                             Goedkeuren
                           </Button>
                           <Button
                             className="mx-1"
                             variant="danger"
-                            onClick={() => afwijzen(verzoek.id)}
-                            disabled={verzoek.status !== 'Wachten'}
+                            onClick={() => handleShowModal(verzoek, 'afwijzen')}
                           >
                             Afwijzen
                           </Button>
@@ -77,13 +133,31 @@ const BoHuurVerzoekBehandeling = () => {
                     </Card>
                   ))
                 ) : (
-                  <p className="text-center">Er zijn nog geen huurverzoeken ingediend.</p>
+                  <p className="text-center">Er zijn geen openstaande huurverzoeken.    </p>
                 )}
               </div>
             </Card.Body>
           </Card>
         </Col>
       </Container>
+
+      {/* Bevestigingsmodal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bevestiging</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Weet je zeker dat je dit verzoek wilt {selectedVerzoek ? selectedVerzoek.action : ''}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleCloseModal}>
+            Annuleren
+          </Button>
+          <Button variant="success" onClick={handleConfirmAction}>
+            Bevestigen
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
