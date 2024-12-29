@@ -20,7 +20,7 @@ const Home = () => {
         <h1>Welkom bij Car And All!</h1>
       </div>
       <Container>
-        <Row className="justify-content-center p-4 mt-5 foto-rij">
+        <Row className="justify-content-center p-4 mt-5">
           <Col xs={12} md={4} className="mb-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2 text-center">Auto's</h3>

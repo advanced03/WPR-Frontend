@@ -1,33 +1,8 @@
-.huren-background {
-    height: 100vh;
-}
-
 .huren-box {
     min-width: 500px;
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 600px;
-}
-
-.huren-titel {
-    font-size: 3rem; 
-    font-weight: bold; 
-    color: #600339; 
-    /* https://designshack.net */
-    text-shadow: 0px 3px 0px #b2a98f,
-    0px 14px 10px rgba(0,0,0,0.15),
-    0px 24px 2px rgba(0,0,0,0.1),
-    0px 34px 30px rgba(0,0,0,0.1);
-  }
-  
-
-.knop:disabled {
-    background-color: #6c757d; 
-    border-color: #6c757d; 
-    color: #fff;
-}
-
-.titel-achtergrond {
-    background-color: white;
+    margin: 0 auto;
 }

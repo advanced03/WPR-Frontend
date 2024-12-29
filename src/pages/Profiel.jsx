@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, CardBody, CardHeader, Button, Form, FormGroup, FormControl } from 'react-bootstrap';
-import '../style/profiel.css';
-
 function Profiel() {
   const [gebruiker, setGebruiker] = useState({
     gebruikersnaam: '',

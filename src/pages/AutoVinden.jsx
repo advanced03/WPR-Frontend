@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import '../style/huren.css';
+import '../style/knop.css';
 
 {/* Uiteindelijk moet dit de auto's van de database ophalen en de huurknop moet de data opslaan voor de volgende pagina*/}
 // Pagina's ook om een of andere manier beveiligen zodat je niet zomaar de url kan invullen en echt stap voor stap moet + alleen ingelogde gebruikers.
@@ -16,7 +17,7 @@ const AutoVinden = () => {
       <div className="achtergrond2"></div>
       <Container fluid>
       <h1 className="huren-titel text-center"><br/> Kies een Auto om te Huren</h1>
-        <Row className="justify-content-center my-5">
+        <Row className="my-5">
           {wagens.map(wagen => (
             <Col key={wagen.VoertuigId} sm={12} md={6} lg={4} className="my-5">
               <Card className="h-100 p-2">

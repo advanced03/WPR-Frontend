@@ -1,0 +1,54 @@
+/* Container verticaal centreren */
+.container-center {
+    height: 100vh;
+}
+
+.pagina-titel {
+    font-size: 3rem; 
+    font-weight: bold; 
+    color: #600339; 
+    /* https://designshack.net */
+    text-shadow: 0px 3px 0px #b2a98f,
+    0px 14px 10px rgba(0,0,0,0.15),
+    0px 24px 2px rgba(0,0,0,0.1),
+    0px 34px 30px rgba(150, 147, 147, 0.1);
+  }
+
+/* Eerste achtergrond voor wanneer de gebruiker niet is ingelogd */
+.achtergrond1 {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/achtergrond1.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+}
+
+/* Tweede achtergrond voor wanneer de gebruiker is ingelogd */
+.achtergrond2 {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/achtergrond2.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+  }
+
+/* Styling voor blauwe links */
+  .Link {
+    border: none;
+    background: none;
+    color: blue;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* Card header achtergrond voor react bootstrap kaarten */
+.bg-custom {
+  background-color: #600339;
+}

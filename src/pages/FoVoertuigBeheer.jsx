@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Table, Button, Modal, Row, Col, Form } from 'react-bootstrap';
-import "././././../../style/tabel.css";
+import "../style/tabel.css";
 
 const FoVoertuigStatus = () => {
   // Mock data voor voertuigen, 5 voertuigen per type

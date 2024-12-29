@@ -8,9 +8,11 @@ import ZakelijkRegister from './pages/ZakelijkRegister.jsx';
 import Home from './pages/Home.jsx';
 import AutoZoeken from './pages/AutoZoeken.jsx';
 import AutoVinden from './pages/AutoVinden.jsx';
+import HuurVerzoek from './pages/HuurVerzoek.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
 import Profiel from './pages/Profiel.jsx';
-import FoVoertuigStatus from './pages/frontoffice/FoVoertuigStatus.jsx';
+import FoVoertuigBeheer from './pages/FoVoertuigBeheer.jsx';
+import FoVoertuigRegistratie from './pages/FoVoertuigRegistratie.jsx';
 
 const App = () => {
     return (
@@ -22,9 +24,11 @@ const App = () => {
                 <Route path="/ZakelijkRegister" element={<ZakelijkRegister />} />
                 <Route path="/AutoZoeken" element={<AutoZoeken />} />
                 <Route path="/AutoVinden" element={<AutoVinden />} />
+                <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
                 <Route path="/Profiel" element={<Profiel />} />
-                <Route path="/FoVoertuigStatus" element={<FoVoertuigStatus />} />
+                <Route path="/FoVoertuigBeheer" element={<FoVoertuigBeheer />} />
+                <Route path="/FoVoertuigRegistratie" element={<FoVoertuigRegistratie />} />
             </Routes>
         </Router>
     );

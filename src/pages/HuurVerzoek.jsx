@@ -23,10 +23,10 @@ const HuurVerzoek = () => {
   return (
     <>
       <div className="achtergrond2"></div>
-      <h1 className="huren-titel text-center"><br />Uw Keuze:</h1>
+      <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
       <Container fluid className="d-flex justify-content-center align-items-center huren-background">
         <Col md={6}>
-          <Card className='huren-box p-2'>
+          <Card className='huren-box p-2 mt-5'>
             <Card.Body>
               {wagens.map((wagen) => (
                 <Card.Text className="text-center mb-5" key={wagen.VoertuigId}>

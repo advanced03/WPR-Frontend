@@ -8,16 +8,15 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import "../style/huren.css";
+import "../style/universeel.css";
 
 function AutoZoeken() {
   return (
-  <>
-    <div className="achtergrond2"></div>
-      <Container
-        fluid
-        className="d-flex justify-content-center align-items-center huren-background">
+    <>
+      <div className="achtergrond2"></div>
+      <Container fluid className="d-flex justify-content-center align-items-center container-center">
         <Row>
-          <Col className="huren-box mx-3 p-5">
+          <Col className="huren-box mx-auto px-5 py-5">
             <h1 className="text-center huren-titel mb-3">Huren</h1>
             <Form>
               <Form.Group className="mb-3 text-center">
@@ -25,7 +24,6 @@ function AutoZoeken() {
                   Kies het type voertuig dat u wilt huren:
                 </Form.Label>
                 <div className="toggle-center">
-                  {/*Als het accounttype overeenkomt met zakelijk moet de disabled prop van react bootstrap gepast worden aan de buttons om ze uit te schakelen*/}
                   <ButtonGroup className="mb-3">
                     <Button className="knop">Auto 🚗</Button>
                     <Button className="knop" disabled>
@@ -56,7 +54,6 @@ function AutoZoeken() {
                 />
               </Form.Group>
 
-              {/* Als er geen auto's worden gevonden moet dit een error geven als er auto's worden gevonden door naar de AutoVinden pagina. */}
               <div className="d-flex justify-content-center">
                 <Button className="knop mt-3">Zoeken 🔍</Button>
               </div>
