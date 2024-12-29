@@ -12,12 +12,12 @@ import HuurVerzoek from './pages/HuurVerzoek.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
 import Profiel from './pages/Profiel.jsx';
 import FoVoertuigBeheer from './pages/FoVoertuigBeheer.jsx';
-import FoVoertuigRegistratie from './pages/FoVoertuigRegistratie.jsx';
+import BoHuurVerzoekBehandeling from './pages/BoHuurVerzoekBehandeling.jsx';
 
 const App = () => {
     return (
         <Router>
-            <Routes>
+            <Routes> 
                 <Route path="/" element={<Login />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
@@ -28,7 +28,7 @@ const App = () => {
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
                 <Route path="/Profiel" element={<Profiel />} />
                 <Route path="/FoVoertuigBeheer" element={<FoVoertuigBeheer />} />
-                <Route path="/FoVoertuigRegistratie" element={<FoVoertuigRegistratie />} />
+                <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
             </Routes>
         </Router>
     );

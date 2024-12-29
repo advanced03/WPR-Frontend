@@ -1,0 +1,5 @@
+.verzoeken-lijst {
+    max-height: 50rem; /* Maximale hoogte voor scrollbaar gebied */
+    overflow-y: auto;  /* Verticaal scrollen als de lijst te groot is */
+    padding-right: 15px; /* Zorgt ervoor dat er ruimte is voor de scrollbar */
+  }
