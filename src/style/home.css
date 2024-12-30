@@ -11,18 +11,12 @@
   height: auto;
 }
 
-.home-titel {
-  background-color: #600339;
-  color: white;
-  padding: 10px;
-}
-
 .home-inhoud {
   background-color: #600339;
+  border-radius: 20px;
   color: white;
-  padding: 1.5rem;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-  margin-top: 25rem;
+  max-width: 75%;
 }
 
 .HomeFotoTekst {

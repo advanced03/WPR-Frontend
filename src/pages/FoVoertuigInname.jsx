@@ -7,7 +7,7 @@ const FoVoertuigInname = () => {
     { id: 2, voorNaam: 'Piet', achterNaam: 'Pietersen', adres: 'Laan 456', rijbewijsNummer: 'CD789012', aardVanRit: 'Zakelijk', versteBestemming: 'Rotterdam', verwachteKilometers: 350 },
     { id: 3, voorNaam: 'Klaas', achterNaam: 'de Vries', adres: 'Hoofdweg 12', rijbewijsNummer: 'EF345678', aardVanRit: 'Privé', versteBestemming: 'Utrecht', verwachteKilometers: 150 },
     { id: 4, voorNaam: 'Sanne', achterNaam: 'Bakker', adres: 'Plein 8', rijbewijsNummer: 'GH901234', aardVanRit: 'Zakelijk', versteBestemming: 'Den Haag', verwachteKilometers: 400 },
-    { id: 5, voorNaam: 'Jeroen', achterNaam: 'Schmidt', adres: 'Singel 234', rijbewijsNummer: 'IJ567890', aardVanRit: 'Privé', versteBestemming: 'Leiden', verwachteKilometers: 120 },qq
+    { id: 5, voorNaam: 'Jeroen', achterNaam: 'Schmidt', adres: 'Singel 234', rijbewijsNummer: 'IJ567890', aardVanRit: 'Privé', versteBestemming: 'Leiden', verwachteKilometers: 120 },
     
   ]);
 

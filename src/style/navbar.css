@@ -1,0 +1,18 @@
+.navigatiebalk {
+    background-color: #600339;
+    color: white;
+}
+
+.navigatiebalk .navbar-brand,
+.navigatiebalk, .nav-link {
+  color: white;
+}
+
+.navbar-toggler, .navbar-toggler-icon {
+  background-color: white;
+}
+
+.hover:hover {
+  color: turquoise;
+  background-color: transparent;
+}

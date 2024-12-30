@@ -1,22 +1,16 @@
 import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  ButtonGroup,
-} from "react-bootstrap";
+import { Container, Row, Col, Form, Button, ButtonGroup} from "react-bootstrap";
 import "../style/huren.css";
 import "../style/universeel.css";
+import PartNavbar from "../components/PartNavbar.jsx";
 
 function AutoZoeken() {
   return (
-    <>
-      <div className="achtergrond2"></div>
+      <div className="achtergrond2">
+      <PartNavbar />
       <Container fluid className="d-flex justify-content-center align-items-center container-center">
         <Row>
-          <Col className="huren-box mx-auto px-5 py-5">
+          <Col className="huren-box p-5">
             <h1 className="text-center huren-titel mb-3">Huren</h1>
             <Form>
               <Form.Group className="mb-3 text-center">
@@ -61,7 +55,7 @@ function AutoZoeken() {
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   );
 }
 
