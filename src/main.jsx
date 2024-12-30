@@ -11,7 +11,8 @@ import AutoVinden from './pages/AutoVinden.jsx';
 import HuurVerzoek from './pages/HuurVerzoek.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
 import Profiel from './pages/Profiel.jsx';
-import FoVoertuigBeheer from './pages/FoVoertuigBeheer.jsx';
+import FoVoertuigInname from './pages/FoVoertuigInname.jsx';
+import FoVoertuigUitgifte from './pages/FoVoertuigUitgifte.jsx';
 import BoHuurVerzoekBehandeling from './pages/BoHuurVerzoekBehandeling.jsx';
 
 const App = () => {
@@ -27,7 +28,8 @@ const App = () => {
                 <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
                 <Route path="/Profiel" element={<Profiel />} />
-                <Route path="/FoVoertuigBeheer" element={<FoVoertuigBeheer />} />
+                <Route path="/FoVoertuigInname" element={<FoVoertuigInname />} />
+                <Route path="/FoVoertuigUitgifte" element={<FoVoertuigUitgifte />} />
                 <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
             </Routes>
         </Router>
