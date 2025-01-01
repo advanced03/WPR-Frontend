@@ -14,6 +14,7 @@ import Profiel from './pages/Profiel.jsx';
 import FoVoertuigInname from './pages/FoVoertuigInname.jsx';
 import FoVoertuigUitgifte from './pages/FoVoertuigUitgifte.jsx';
 import BoHuurVerzoekBehandeling from './pages/BoHuurVerzoekBehandeling.jsx';
+import BoSchadeRegister from './pages/BoSchadeREgister.jsx';
 
 const App = () => {
     return (
@@ -31,6 +32,7 @@ const App = () => {
                 <Route path="/FoVoertuigInname" element={<FoVoertuigInname />} />
                 <Route path="/FoVoertuigUitgifte" element={<FoVoertuigUitgifte />} />
                 <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
+                <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
             </Routes>
         </Router>
     );
