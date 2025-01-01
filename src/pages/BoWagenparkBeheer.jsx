@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Table, Button, Modal, Form, InputGroup, FormControl, Dropdown, DropdownButton, Row, Col, Card } from 'react-bootstrap';
+import { Container, Table, Button, Modal, Form, Dropdown, DropdownButton, InputGroup, FormControl } from 'react-bootstrap';
 
 const BOWagenparkBeheer = () => {
   const [vehicles, setVehicles] = useState([
@@ -10,8 +10,6 @@ const BOWagenparkBeheer = () => {
       bouwjaar: 2021,
       kenteken: 'AB-123-CD',
       status: 'Beschikbaar',
-      schade: 'Geen schade',
-      registratieDatum: '2024-12-01',
     },
     {
       merk: 'Volkswagen',
@@ -20,8 +18,6 @@ const BOWagenparkBeheer = () => {
       bouwjaar: 2019,
       kenteken: 'EF-456-GH',
       status: 'Beschikbaar',
-      schade: 'Gebroken achterlicht',
-      registratieDatum: '2024-12-10',
     },
     {
       merk: 'BMW',
@@ -30,11 +26,12 @@ const BOWagenparkBeheer = () => {
       bouwjaar: 2020,
       kenteken: 'IJ-789-KL',
       status: 'Niet Beschikbaar',
-      schade: 'Deuk in zijpaneel',
-      registratieDatum: '2024-12-15',
     },
   ]);
-
+  const [showModal, setShowModal] = useState(false);
+  const [currentVehicle, setCurrentVehicle] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
   const [form, setForm] = useState({
     merk: '',
     type: '',
@@ -42,16 +39,9 @@ const BOWagenparkBeheer = () => {
     bouwjaar: '',
     kenteken: '',
     status: 'Beschikbaar',
-    schade: '',
-    registratieDatum: '',
   });
   const [statusFilter, setStatusFilter] = useState('Alle');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRepairModal, setShowRepairModal] = useState(false);
-  const [currentVehicle, setCurrentVehicle] = useState(null);
-  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,7 +56,7 @@ const BOWagenparkBeheer = () => {
     } else {
       setVehicles([...vehicles, form]);
     }
-    setForm({ merk: '', type: '', kleur: '', bouwjaar: '', kenteken: '', status: 'Beschikbaar', schade: '', registratieDatum: '' });
+    setForm({ merk: '', type: '', kleur: '', bouwjaar: '', kenteken: '', status: 'Beschikbaar' });
     setCurrentVehicle(null);
     setShowModal(false);
   };
@@ -97,21 +87,6 @@ const BOWagenparkBeheer = () => {
     setVehicles(updatedVehicles);
   };
 
-  const handleRegisterForRepair = (vehicle) => {
-    setCurrentVehicle(vehicle);
-    setShowRepairModal(true);
-  };
-
-  const handleConfirmRepair = () => {
-    const updatedVehicles = vehicles.map((v) =>
-      v.kenteken === currentVehicle.kenteken
-        ? { ...v, status: 'In reparatie' }
-        : v
-    );
-    setVehicles(updatedVehicles);
-    setShowRepairModal(false);
-  };
-
   const handleFilterChange = (status) => {
     setStatusFilter(status);
   };
@@ -138,52 +113,59 @@ const BOWagenparkBeheer = () => {
     <div className="achtergrond2">
       <Container>
         <h1 className="pagina-titel text-center my-4">Wagenparkbeheer</h1>
-
+        
         {/* Filter en zoekbalk boven de tabel */}
-        <Row className="mb-4">
-          <Col md={6}>
-            <InputGroup className="w-100">
-              <FormControl
-                placeholder="Zoek voertuigen..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </InputGroup>
-          </Col>
+        <div className="d-flex justify-content-between mb-3">
+          <InputGroup className="w-50">
+            <FormControl
+              placeholder="Zoek voertuigen..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </InputGroup>
 
-          <Col md={3}>
-            <DropdownButton
-              title={statusFilter === 'Alle' ? 'Alle Voertuigen' : statusFilter}
-              onSelect={handleFilterChange}
-              className="w-100 knop"
-            >
-              <Dropdown.Item eventKey="Alle">Alle Voertuigen</Dropdown.Item>
-              <Dropdown.Item eventKey="Actief">Alleen Actief</Dropdown.Item>
-              <Dropdown.Item eventKey="Geblokkeerd">Alleen Geblokkeerd</Dropdown.Item>
-            </DropdownButton>
-          </Col>
-
-          <Col md={3}>
-            <Button className="w-100" onClick={() => setShowModal(true)}>
-              Voertuig Toevoegen
-            </Button>
-          </Col>
-        </Row>
+          <DropdownButton
+            variant="secondary"
+            title={statusFilter === 'Alle' ? 'Alle Voertuigen' : statusFilter}
+            onSelect={handleFilterChange}
+          >
+            <Dropdown.Item eventKey="Alle">Alle Voertuigen</Dropdown.Item>
+            <Dropdown.Item eventKey="Actief">Alleen Actief</Dropdown.Item>
+            <Dropdown.Item eventKey="Geblokkeerd">Alleen Geblokkeerd</Dropdown.Item>
+          </DropdownButton>
+          
+          <Button className="mb-3 knop" onClick={() => setShowModal(true)}>
+            Voertuig Toevoegen
+          </Button>
+        </div>
 
         {/* Tabel met voertuigen */}
-        <Row>
-          {filteredVehicles.map((vehicle, index) => (
-            <Col key={index} md={4} className="mb-3">
-              <Card>
-                <Card.Body>
-                  <Card.Title>{vehicle.merk} {vehicle.type}</Card.Title>
-                  <Card.Text>
-                    <strong>Kenteken:</strong> {vehicle.kenteken}<br />
-                    <strong>Status:</strong> {vehicle.status}<br />
-                    <strong>Schade:</strong> {vehicle.schade}
-                  </Card.Text>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Merk</th>
+              <th>Type</th>
+              <th>Kleur</th>
+              <th>Bouwjaar</th>
+              <th>Kenteken</th>
+              <th>Status</th>
+              <th>Acties</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredVehicles.map((vehicle, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{vehicle.merk}</td>
+                <td>{vehicle.type}</td>
+                <td>{vehicle.kleur}</td>
+                <td>{vehicle.bouwjaar}</td>
+                <td>{vehicle.kenteken}</td>
+                <td>{vehicle.status}</td>
+                <td>
                   <Button
-                    variant="primary"
+                    variant="warning"
                     size="sm"
                     onClick={() => handleEditVehicle(index)}
                     className="me-2"
@@ -197,6 +179,7 @@ const BOWagenparkBeheer = () => {
                       setDeleteIndex(index);
                       setShowDeleteModal(true);
                     }}
+                    className="me-2"
                   >
                     Verwijderen
                   </Button>
@@ -205,7 +188,6 @@ const BOWagenparkBeheer = () => {
                       variant="secondary"
                       size="sm"
                       onClick={() => handleBlockVehicle(index)}
-                      className="mt-2"
                     >
                       Blokkeren
                     </Button>
@@ -214,24 +196,15 @@ const BOWagenparkBeheer = () => {
                       variant="success"
                       size="sm"
                       onClick={() => handleUnblockVehicle(index)}
-                      className="mt-2"
                     >
                       Deblokkeren
                     </Button>
                   )}
-                  <Button
-                    variant="info"
-                    size="sm"
-                    onClick={() => handleRegisterForRepair(vehicle)}
-                    className="mt-2"
-                  >
-                    Schadebeheer
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
         {/* Toevoegen/Wijzigen Modal */}
         <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -285,67 +258,25 @@ const BOWagenparkBeheer = () => {
                   onChange={handleInputChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Schade</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="schade"
-                  value={form.schade}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Registratiedatum</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="registratieDatum"
-                  value={form.registratieDatum}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
+            <Button variant="danger" onClick={() => setShowModal(false)}>
               Annuleren
             </Button>
-            <Button variant="primary" onClick={handleAddOrUpdateVehicle}>
-              {currentVehicle !== null ? 'Opslaan' : 'Toevoegen'}
+            <Button variant="success" onClick={handleAddOrUpdateVehicle}>
+              {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
             </Button>
           </Modal.Footer>
         </Modal>
 
-        {/* Bevestiging Schade Modal */}
-        <Modal show={showRepairModal} onHide={() => setShowRepairModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Schade Informatie</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Wilt u het voertuig {currentVehicle?.merk} {currentVehicle?.type} met kenteken{' '}
-              {currentVehicle?.kenteken} markeren als "In reparatie"?
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowRepairModal(false)}>
-              Annuleren
-            </Button>
-            <Button variant="primary" onClick={handleConfirmRepair}>
-              Bevestigen
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Bevestiging Verwijder Modal */}
+        {/* Verwijderbevestiging Modal */}
         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Verwijder Voertuig</Modal.Title>
+            <Modal.Title>Bevestig Verwijdering</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>
-              Bent u zeker dat u het voertuig met kenteken {vehicles[deleteIndex]?.kenteken} wilt
-              verwijderen?
-            </p>
+            Weet u zeker dat u dit voertuig wilt verwijderen?
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>

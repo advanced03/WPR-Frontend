@@ -14,7 +14,8 @@ import Profiel from './pages/Profiel.jsx';
 import FoVoertuigInname from './pages/FoVoertuigInname.jsx';
 import FoVoertuigUitgifte from './pages/FoVoertuigUitgifte.jsx';
 import BoHuurVerzoekBehandeling from './pages/BoHuurVerzoekBehandeling.jsx';
-import BoSchadeRegister from './pages/BoSchadeREgister.jsx';
+import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
+import BoWagenparkBeheer from './pages/BoWagenparkBeheer.jsx';
 
 const App = () => {
     return (
@@ -33,6 +34,7 @@ const App = () => {
                 <Route path="/FoVoertuigUitgifte" element={<FoVoertuigUitgifte />} />
                 <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
                 <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
+                <Route path="/BoWagenparkBeheer" element={<BoWagenparkBeheer />} />
             </Routes>
         </Router>
     );
