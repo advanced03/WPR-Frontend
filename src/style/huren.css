@@ -6,3 +6,10 @@
     max-width: 600px;
     margin: 0 auto;
 }
+
+.car-image {
+    max-width: 100%; /* Past zich aan de breedte van de container aan */
+    height: auto;    /* Houdt de verhoudingen correct */
+    max-height: 150px; /* Zorgt ervoor dat de afbeelding niet te hoog wordt */
+    object-fit: contain; /* Zorgt dat de afbeelding wordt geschaald zonder te worden bijgesneden */
+  }
