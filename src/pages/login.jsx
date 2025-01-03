@@ -15,22 +15,37 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await axios.post('https://localhost:7281/api/account/Login', { username, password }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await axios.post(
+                'https://localhost:7281/api/account/Login',
+                { username, password },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
             if (response.status === 200) {
+                // JWT-token opslaan in localStorage
+                const token = response.data.token; // Zorg ervoor dat de server dit terugstuurt
+                if (token) {
+                    sessionStorage.setItem('jwtToken', token);
+                }
+
                 console.log('Login successful:', response.data);
 
+                // Navigeer naar de Home-pagina
                 navigate('/Home');
             } else {
-                throw new Error('Login failed. Please check your credentials.');
+                throw new Error('Inloggen mislukt. Controleer uw inloggegevens.');
             }
         } catch (error) {
             console.error('Error logging in:', error);
-            setError(error.message);
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message); // Toon foutmelding van de server
+            } else {
+                setError('Er is een fout opgetreden tijdens het inloggen.');
+            }
         }
     };
 
@@ -91,3 +106,4 @@ const Login = () => {
 };
 
 export default Login;
+

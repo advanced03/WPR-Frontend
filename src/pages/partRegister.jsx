@@ -4,9 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
 
-
-// Miss een bericht laten zien als het account succesvol is aangemaakt?
-
 const PartRegister = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -41,7 +38,13 @@ const PartRegister = () => {
             });
 
             if (response.status === 201) { // 201 Created
-                setSuccess(true); // Indicate success
+                // JWT-token opslaan in localStorage
+                const token = response.data.token; // Zorg ervoor dat de server dit terugstuurt
+                if (token) {
+                    sessionStorage.setItem('jwtToken', token);
+                }
+
+                setSuccess(true);
                 setUsername('');
                 setEmail('');
                 setPhone('');
@@ -51,18 +54,15 @@ const PartRegister = () => {
                 // Navigate to the login page after registration
                 setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
             } else {
-                setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
+                setError('Er is iets misgegaan bij de registratie.');
             }
         } catch (error) {
             console.error('Error during registration:', error);
             if (error.response) {
-                // Server error
                 setError(error.response.data.message || 'Er is een fout opgetreden tijdens registratie.');
             } else if (error.request) {
-                // No response from server
                 setError('Geen antwoord van de server. Probeer het later opnieuw.');
             } else {
-                // Other errors
                 setError(error.message);
             }
         }
