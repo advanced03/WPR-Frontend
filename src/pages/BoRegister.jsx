@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import '../style/register.css';
 
-const ZakelijkRegister = () => {
+const BoRegister = () => {
     const [rol, setRol] = useState('frontoffice'); // Default role
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [bedrijfEmail, setBedrijfEmail] = useState('');
-    const [bedrijfsnaam, setBedrijfsnaam] = useState('');
-    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
@@ -33,9 +29,6 @@ const ZakelijkRegister = () => {
                 rol,
                 username,
                 email,
-                bedrijfEmail: rol === 'wagenparkbeheerder' ? bedrijfEmail : null, 
-                bedrijfsnaam,
-                phone,
                 password,
             };
 
@@ -59,7 +52,7 @@ const ZakelijkRegister = () => {
     const handleLoginRedirect = (path) => {
         navigate(path);
     };
-// Zakelijk register in de part register zetten omdat het eigenlijk een particuliere gebruiker is maar alleen auto's kan huren.
+
     return (
         <>
             <div className="achtergrond1"></div>
@@ -67,7 +60,7 @@ const ZakelijkRegister = () => {
                 <Row className="justify-content-center">
                     <Col>
                         <div className="RegistratieKaart">
-                            <h2 className="text-center mb-4">Zakelijk Registreren</h2>
+                            <h2 className="text-center mb-4">Backoffice Medewerker Registratie</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
@@ -83,7 +76,6 @@ const ZakelijkRegister = () => {
                                     >
                                         <option value="frontoffice">Frontoffice Medewerker</option>
                                         <option value="backoffice">Backoffice Medewerker</option>
-                                        <option value="wagenparkbeheerder">Wagenpark Beheerder</option>
                                     </Form.Select>
                                 </Form.Group>
 
@@ -104,50 +96,6 @@ const ZakelijkRegister = () => {
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                {rol === 'wagenparkbeheerder' && (
-                                    <Form.Group controlId="formBedrijfEmail" className="mb-3">
-                                        <Form.Label>📧 Bedrijf E-mail Tag</Form.Label>
-                                        <Form.Control
-                                            type="email"
-                                            placeholder="Voer uw E-Mail tag in (@bedrijf)"
-                                            value={bedrijfEmail}
-                                            onChange={(e) => setBedrijfEmail(e.target.value)}
-                                        />
-                                    </Form.Group>
-                                )}
-
-                                {rol === 'wagenparkbeheerder' && (
-                                    <Form.Group controlId="formKVK" className="mb-3">
-                                        <Form.Label>📧 Bedrijf E-mail Tag</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Voer het KVK nummer van uw bedrijf in:"
-                                            value={bedrijfEmail}
-                                            onChange={(e) => setBedrijfEmail(e.target.value)}
-                                        />
-                                    </Form.Group>
-                                )}
-
-                                <Form.Group controlId="formBedrijfsnaam" className="mb-3">
-                                    <Form.Label>🏢 Bedrijfsnaam</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Voer uw bedrijfsnaam in"
-                                        value={bedrijfsnaam}
-                                        onChange={(e) => setBedrijfsnaam(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="formPhone" className="mb-3">
-                                    <Form.Label>📞 Telefoonnummer</Form.Label>
-                                    <Form.Control
-                                        type="tel"
-                                        placeholder="Voer uw telefoonnummer in"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
                                     />
                                 </Form.Group>
 
@@ -175,20 +123,6 @@ const ZakelijkRegister = () => {
                                     Registreren 🔑
                                 </Button>
                             </Form>
-
-                            <div className="mt-3 text-center">
-                                <span>
-                                    Heeft u al een{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => handleLoginRedirect('/Login')}
-                                        className="Link"
-                                    >
-                                        account
-                                    </button>
-                                    ?
-                                </span>
-                            </div>
                         </div>
                     </Col>
                 </Row>
@@ -197,5 +131,4 @@ const ZakelijkRegister = () => {
     );
 };
 
-export default ZakelijkRegister;
-
+export default BoRegister;

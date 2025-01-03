@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Table, Button } from "react-bootstrap";
+import { Container, Table, Button, Modal } from "react-bootstrap";
 import "../style/tabel.css";
 
 const HuurGeschiedenis = () => {
@@ -51,22 +51,32 @@ const HuurGeschiedenis = () => {
     },
   ]);
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
   const statusKleur = {
     Goedgekeurd: "green",
     Afgekeurd: "red",
     "In Behandeling": "gray",
   };
 
-  // Huurdata sorteren
   const sortedHuurData = [...huurData].sort((a, b) => new Date(b.einddatum) - new Date(a.einddatum));
 
-  const handleAnnuleren = (index) => {
-    const bevestigen = window.confirm("Weet je zeker dat je dit huurverzoek wilt annuleren?");
-    if (bevestigen) {
-      const nieuweHuurData = [...huurData];
-      nieuweHuurData[index].status = "Geannuleerd";
-      setHuurData(nieuweHuurData);
-    }
+  const handleShowModal = (index) => {
+    setSelectedIndex(index);
+    setShowModal(true);
+  };
+
+  const handleAnnuleren = () => {
+    const nieuweHuurData = [...huurData];
+    nieuweHuurData[selectedIndex].status = "Geannuleerd";
+    setHuurData(nieuweHuurData);
+    setShowModal(false); // Close the modal after cancelling
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedIndex(null);
   };
 
   return (
@@ -103,8 +113,8 @@ const HuurGeschiedenis = () => {
                 <td>
                   {item.status !== "Afgekeurd" && item.status !== "Geannuleerd" && (
                     <Button
-                      variant="danger"
-                      onClick={() => handleAnnuleren(index)}
+                      className="knop"
+                      onClick={() => handleShowModal(index)}
                     >
                       Annuleren
                     </Button>
@@ -115,6 +125,24 @@ const HuurGeschiedenis = () => {
           </tbody>
         </Table>
       </Container>
+
+      {/* Modal for cancellation confirmation */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bevestiging Annuleren</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Weet je zeker dat je dit huurverzoek wilt annuleren?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Annuleren
+          </Button>
+          <Button variant="danger" onClick={handleAnnuleren}>
+            Bevestigen
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

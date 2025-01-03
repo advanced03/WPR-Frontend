@@ -83,9 +83,15 @@ function Profiel() {
                       <FormControl
                         type="tel"
                         value={gebruiker.telefoonnummer}
-                        onChange={(e) => setGebruiker({ ...gebruiker, telefoonnummer: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, ''); // Verwijder alles behalve cijfers
+                          if (value.length <= 11) { // Maximaal 10 cijfers
+                            setGebruiker({ ...gebruiker, telefoonnummer: value });
+                          }
+                        }}
                       />
                     </FormGroup>
+
                     <FormGroup controlId="wachtwoord">
                       <FormLabel>Wachtwoord</FormLabel>
                       <FormControl

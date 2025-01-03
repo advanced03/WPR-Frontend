@@ -1,12 +1,18 @@
-import React from "react";
-import { Container, Row, Col, Form, Button, ButtonGroup} from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, ButtonGroup } from "react-bootstrap";
 import "../style/huren.css";
 import "../style/universeel.css";
 import PartNavbar from "../components/PartNavbar.jsx";
 
 function AutoZoeken() {
+  const [selectedType, setSelectedType] = useState(null);
+
+  const handleSelect = (type) => {
+    setSelectedType(type);
+  };
+
   return (
-      <div className="achtergrond2">
+    <div className="achtergrond2">
       <PartNavbar />
       <Container fluid className="d-flex justify-content-center align-items-center container-center">
         <Row>
@@ -19,11 +25,24 @@ function AutoZoeken() {
                 </Form.Label>
                 <div className="toggle-center">
                   <ButtonGroup className="mb-3">
-                    <Button className="knop">Auto 🚗</Button>
-                    <Button className="knop" disabled>
+                    <Button
+                      variant={selectedType === "auto" ? "primary" : "outline-primary"}
+                      onClick={() => handleSelect("auto")}
+                    >
+                      Auto 🚗
+                    </Button>
+                    {/* Als gebruikerstype overeenkomt met zakelijk moet dit disabled zijn */}
+                    <Button
+                      variant={selectedType === "caravan" ? "primary" : "outline-primary"}
+                      onClick={() => handleSelect("caravan")}
+                    >
                       Caravan ⛺
                     </Button>
-                    <Button className="knop" disabled>
+                    {/* Als gebruikerstype overeenkomt met zakelijk moet dit disabled zijn */}
+                    <Button
+                      variant={selectedType === "camper" ? "primary" : "outline-primary"}
+                      onClick={() => handleSelect("camper")}
+                    >
                       Camper 🚐
                     </Button>
                   </ButtonGroup>
