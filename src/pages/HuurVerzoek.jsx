@@ -26,57 +26,19 @@ const HuurVerzoek = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleHuurVerzoek = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setSuccess(false);
-
-        try {
-            const response = await axios.post(`https://localhost:7281/api/verhuur/verzoek`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.status === 201) { // 201 Created
-                setSuccess(true);
-                setFormData({
-                    naam: '',
-                    adres: '',
-                    rijbewijsNummer: '',
-                    aardVanRij: '',
-                    versteBestemming: '',
-                    verwachteKilometers: '',
-                });
-
-                // Navigate to a confirmation page after a delay
-                setTimeout(() => navigate('/bevestiging'), 2000);
-            }
-        } catch (error) {
-            console.error('Error during rental request:', error);
-            if (error.response) {
-                setError(error.response.data.message || 'Er is een fout opgetreden tijdens het indienen van uw verzoek.');
-            } else if (error.request) {
-                setError('Geen antwoord van de server. Probeer het later opnieuw.');
-            } else {
-                setError(error.message);
-            }
-        }
-    };
-
-    return (
-        <>
-            <div className="achtergrond2"></div>
-            <h1 className="huren-titel text-center"><br />Uw Keuze:</h1>
-            <Container fluid className="d-flex justify-content-center align-items-center huren-background">
-                <Col md={6}>
-                    <Card className='huren-box p-2'>
-                        <Card.Body>
-                            {wagens.map((wagen) => (
-                                <Card.Text className="text-center mb-5" key={wagen.VoertuigId}>
-                                    <strong>Gekozen Auto:</strong> {wagen.Merk} {wagen.model}
-                                </Card.Text>
-                            ))}
+  return (
+    <>
+      <div className="achtergrond2"></div>
+      <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
+      <Container fluid className="d-flex justify-content-center align-items-center huren-background">
+        <Col md={6}>
+          <Card className='huren-box p-2 mt-5'>
+            <Card.Body>
+              {wagens.map((wagen) => (
+                <Card.Text className="text-center mb-5" key={wagen.VoertuigId}>
+                  <strong>Gekozen Auto:</strong> {wagen.Merk} {wagen.model}
+                </Card.Text>
+              ))}
 
                             <Card.Title className="mb-3"><strong>Uw persoonlijke informatie</strong></Card.Title>
                             {error && <Alert variant="danger">{error}</Alert>}

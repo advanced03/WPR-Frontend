@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Table, Button } from "react-bootstrap";
-import "../style/huurgeschiedenis.css";
+import "../style/tabel.css";
 
 const HuurGeschiedenis = () => {
   const [huurData, setHuurData] = useState([
@@ -72,7 +72,7 @@ const HuurGeschiedenis = () => {
   return (
     <div className="achtergrond2">
       <Container className="mt-4">
-        <h2 className="huren-titel text-center my-4">Mijn Huurgeschiedenis</h2>
+        <h2 className="pagina-titel text-center my-4">Mijn Huurgeschiedenis</h2>
         <Table striped bordered hover className="tabel mt-5">
           <thead>
             <tr>

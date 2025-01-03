@@ -1,14 +1,3 @@
-.achtergrond2 {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('../assets/achtergrond2.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: -1;
-}
-
 .home-image-container {
   overflow: hidden;
   border-radius: 20px;
@@ -22,43 +11,14 @@
   height: auto;
 }
 
-.knop {
-  background-color: #600339;
-  border: none;
-  border-radius: 12px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.knop:hover {
-  background-color: #6F1C4C;
-  transform: scale(1.05);
-}
-
-.knop:focus {
-  outline: none;
-  box-shadow: 0 0 5px #6F1C4C;
-}
-
-.home-titel {
-  background-color: #600339;
-  color: white;
-  padding: 10px;
-}
-
 .home-inhoud {
   background-color: #600339;
+  border-radius: 20px;
   color: white;
-  padding: 1.5rem;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-  margin-top: 25rem;
+  max-width: 75%;
 }
 
 .HomeFotoTekst {
   color: white;
-}
-
-.login-tekst {
-  font-weight: bold;
-  text-shadow: 1px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
-    1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
 }

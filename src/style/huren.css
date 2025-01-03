@@ -1,22 +1,15 @@
-.huren-background {
-    height: 100vh;
-}
-
 .huren-box {
     min-width: 500px;
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 600px;
+    margin: 0 auto;
 }
 
-.huren-titel {
-    font-weight: bold;
-    color: #600339;
-}
-
-.knop:disabled {
-    background-color: #6c757d; 
-    border-color: #6c757d; 
-    color: #fff;
-}
+.car-image {
+    max-width: 100%; /* Past zich aan de breedte van de container aan */
+    height: auto;    /* Houdt de verhoudingen correct */
+    max-height: 150px; /* Zorgt ervoor dat de afbeelding niet te hoog wordt */
+    object-fit: contain; /* Zorgt dat de afbeelding wordt geschaald zonder te worden bijgesneden */
+  }

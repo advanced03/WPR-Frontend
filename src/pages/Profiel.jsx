@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, CardBody, CardHeader, Button, Form, FormGroup, FormControl } from 'react-bootstrap';
-import '../style/profiel.css';
+import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import PartNavbar from "../components/PartNavbar.jsx";
 
 function Profiel() {
   const [gebruiker, setGebruiker] = useState({
@@ -15,8 +15,7 @@ function Profiel() {
   const [editModus, setEditModus] = useState(false);
 
   useEffect(() => {
-    // Hier zou je normaal de gegevens van de gebruiker ophalen uit een API
-    // Voor dit voorbeeld gebruiken we standaardwaarden
+    // Mock data voor gebruiker
     setGebruiker({
       gebruikersnaam: 'Jan Janssen',
       email: 'jan.janssen@example.com',
@@ -30,25 +29,25 @@ function Profiel() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Wijzigingen opgeslagen:', gebruiker);
-    // Hier zou je de wijzigingen moeten opslaan naar een API
     setEditModus(false);
   };
 
-  if (editModus) {
-    return (
-      <>
-        <div className="achtergrond2"></div>
-        <Container className="py-5">
+  return (
+    <div className="achtergrond2">
+      <PartNavbar />
+      <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
+      <Container className="py-5">
+        {editModus ? (
           <Form onSubmit={handleSubmit}>
             <Row className="justify-content-center">
               <Col md={8}>
                 <Card className="border-0 shadow rounded-lg mt-5">
-                  <CardHeader className="bg-custom text-white border-bottom">
+                  <Card.Header className="bg-custom text-white border-bottom">
                     <h3 className="mb-0">Profiel Bewerken</h3>
-                  </CardHeader>
-                  <CardBody className="border-top">
+                  </Card.Header>
+                  <Card.Body>
                     <FormGroup controlId="gebruikersnaam">
-                      <Form.Label>Gebruikersnaam</Form.Label>
+                      <FormLabel>Gebruikersnaam</FormLabel>
                       <FormControl
                         type="text"
                         value={gebruiker.gebruikersnaam}
@@ -56,7 +55,7 @@ function Profiel() {
                       />
                     </FormGroup>
                     <FormGroup controlId="email">
-                      <Form.Label>Email</Form.Label>
+                      <FormLabel>Email</FormLabel>
                       <FormControl
                         type="email"
                         value={gebruiker.email}
@@ -64,7 +63,7 @@ function Profiel() {
                       />
                     </FormGroup>
                     <FormGroup controlId="bedrijfsemailtag">
-                      <Form.Label>Bedrijfs email tag</Form.Label>
+                      <FormLabel>Bedrijfs email tag</FormLabel>
                       <FormControl
                         type="text"
                         value={gebruiker.bedrijfsemailtag}
@@ -72,7 +71,7 @@ function Profiel() {
                       />
                     </FormGroup>
                     <FormGroup controlId="bedrijfsnaam">
-                      <Form.Label>Bedrijfsnaam</Form.Label>
+                      <FormLabel>Bedrijfsnaam</FormLabel>
                       <FormControl
                         type="text"
                         value={gebruiker.bedrijfsnaam}
@@ -80,7 +79,7 @@ function Profiel() {
                       />
                     </FormGroup>
                     <FormGroup controlId="telefoonnummer">
-                      <Form.Label>Telefoonnummer</Form.Label>
+                      <FormLabel>Telefoonnummer</FormLabel>
                       <FormControl
                         type="tel"
                         value={gebruiker.telefoonnummer}
@@ -88,55 +87,59 @@ function Profiel() {
                       />
                     </FormGroup>
                     <FormGroup controlId="wachtwoord">
-                      <Form.Label>Wachtwoord</Form.Label>
+                      <FormLabel>Wachtwoord</FormLabel>
                       <FormControl
                         type="password"
                         value={gebruiker.wachtwoord}
                         onChange={(e) => setGebruiker({ ...gebruiker, wachtwoord: e.target.value })}
                       />
                     </FormGroup>
-                  </CardBody>
+                  </Card.Body>
                 </Card>
               </Col>
             </Row>
-            <div className="d-flex justify-content-center mt-4">
-              <Button variant="success" size="lg" className="mx-2" type="submit">Opslaan</Button>
-              <Button variant="danger" size="lg" className="mx-2" onClick={() => setEditModus(false)}>Annuleren</Button>
+            <div className="d-flex justify-content-center mt-5">
+              <Button variant="success" size="lg" className="mx-2" type="submit">
+                Opslaan
+              </Button>
+              <Button
+                variant="danger"
+                size="lg"
+                className="mx-2"
+                onClick={() => setEditModus(false)}
+              >
+                Annuleren
+              </Button>
             </div>
           </Form>
-        </Container>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div className="achtergrond2"></div>
-        <Container className="py-5">
-          <Row className="justify-content-center">
-            <Col md={8}>
-              <Card className="border-0 shadow rounded-lg mt-5">
-                <CardHeader className="bg-custom text-white border-bottom">
-                  <h3 className="mb-0">{gebruiker.gebruikersnaam}</h3>
-                </CardHeader>
-                <CardBody className="border-top">
-                  <p className="mb-0">Email: {gebruiker.email}</p>
-                  {/* Toon de bedrijfsnaam alleen als deze ingevuld is */}
-                  {gebruiker.bedrijfsnaam && <p className="mb-0">Bedrijfsnaam: {gebruiker.bedrijfsnaam}</p>}
-                  {/* Toon de bedrijfsemailtag alleen als deze ingevuld is */}
-                  {gebruiker.bedrijfsemailtag && <p className="mb-0">Bedrijfs email tag: {gebruiker.bedrijfsemailtag}</p>}
-                  <p className="mb-0">Telefoonnummer: {gebruiker.telefoonnummer || 'N'}</p>
-                  <p className="mb-0">Wachtwoord: {gebruiker.wachtwoord || 'N'}</p>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-          <div className="d-flex justify-content-center mt-4">
-            <Button className='knop' size="lg" onClick={() => setEditModus(true)}>Wijzig</Button>
-          </div>
-        </Container>
-      </>
-    );
-  }
+        ) : (
+          <>
+            <Row className="justify-content-center">
+              <Col md={8}>
+                <Card className="border-0 shadow rounded-lg mt-5">
+                  <Card.Header className="bg-custom text-white border-bottom">
+                    <h3 className="mb-0">{gebruiker.gebruikersnaam}</h3>
+                  </Card.Header>
+                  <Card.Body>
+                    <p className="mb-0">Email: {gebruiker.email}</p>
+                    {gebruiker.bedrijfsnaam && <p className="mb-0">Bedrijfsnaam: {gebruiker.bedrijfsnaam}</p>}
+                    {gebruiker.bedrijfsemailtag && <p className="mb-0">Bedrijfs email tag: {gebruiker.bedrijfsemailtag}</p>}
+                    <p className="mb-0">Telefoonnummer: {gebruiker.telefoonnummer || 'N.v.t.'}</p>
+                    <p className="mb-0">Wachtwoord: {gebruiker.wachtwoord || 'N.v.t.'}</p>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <div className="d-flex justify-content-center mt-5">
+              <Button className="knop" size="lg" onClick={() => setEditModus(true)}>
+                Wijzig
+              </Button>
+            </div>
+          </>
+        )}
+      </Container>
+    </div>
+  );
 }
 
 export default Profiel;

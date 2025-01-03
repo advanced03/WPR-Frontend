@@ -1,0 +1,15 @@
+.tabel {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 75%;
+    margin: 0 auto; 
+}
+
+.geen-resize {
+    resize: none;
+  }
+
+  .tabel-container {
+    max-height: 50rem; 
+    overflow-y: auto;
+  }
+  
