@@ -19,8 +19,7 @@ const AutoVinden = () => {
   };
 
   return (
-    <>
-      <div className="achtergrond2"></div>
+      <div className="achtergrond2">
       <Container fluid>
         <h1 className="pagina-titel text-center my-4">Kies een Auto om te Huren</h1>
         <Row className="my-5 p-5 autovinden">
@@ -43,7 +42,7 @@ const AutoVinden = () => {
           </Button>
         </div>
       </Container>
-    </>
+    </div>
   );
 };
 
