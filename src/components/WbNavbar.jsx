@@ -5,9 +5,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import '../style/navbar.css';
 
-function PartNavbar() {
+function WbNavbar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); // Gebruik de useLocation hook
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -25,21 +25,31 @@ function PartNavbar() {
                 Homepagina
               </Nav.Link>
             )}
-            {location.pathname !== '/AutoVinden' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/AutoVinden')}>
-                Voertuig huren
-              </Nav.Link>
-            )}
             {location.pathname !== '/Profiel' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/Profiel')}>
                 Profiel
               </Nav.Link>
             )}
+            {location.pathname !== '/WbAccountsBeheren' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/WbAccountsBeheren')}>
+                Accounts beheren
+              </Nav.Link>
+            )}
+            {location.pathname !== '/WbRegister' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/WbRegister')}>
+                Gebruikers registreren
+              </Nav.Link>
+            )}
+            {location.pathname !== '/WbStatus' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/WbStatus')}>
+                Overzicht voertuigen
+              </Nav.Link>
+            )}
           </Nav>
-        </Navbar.Collapse>  
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
 
-export default PartNavbar;
+export default WbNavbar;

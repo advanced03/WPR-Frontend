@@ -1,0 +1,7 @@
+.scrollable-table-container {
+  max-height: 800px;
+  overflow-y: auto; 
+  overflow-x: hidden;
+  margin-left: 3rem;
+  margin-right: 3rem;  
+}

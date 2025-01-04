@@ -15,7 +15,9 @@ const FoVoertuigInname = () => {
   const [toonModal, zetToonModal] = useState(false);
   const [schadeInfo, zetSchadeInfo] = useState('');
   const [heeftSchade, zetHeeftSchade] = useState(false);
-  const [schadeDatum, zetSchadeDatum] = useState(''); // Nieuw state voor schade datum
+  const [foutmeldingen, zetFoutmeldingen] = useState({
+    schadeInfo: false,
+  });
 
   const registreerInname = (auto) => {
     zetGeselecteerdeAuto(auto);
@@ -23,16 +25,36 @@ const FoVoertuigInname = () => {
   };
 
   const opslaanInname = () => {
-    console.log(`Auto: ${geselecteerdeAuto.naam}`);
+    // Validatie voor schade
+    if (heeftSchade) {
+      const fouten = {
+        schadeInfo: schadeInfo.trim() === '',
+      };
+      zetFoutmeldingen(fouten);
+
+      // Als er fouten zijn, stop de registratie
+      if (fouten.schadeInfo) {
+        return;
+      }
+    }
+
+    console.log(`Auto: ${geselecteerdeAuto.voorNaam} ${geselecteerdeAuto.achterNaam}`);
     console.log(`Schade: ${heeftSchade ? schadeInfo : 'Geen schade'}`);
-    console.log(`Datum schade: ${heeftSchade ? schadeDatum : 'Geen schade'}`);
+    console.log(`Datum schade: ${heeftSchade ? new Date().toLocaleDateString() : 'Geen schade'}`);
+
+    // Verwijder de ingeleverde auto uit de lijst
+    zetAutos(autos.filter((auto) => auto.id !== geselecteerdeAuto.id));
+
     zetToonModal(false);
     zetGeselecteerdeAuto(null);
     zetSchadeInfo('');
     zetHeeftSchade(false);
-    zetSchadeDatum('');
+    zetFoutmeldingen({
+      schadeInfo: false,
+    });
   };
 
+  // Gefilterde lijst van auto's
   const gefilterdeAutos = autos.filter((auto) =>
     Object.values(auto)
       .join(' ')
@@ -107,12 +129,16 @@ const FoVoertuigInname = () => {
                       placeholder="Beschrijf de schade"
                       value={schadeInfo}
                       onChange={(e) => zetSchadeInfo(e.target.value)}
-                      className="mt-2"
+                      className={`mt-2 ${foutmeldingen.schadeInfo ? 'is-invalid' : ''}`}
                     />
+                    {foutmeldingen.schadeInfo && (
+                      <div className="invalid-feedback">Beschrijf de schade, dit veld is verplicht.</div>
+                    )}
+                    {/* Datum wordt automatisch ingesteld op vandaag */}
                     <Form.Control
-                      type="date"
-                      value={schadeDatum}
-                      onChange={(e) => zetSchadeDatum(e.target.value)}
+                      type="text"
+                      value={new Date().toLocaleDateString()}
+                      readOnly
                       className="mt-2"
                     />
                   </>

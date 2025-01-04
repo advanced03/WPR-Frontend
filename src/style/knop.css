@@ -1,7 +1,6 @@
 .knop {
     background-color: #600339;
     border: none;
-    border-radius: px;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
   

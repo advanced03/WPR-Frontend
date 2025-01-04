@@ -8,8 +8,24 @@
 }
 
 .car-image {
-    max-width: 100%; /* Past zich aan de breedte van de container aan */
-    height: auto;    /* Houdt de verhoudingen correct */
-    max-height: 150px; /* Zorgt ervoor dat de afbeelding niet te hoog wordt */
-    object-fit: contain; /* Zorgt dat de afbeelding wordt geschaald zonder te worden bijgesneden */
+    max-width: 100%;
+    height: auto;    
+    max-height: 150px;
+    object-fit: contain; 
   }
+
+  .gekozen-auto {
+    font-size: 1.5rem;
+  }
+
+  .knoppengroep {
+    background-color: #600339;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  }
+  
+
+  .autovinden {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
