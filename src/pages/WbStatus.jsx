@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Table, Dropdown, DropdownButton, InputGroup, FormControl } from 'react-bootstrap';
+import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbStatus = () => {
   const [vehicles, setVehicles] = useState([
@@ -52,6 +53,7 @@ const WbStatus = () => {
 
   return (
     <div className="achtergrond2">
+      <WbNavbar />
       <Container>
         <h1 className="pagina-titel text-center my-4">Overzicht Verhuurde Voertuigen</h1>
 

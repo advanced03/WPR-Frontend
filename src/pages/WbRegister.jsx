@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
+import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbRegister = () => {
     const [username, setUsername] = useState('');
@@ -62,8 +63,8 @@ const WbRegister = () => {
     };
 
     return (
-        <>
-            <div className="achtergrond1"></div>
+            <div className="achtergrond1">
+            <WbNavbar />
             <Container className="RegistratieContainer">
                 <Row className="justify-content-center">
                     <Col>
@@ -164,7 +165,7 @@ const WbRegister = () => {
                     </Col>
                 </Row>
             </Container>
-        </>
+        </div>
     );
 };
 
