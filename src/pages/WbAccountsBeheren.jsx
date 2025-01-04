@@ -56,14 +56,17 @@ const WbAccountsBeheren = () => {
       <div>
         <h1 className="pagina-titel text-center my-5">Zakelijke Huurders Beheren</h1>
 
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Zoek medewerkers"
-            aria-label="Zoek medewerkers"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </InputGroup>
+        <div className="d-flex justify-content-center mb-3">
+          <InputGroup className="w-75">
+            <FormControl
+              placeholder="Zoek medewerkers"
+              aria-label="Zoek medewerkers"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </InputGroup>
+        </div>
+
 
         <div className="scrollable-table-container">
           <Table striped bordered hover responsive>
