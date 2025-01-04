@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Form, Table, InputGroup, FormControl, Modal } from 'react-bootstrap';
+import { Button, FormControl, Table, InputGroup, Modal } from 'react-bootstrap';
 import '../style/wagenpark.css';
+import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbAccountsBeheren = () => {
-  // Voorbeeld data met 20 zakelijke huurders
   const [accounts, setAccounts] = useState([
     { id: 1, naam: 'John Doe', email: 'john@techcorp.com' },
     { id: 2, naam: 'Jane Smith', email: 'jane@designltd.com' },
@@ -31,12 +31,10 @@ const WbAccountsBeheren = () => {
   const [showModal, setShowModal] = useState(false);
   const [accountToDelete, setAccountToDelete] = useState(null);
 
-  // Filter de accounts op basis van de zoekterm
   const filteredAccounts = accounts.filter((account) =>
     account.naam.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Functie om de account te verwijderen
   const handleDelete = () => {
     setAccounts(accounts.filter(account => account.id !== accountToDelete.id));
     setShowModal(false);
@@ -53,12 +51,11 @@ const WbAccountsBeheren = () => {
   };
 
   return (
-    <div className="achtergrond2 d-flex justify-content-center">
-      <div className="w-75">
-        {/* Titel buiten de Tabel */}
+    <div className="achtergrond2">
+      <WbNavbar />
+      <div>
         <h1 className="pagina-titel text-center my-5">Zakelijke Huurders Beheren</h1>
 
-        {/* Zoekbalk buiten de Tabel */}
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Zoek medewerkers"
@@ -68,8 +65,7 @@ const WbAccountsBeheren = () => {
           />
         </InputGroup>
 
-        {/* Tabel met de lijst van accounts */}
-        <div className="scrollen">
+        <div className="scrollable-table-container">
           <Table striped bordered hover responsive>
             <thead>
               <tr>
@@ -103,7 +99,6 @@ const WbAccountsBeheren = () => {
         </div>
       </div>
 
-      {/* Modal voor bevestiging */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Weet je het zeker?</Modal.Title>

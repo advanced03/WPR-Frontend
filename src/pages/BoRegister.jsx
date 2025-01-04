@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import BoNavbar from "../components/BoNavbar.jsx";
 
 const BoRegister = () => {
     const [rol, setRol] = useState('frontoffice'); // Default role
@@ -54,7 +55,8 @@ const BoRegister = () => {
     };
 
     return (
-            <div className="achtergrond1">
+        <div className="achtergrond1">
+            <BoNavbar/>
             <Container className="RegistratieContainer">
                 <Row className="justify-content-center">
                     <Col>

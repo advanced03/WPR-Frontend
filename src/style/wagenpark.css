@@ -1,5 +1,5 @@
-.scrollen {
-    max-height: 75%;
-    overflow-y: auto;
-  }
-  
+.scrollable-table-container {
+  max-height: 800px;
+  overflow-y: auto; 
+  overflow-x: hidden; 
+}
