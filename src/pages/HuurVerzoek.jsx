@@ -26,19 +26,50 @@ const HuurVerzoek = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-  return (
-    <>
-      <div className="achtergrond2"></div>
-      <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
-      <Container fluid className="d-flex justify-content-center align-items-center huren-background">
-        <Col md={6}>
-          <Card className='huren-box p-2 mt-5'>
-            <Card.Body>
-              {wagens.map((wagen) => (
-                <Card.Text className="text-center mb-5" key={wagen.VoertuigId}>
-                  <strong>Gekozen Auto:</strong> {wagen.Merk} {wagen.model}
-                </Card.Text>
-              ))}
+    const handleHuurVerzoek = async (e) => {
+        e.preventDefault();
+
+        // Validatie
+        if (!formData.naam || !formData.adres || !formData.rijbewijsNummer || !formData.aardVanRij || !formData.versteBestemming || !formData.verwachteKilometers) {
+            setError('Alle velden zijn verplicht!');
+            return;
+        }
+
+        if (isNaN(formData.verwachteKilometers)) {
+            setError('Verwachte kilometers moeten een nummer zijn.');
+            return;
+        }
+
+        try {
+            // Voorbeeld van een POST-aanroep naar een API
+            const response = await axios.post('https://localhost:7281/api/verhuurVerzoek/VerhuurVerzoekRequest', formData);
+
+            if (response.status === 200) {
+                setSuccess(true);
+                setError(null);
+                setTimeout(() => {
+                    navigate('/bevestiging'); // Redirect naar de bevestigingspagina
+                }, 3000);
+            }
+        } catch (error) {
+            setError('Er is een fout opgetreden bij het indienen van uw verzoek.');
+            setSuccess(false);
+        }
+    };
+
+    return (
+        <>
+            <div className="achtergrond2"></div>
+            <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
+            <Container fluid className="d-flex justify-content-center align-items-center huren-background">
+                <Col md={6}>
+                    <Card className='huren-box p-2 mt-5'>
+                        <Card.Body>
+                            {wagens.map((wagen) => (
+                                <Card.Text className="text-center mb-5" key={wagen.VoertuigId}>
+                                    <strong>Gekozen Auto:</strong> {wagen.Merk} {wagen.model}
+                                </Card.Text>
+                            ))}
 
                             <Card.Title className="mb-3"><strong>Uw persoonlijke informatie</strong></Card.Title>
                             {error && <Alert variant="danger">{error}</Alert>}
@@ -79,7 +110,7 @@ const HuurVerzoek = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formAardVanRij">
-                                    <Form.Label>🏖️ Aard van het reis</Form.Label>
+                                    <Form.Label>🏖️ Aard van de reis</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="aardVanRij"
@@ -121,3 +152,4 @@ const HuurVerzoek = () => {
 };
 
 export default HuurVerzoek;
+

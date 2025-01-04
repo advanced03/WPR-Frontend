@@ -6,8 +6,10 @@ import axios from 'axios';
 
 const PartRegister = () => {
     const [username, setUsername] = useState('');
+    const [voornaam, setVoornaam] = useState('');
+    const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
@@ -26,40 +28,67 @@ const PartRegister = () => {
         }
 
         try {
-            const response = await axios.post(`https://localhost:7281/api/account/registerParticulier`, {
+            console.log('Payload:', {
                 username,
                 email,
-                phone,
+                phoneNumber,
+                voornaam,
+                achternaam,
                 password,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
             });
 
-            if (response.status === 201) { // 201 Created
-                // JWT-token opslaan in localStorage
-                const token = response.data.token; // Zorg ervoor dat de server dit terugstuurt
+            const response = await axios.post(
+                `https://localhost:7281/api/account/registerParticulier`,
+                {
+                    username,
+                    email,
+                    phoneNumber,
+                    voornaam,
+                    achternaam,
+                    password,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 201) {
+                // JWT-token opslaan in sessionStorage
+                const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
                 }
 
                 setSuccess(true);
                 setUsername('');
+                setVoornaam('');
+                setAchternaam('');
                 setEmail('');
-                setPhone('');
+                setPhoneNumber('');
                 setPassword('');
                 setConfirmPassword('');
 
-                // Navigate to the login page after registration
-                setTimeout(() => navigate('/login'), 2000); // Wait for 2 seconds before redirecting
+                // Navigeren naar de login-pagina
+                setTimeout(() => navigate('/Login'), 2000);
             } else {
-                setError('Er is iets misgegaan bij de registratie.');
+                setTimeout(() => navigate('/Login'), 2000);
             }
         } catch (error) {
             console.error('Error during registration:', error);
+
             if (error.response) {
-                setError(error.response.data.message || 'Er is een fout opgetreden tijdens registratie.');
+                // Foutmelding van de backend weergeven
+                if (error.response.data && error.response.data.Errors) {
+                    // Dit is meestal het geval bij ModelState-validatie fouten
+                    setError(error.response.data.Errors.join(' '));
+                } else if (error.response.data && error.response.data.Message) {
+                    // Specifieke foutmelding van de backend
+                    setError(error.response.data.Message);
+                } else {
+                    setError('Er is een fout opgetreden tijdens registratie.');
+                }
             } else if (error.request) {
                 setError('Geen antwoord van de server. Probeer het later opnieuw.');
             } else {
@@ -67,6 +96,7 @@ const PartRegister = () => {
             }
         }
     };
+
 
     const handleNavigation = (path) => {
         navigate(path);
@@ -107,14 +137,34 @@ const PartRegister = () => {
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>Voornaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw voornaam in"
+                                        value={voornaam}
+                                        onChange={(e) => setVoornaam(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formAchternaam" className="mb-3">
+                                    <Form.Label>Achternaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw achternaam in"
+                                        value={achternaam}
+                                        onChange={(e) => setAchternaam(e.target.value)}
+                                    />
+                                </Form.Group>
                                 <Form.Group controlId="formPhone" className="mb-3">
                                     <Form.Label>📞 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         required
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">

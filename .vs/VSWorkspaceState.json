@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\pages"
+    "\\src\\pages",
+    "\\src\\style"
   ],
-  "SelectedNode": "\\src\\pages\\AutoVinden.jsx",
   "PreviewInSolutionExplorer": false
 }
