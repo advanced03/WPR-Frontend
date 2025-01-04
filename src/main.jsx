@@ -6,7 +6,6 @@ import PartRegister from './pages/partRegister.jsx';
 import Login from './pages/login.jsx';
 import BoRegister from './pages/BoRegister.jsx';
 import Home from './pages/Home.jsx';
-import AutoZoeken from './pages/AutoZoeken.jsx';
 import AutoVinden from './pages/AutoVinden.jsx';
 import HuurVerzoek from './pages/HuurVerzoek.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
@@ -29,7 +28,6 @@ const App = () => {
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
                 <Route path="/BoRegister" element={<BoRegister />} />
-                <Route path="/AutoZoeken" element={<AutoZoeken />} />
                 <Route path="/AutoVinden" element={<AutoVinden />} />
                 <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />

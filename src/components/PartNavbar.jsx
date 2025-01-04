@@ -25,8 +25,8 @@ function PartNavbar() {
                 Homepagina
               </Nav.Link>
             )}
-            {location.pathname !== '/AutoZoeken' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/AutoZoeken')}>
+            {location.pathname !== '/AutoVinden' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/AutoVinden')}>
                 Voertuig huren
               </Nav.Link>
             )}
@@ -36,7 +36,7 @@ function PartNavbar() {
               </Nav.Link>
             )}
           </Nav>
-        </Navbar.Collapse>
+        </Navbar.Collapse>  
       </Container>
     </Navbar>
   );
