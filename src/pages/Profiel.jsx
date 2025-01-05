@@ -18,40 +18,68 @@ function Profiel() {
     const [editModus, setEditModus] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    const fetchUserData = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
+        try {
+            const response = await axios.get('https://localhost:7281/api/account/getUserData', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            setGebruiker(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Er is een fout opgetreden bij het ophalen van de gebruikersgegevens:', error);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchUserData = async () => {
-            // Haal de token op uit sessionStorage
-            const token = sessionStorage.getItem('jwtToken');
-
-            if (!token) {
-                console.error('JWT-token ontbreekt in sessionStorage.');
-                return;
-            }
-
-            try {
-                // Haal gebruikersgegevens op van de backend
-                const response = await axios.get('https://localhost:7281/api/account/getUserData', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                // Zet de ontvangen gegevens in de state
-                setGebruiker(response.data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Er is een fout opgetreden bij het ophalen van de gebruikersgegevens:', error);
-                setLoading(false);
-            }
-        };
-
         fetchUserData();
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Wijzigingen opgeslagen:', gebruiker);
-        setEditModus(false);
+
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
+        try {
+            const response = await axios.put(
+                'https://localhost:7281/api/account/updateUserData',
+                {
+                    username: gebruiker.username,
+                    email: gebruiker.email,
+                    phoneNumber: gebruiker.phoneNumber
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            console.log('Gebruiker succesvol bijgewerkt:', response.data);
+
+            setEditModus(false);
+            setGebruiker(response.data);
+
+            // Herlaad de gebruikersgegevens
+            fetchUserData();
+        } catch (error) {
+            console.error('Er is een fout opgetreden bij het opslaan van de gebruikersgegevens:', error);
+        }
     };
 
     if (loading) {
@@ -112,30 +140,6 @@ function Profiel() {
                                                 onChange={(e) => setGebruiker({ ...gebruiker, phoneNumber: e.target.value })}
                                             />
                                         </FormGroup>
-                                        <FormGroup controlId="voornaam">
-                                            <FormLabel>Voornaam</FormLabel>
-                                            <FormControl
-                                                type="voornaam"
-                                                value={gebruiker.voornaam}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, achternaam: e.target.value })}
-                                            />
-                                        </FormGroup>
-                                        <FormGroup controlId="achternaam">
-                                            <FormLabel>Achternaam</FormLabel>
-                                            <FormControl
-                                                type="achternaam"
-                                                value={gebruiker.achternaam}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, achternaam: e.target.value })}
-                                            />
-                                        </FormGroup>
-                                        <FormGroup controlId="wachtwoord">
-                                            <FormLabel>Wachtwoord</FormLabel>
-                                            <FormControl
-                                                type="password"
-                                                value={gebruiker.wachtwoord}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, wachtwoord: e.target.value })}
-                                            />
-                                        </FormGroup>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -148,7 +152,10 @@ function Profiel() {
                                 variant="danger"
                                 size="lg"
                                 className="mx-2"
-                                onClick={() => setEditModus(false)}
+                                onClick={() => {
+                                    setEditModus(false);
+                                    fetchUserData();  // Voeg dit toe om opnieuw de gegevens op te halen
+                                }}
                             >
                                 Annuleren
                             </Button>
@@ -159,16 +166,16 @@ function Profiel() {
                         <Row className="justify-content-center">
                             <Col md={8}>
                                 <Card className="border-0 shadow rounded-lg mt-5">
-                                        <Card.Header className="bg-custom text-white border-bottom">
-                                            <h3 className="mb-0">{gebruiker.username}</h3>
+                                    <Card.Header className="bg-custom text-white border-bottom">
+                                        <h3 className="mb-0">{gebruiker.username}</h3>
                                     </Card.Header>
                                     <Card.Body>
                                         <p className="mb-0">Email: {gebruiker.email}</p>
                                         {gebruiker.bedrijfsnaam && <p className="mb-0">Bedrijfsnaam: {gebruiker.bedrijfsnaam}</p>}
-                                            {gebruiker.bedrijfsemailtag && <p className="mb-0">Bedrijfs email tag: {gebruiker.bedrijfsemailtag}</p>}
-                                            <p className="mb-0">Telefoonnummer: {gebruiker.phoneNumber || 'N.v.t.'}</p>
-                                            <p className="mb-0">Voornaam: {gebruiker.voornaam || 'N.v.t.'}</p>
-                                            <p className="mb-0">Achternaam: {gebruiker.achternaam || 'N.v.t.'}</p>
+                                        {gebruiker.bedrijfsemailtag && <p className="mb-0">Bedrijfs email tag: {gebruiker.bedrijfsemailtag}</p>}
+                                        <p className="mb-0">Telefoonnummer: {gebruiker.phoneNumber || 'N.v.t.'}</p>
+                                        <p className="mb-0">Voornaam: {gebruiker.voornaam || 'N.v.t.'}</p>
+                                        <p className="mb-0">Achternaam: {gebruiker.achternaam || 'N.v.t.'}</p>
                                         <p className="mb-0">Wachtwoord: {gebruiker.wachtwoord || 'N.v.t.'}</p>
                                     </Card.Body>
                                 </Card>
@@ -187,4 +194,5 @@ function Profiel() {
 }
 
 export default Profiel;
+
 

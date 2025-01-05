@@ -1,3 +1,6 @@
+body {
+    overflow-y: scroll; /* Zorg ervoor dat de pagina altijd scrollbaar is */
+}
 /* Container verticaal centreren */
 .container-center {
     height: 100vh;

@@ -1,105 +1,142 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
+import axios from 'axios';
 import '../style/huren.css';
 import '../style/knop.css';
 import PartNavbar from "../components/PartNavbar.jsx";
 
-// Mock data voor voertuigen
-const wagens = [
-  { VoertuigId: 1, Merk: 'Ford', model: 'Fiesta', kleur: 'Blauw', type: 'auto' },
-  { VoertuigId: 2, Merk: 'Volkswagen', model: 'Golf', kleur: 'Geel', type: 'auto' },
-  { VoertuigId: 3, Merk: 'Opel', model: 'Corsa', kleur: 'Zwart', type: 'auto' },
-  { VoertuigId: 4, Merk: 'Hobby', model: 'DeLuxe', kleur: 'Wit', type: 'caravan' },
-  { VoertuigId: 5, Merk: 'Winnebago', model: 'Vista', kleur: 'Grijs', type: 'camper' },
-];
-
+// Verander de mock data naar state en voeg een loading/error state toe.
 const AutoVinden = () => {
-  const [selectedType, setSelectedType] = useState('auto');
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+    const [selectedType, setSelectedType] = useState('auto');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [wagens, setWagens] = useState([]); // Lege lijst voor de voertuigen
+    const [loading, setLoading] = useState(true); // Voor het tonen van een laadindicatie
+    const [error, setError] = useState(null); // Voor het afhandelen van errors
+    const navigate = useNavigate();
 
-  const handleSelect = (type) => {
-    setSelectedType(type);
-  };
+    useEffect(() => {
+        // Functie om de data van de API op te halen
+        const fetchWagens = async () => {
+            try {
+                const response = await axios.get('https://localhost:7281/api/voertuigen/AllVoertuigen');
+                console.log('Response Data:', response.data); // Log de ontvangen data om te controleren
+                setWagens(response.data); // Zet de ontvangen data in state
+                setLoading(false); // Stop de loading state
+            } catch (error) {
+                setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
+                setLoading(false); // Stop de loading state bij error
+            }
+        };
 
-  const handleGoBack = () => {
-    navigate('/AutoZoeken'); // Navigeren naar de vorige stap
-  };
+        fetchWagens();
+    }, []); // Deze useEffect wordt maar één keer uitgevoerd, bij het laden van de component
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+    const handleSelect = (type) => {
+        setSelectedType(type);
+    };
 
-  const filteredWagens = wagens.filter(wagen => 
-    wagen.type === selectedType && 
-    (wagen.Merk.toLowerCase().includes(searchTerm.toLowerCase()) || 
-     wagen.model.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+    const handleGoBack = () => {
+        navigate('/AutoZoeken'); // Navigeren naar de vorige stap
+    };
 
-  return (
-    <div className="achtergrond2">
-      <PartNavbar />
-      <Container fluid className="p-2 my-4">
-        <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
-        <div className="d-flex justify-content-center mt-5">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Zoek voertuigen..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{ width: '300px' }}
-          />
+    const handleRentClick = (wagen) => {
+        // Sla de geselecteerde wagen op in sessionStorage
+        sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
+        const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
+        console.log(storedWagen); // Controleer wat er in sessionStorage zit
+
+        // Optioneel: Navigeren naar een andere pagina, bijvoorbeeld naar een huurpagina
+        navigate('/Huurverzoek');
+    };
+
+    // Filter de voertuigen op type en zoekterm
+    const filteredWagens = wagens.filter(wagen =>
+        wagen.soort === selectedType && // Gebruik 'soort' voor filtering, niet 'type'
+        (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) || // Filter op merk
+            wagen.type.toLowerCase().includes(searchTerm.toLowerCase())) // Filter op type
+    );
+
+    if (loading) {
+        return <div>Loading...</div>; // Toon "Loading..." tijdens het ophalen van data
+    }
+
+    if (error) {
+        return <div>{error}</div>; // Toon foutmelding als er iets misgaat
+    }
+
+    return (
+        <div className="achtergrond2">
+            <PartNavbar />
+            <Container fluid className="p-2 my-4">
+                <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
+
+                <div className="d-flex justify-content-center mt-5">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Zoek voertuigen..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={{ width: '300px' }}
+                    />
+                </div>
+
+                {/* ButtonGroup */}
+                <div className="d-flex justify-content-center mb-4">
+                    <ButtonGroup className="mt-5 knoppengroep">
+                        <Button
+                            variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
+                            onClick={() => handleSelect('auto')}
+                        >
+                            Auto 🚗
+                        </Button>
+                        <Button
+                            variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
+                            onClick={() => handleSelect('caravan')}
+                        >
+                            Caravan ⛺
+                        </Button>
+                        <Button
+                            variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
+                            onClick={() => handleSelect('camper')}
+                        >
+                            Camper 🚐
+                        </Button>
+                    </ButtonGroup>
+                </div>
+
+                {/* Vehicle Grid */}
+                <Row className="my-5 p-5 autovinden">
+                    {filteredWagens.length === 0 ? (
+                        <div className="no-results">Geen voertuigen gevonden!</div> // Toon bericht als geen resultaten
+                    ) : (
+                        filteredWagens.map(wagen => (
+                            <Col key={wagen.voertuigId} sm={12} md={6} lg={4} className="mb-4">
+                                <Card className="h-100 p-2 mb-3">
+                                    <Card.Body>
+                                        <Card.Title>{wagen.merk} {wagen.type}</Card.Title>
+                                        <p>Kleur: {wagen.kleur}</p>
+                                        <p>Type: {wagen.soort}</p>
+                                        <p>Kenteken: {wagen.kenteken}</p>
+                                        <p>Aanschafjaar: {wagen.aanschafJaar}</p>
+                                        <Button className="knop mt-3" onClick={() => handleRentClick(wagen)}>
+                                            Huren 🚗
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))
+                    )}
+                </Row>
+            </Container>
         </div>
-
-        {/* ButtonGroup */}
-        <div className="d-flex justify-content-center mb-4">
-          <ButtonGroup className="mt-5 knoppengroep">
-            <Button
-              variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
-              onClick={() => handleSelect('auto')}
-            >
-              Auto 🚗
-            </Button>
-            <Button
-              variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
-              onClick={() => handleSelect('caravan')}
-            >
-              Caravan ⛺
-            </Button>
-            <Button
-              variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
-              onClick={() => handleSelect('camper')}
-            >
-              Camper 🚐
-            </Button>
-          </ButtonGroup>
-        </div>
-
-        {/* Vehicle Grid */}
-        <Row className="my-5 p-5 autovinden">
-          {filteredWagens.map(wagen => (
-            <Col key={wagen.VoertuigId} sm={12} md={6} lg={4} className="mb-4">
-              <Card className="h-100 p-2 mb-3">
-                <Card.Img
-                  variant="top"
-                  src={`src/logos/${wagen.Merk.toLowerCase()}.png`}
-                  className="car-image"
-                />
-                <Card.Body>
-                  <Card.Title>{wagen.Merk} {wagen.model}</Card.Title>
-                  <p>Kleur: {wagen.kleur}</p>
-                  <Button className="knop mt-3">Huren 🚗</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </div>
-  );
+    );
 };
 
 export default AutoVinden;
+
