@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
-import WbNavbar from "../components/WbNavbar.jsx";
+import axios from 'axios';
 
 const WbRegister = () => {
     const [username, setUsername] = useState('');
+    const [voornaam, setVoornaam] = useState('');
+    const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [bedrijfEmail, setBedrijfEmail] = useState('');
-    const [bedrijfsnaam, setBedrijfsnaam] = useState('');
-    const [kvk, setKVK] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
@@ -23,53 +21,94 @@ const WbRegister = () => {
         setError(null);
         setSuccess(false);
 
-        // Validate inputs
+        // Wachtwoorden controleren
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
             return;
         }
 
         try {
-            const payload = {
-                rol: 'wagenparkbeheerder', // Altijd wagenparkbeheerder
+            console.log('Payload:', {
                 username,
                 email,
-                bedrijfEmail,
-                bedrijfsnaam,
-                kvk,
-                phone,
+                phoneNumber,
+                voornaam,
+                achternaam,
                 password,
-            };
-
-            const response = await fetch('http://your-backend-url/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
             });
 
-            if (!response.ok) {
-                throw new Error('Registratie mislukt. Probeer het opnieuw.');
-            }
+            const response = await axios.post(
+                `https://localhost:7281/api/account/registerZakelijk`,
+                {
+                    username,
+                    email,
+                    phoneNumber,
+                    voornaam,
+                    achternaam,
+                    password,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
-            setSuccess(true); // Indicate success
-            setTimeout(() => navigate('/Login'), 2000);
+            if (response.status === 201) {
+                // JWT-token opslaan in sessionStorage
+                const token = response.data.token;
+                if (token) {
+                    sessionStorage.setItem('jwtToken', token);
+                }
+
+                setSuccess(true);
+                setUsername('');
+                setVoornaam('');
+                setAchternaam('');
+                setEmail('');
+                setPhoneNumber('');
+                setPassword('');
+                setConfirmPassword('');
+
+                // Navigeren naar de login-pagina
+                setTimeout(() => navigate('/Login'), 2000);
+            } else {
+                setTimeout(() => navigate('/Login'), 2000);
+            }
         } catch (error) {
-            setError(error.message);
+            console.error('Error during registration:', error);
+
+            if (error.response) {
+                // Foutmelding van de backend weergeven
+                if (error.response.data && error.response.data.Errors) {
+                    // Dit is meestal het geval bij ModelState-validatie fouten
+                    setError(error.response.data.Errors.join(' '));
+                } else if (error.response.data && error.response.data.Message) {
+                    // Specifieke foutmelding van de backend
+                    setError(error.response.data.Message);
+                } else {
+                    setError('Er is een fout opgetreden tijdens registratie.');
+                }
+            } else if (error.request) {
+                setError('Geen antwoord van de server. Probeer het later opnieuw.');
+            } else {
+                setError(error.message);
+            }
         }
     };
 
-    const handleLoginRedirect = (path) => {
+
+    const handleNavigation = (path) => {
         navigate(path);
     };
 
     return (
             <div className="achtergrond1">
-            <WbNavbar />
             <Container className="RegistratieContainer">
                 <Row className="justify-content-center">
                     <Col>
                         <div className="RegistratieKaart">
-                            <h2 className="text-center mb-4">Zakelijk Registreren (Wagenparkbeheerder)</h2>
+                            <h2 className="text-center mb-4">Zakelijke accounts registreren</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
@@ -80,87 +119,90 @@ const WbRegister = () => {
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
+                                        required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formEmail" className="mb-3">
                                     <Form.Label>📧 E-Mail</Form.Label>
                                     <Form.Control
+                                        required
                                         type="email"
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </Form.Group>
-
-                                <Form.Group controlId="formBedrijfEmail" className="mb-3">
-                                    <Form.Label>📧 Bedrijf E-mail Tag</Form.Label>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>Voornaam</Form.Label>
                                     <Form.Control
-                                        type="email"
-                                        placeholder="Voer uw E-Mail tag in (@bedrijf)"
-                                        value={bedrijfEmail}
-                                        onChange={(e) => setBedrijfEmail(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="formKVK" className="mb-3">
-                                    <Form.Label>📋 KVK Nummer</Form.Label>
-                                    <Form.Control
+                                        required
                                         type="text"
-                                        placeholder="Voer het KVK nummer van uw bedrijf in"
-                                        value={kvk}
-                                        onChange={(e) => setKVK(e.target.value)}
+                                        placeholder="Voer uw voornaam in"
+                                        value={voornaam}
+                                        onChange={(e) => setVoornaam(e.target.value)}
                                     />
                                 </Form.Group>
-
-                                <Form.Group controlId="formBedrijfsnaam" className="mb-3">
-                                    <Form.Label>🏢 Bedrijfsnaam</Form.Label>
+                                <Form.Group controlId="formAchternaam" className="mb-3">
+                                    <Form.Label>Achternaam</Form.Label>
                                     <Form.Control
+                                        required
                                         type="text"
-                                        placeholder="Voer uw bedrijfsnaam in"
-                                        value={bedrijfsnaam}
-                                        onChange={(e) => setBedrijfsnaam(e.target.value)}
+                                        placeholder="Voer uw achternaam in"
+                                        value={achternaam}
+                                        onChange={(e) => setAchternaam(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formPhone" className="mb-3">
                                     <Form.Label>📞 Telefoonnummer</Form.Label>
                                     <Form.Control
+                                        required
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Kies een wachtwoord"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
                                 </Button>
                             </Form>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Heeft u al een{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/login')}
+                                        className="Link"
+                                    >
+                                        account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
                         </div>
                     </Col>
                 </Row>
