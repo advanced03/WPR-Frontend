@@ -13,7 +13,6 @@ import Profiel from './pages/Profiel.jsx';
 import FoVoertuigInname from './pages/FoVoertuigInname.jsx';
 import FoVoertuigUitgifte from './pages/FoVoertuigUitgifte.jsx';
 import BoHuurVerzoekBehandeling from './pages/BoHuurVerzoekBehandeling.jsx';
-import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
 import BoWagenparkBeheer from './pages/BoWagenparkBeheer.jsx';
 import WbRegister from './pages/WbRegister.jsx';
 import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
@@ -35,7 +34,6 @@ const App = () => {
                 <Route path="/FoVoertuigInname" element={<FoVoertuigInname />} />
                 <Route path="/FoVoertuigUitgifte" element={<FoVoertuigUitgifte />} />
                 <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
-                <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
                 <Route path="/BoWagenparkBeheer" element={<BoWagenparkBeheer />} />
                 <Route path="/WbRegister" element={<WbRegister />} />
                 <Route path="/WbAccountsBeheren" element={<WbAccountsBeheren />} />

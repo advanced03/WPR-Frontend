@@ -55,3 +55,9 @@ body {
 .bg-custom {
   background-color: #600339;
 }
+
+
+.scroll-container {
+  max-height: 100vh; /* Zorgt ervoor dat het niet groter wordt dan het scherm */
+  overflow-y: auto; /* Schakelt verticale scrollbalk in als nodig */
+}

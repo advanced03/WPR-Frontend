@@ -90,7 +90,7 @@ function Profiel() {
         <div className="achtergrond2">
             <PartNavbar />
             <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
-            <Container className="py-5">
+            <Container className="py-5 scroll-container">
                 {editModus ? (
                     <Form onSubmit={handleSubmit}>
                         <Row className="justify-content-center">
@@ -100,6 +100,7 @@ function Profiel() {
                                         <h3 className="mb-0">Profiel Bewerken</h3>
                                     </Card.Header>
                                     <Card.Body>
+                                        {/* Form Fields */}
                                         <FormGroup controlId="gebruikersnaam">
                                             <FormLabel>Gebruikersnaam</FormLabel>
                                             <FormControl
@@ -190,7 +191,7 @@ function Profiel() {
                 )}
             </Container>
         </div>
-    );
+    );    
 }
 
 export default Profiel;
