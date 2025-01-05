@@ -23,10 +23,6 @@ const AutoVinden = () => {
     setSelectedType(type);
   };
 
-  const handleGoBack = () => {
-    navigate('/AutoZoeken'); // Navigeren naar de vorige stap
-  };
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };

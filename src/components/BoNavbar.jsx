@@ -35,11 +35,6 @@ function BoNavbar() {
                 Huurverzoeken behandelen
               </Nav.Link>
             )}
-            {location.pathname !== '/BoSchadeRegister' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/BoSchadeRegister')}>
-                Reparatiestatus aanpassen
-              </Nav.Link>
-            )}
             {location.pathname !== '/BoRegister' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/BoRegister')}>
                 Medewerkeraccount aanmaken
