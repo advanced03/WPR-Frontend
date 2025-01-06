@@ -72,8 +72,7 @@ const HuurVerzoek = () => {
     }
 
     return (
-        <>
-            <div className="achtergrond2"></div>
+            <div className="achtergrond2">
             <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
             <Container fluid className="d-flex justify-content-center align-items-center huren-background">
                 <Col md={6}>
@@ -142,7 +141,7 @@ const HuurVerzoek = () => {
             <div className="d-flex justify-content-center my-4">
                 <Button className="knop" onClick={handleGoBack}>← Terug</Button>
             </div>
-        </>
+        </div>
     );
 };
 

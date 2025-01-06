@@ -6,7 +6,6 @@ import '../style/huren.css';
 import '../style/knop.css';
 import PartNavbar from "../components/PartNavbar.jsx";
 
-// Verander de mock data naar state en voeg een loading/error state toe.
 const AutoVinden = () => {
     const [selectedType, setSelectedType] = useState('auto');
     const [searchTerm, setSearchTerm] = useState('');
@@ -34,10 +33,6 @@ const AutoVinden = () => {
 
     const handleSelect = (type) => {
         setSelectedType(type);
-    };
-
-    const handleGoBack = () => {
-        navigate('/AutoZoeken'); // Navigeren naar de vorige stap
     };
 
     const handleSearchChange = (e) => {

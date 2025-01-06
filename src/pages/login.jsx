@@ -56,8 +56,7 @@ const Login = () => {
     };
 
     return (
-        <>
-            <div className="achtergrond1"></div>
+            <div className="achtergrond1">
             <Container className="LoginContainer">
                 <Row className="justify-content-center">
                     <Col>
@@ -103,7 +102,7 @@ const Login = () => {
                     </Col>
                 </Row>
             </Container>
-        </>
+        </div>
     );
 };
 
