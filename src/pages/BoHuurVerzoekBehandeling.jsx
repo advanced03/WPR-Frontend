@@ -4,83 +4,128 @@ import axios from 'axios';
 import '../style/backoffice.css';
 
 const BoHuurVerzoekBehandeling = () => {
-    const [verzoeken, setVerzoeken] = useState([]); // State voor huurverzoeken
-    const [showModal, setShowModal] = useState(false); // Standaard geen modal tonen
-    const [selectedVerzoek, setSelectedVerzoek] = useState(null); // Het geselecteerde verzoek dat goedgekeurd of afgewezen wordt
-    const [loading, setLoading] = useState(true); // Laadstatus
-    const [error, setError] = useState(null); // Foutstatus
+    const [verzoeken, setVerzoeken] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedVerzoek, setSelectedVerzoek] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Haal huurverzoeken op bij het laden van de component
-    useEffect(() => {
-        const fetchVerzoeken = async () => {
-            const token = sessionStorage.getItem('jwtToken');
+    // Functie om huurverzoeken op te halen
+    const fetchVerzoeken = async () => {
+        const token = sessionStorage.getItem('jwtToken');
 
-            if (!token) {
-                console.error('JWT-token ontbreekt in sessionStorage.');
-                return;
-            }
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
 
-            try {
-                const response = await axios.get(
-                    'https://localhost:7281/api/verhuurVerzoek/GetAllPending', {
+        try {
+            setLoading(true);
+            const response = await axios.get(
+                'https://localhost:7281/api/verhuurVerzoek/GetAllPendingVerhuurVerzoeken',
+                {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                });
-                
-                setVerzoeken(response.data); // Werk de state bij met de API-data
-            } catch (err) {
-                setError('Er is een fout opgetreden bij het ophalen van de huurverzoeken.');
-            } finally {
-                setLoading(false); // Zet loading op false
-            }
-        };
+                }
+            );
+            setVerzoeken(response.data);
+            setError(null);
+        } catch (err) {
+            setError('Er is een fout opgetreden bij het ophalen van de huurverzoeken.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchVerzoeken();
     }, []);
 
-    // Functie om verzoek goed te keuren
-    const goedkeuren = (id) => {
-        const updatedVerzoeken = verzoeken.map((verzoek) =>
-            verzoek.id === id ? { ...verzoek, goedgekeurd: true } : verzoek
-        );
-        setVerzoeken(updatedVerzoeken);
+    const postGoedkeuren = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
+        if (selectedVerzoek && selectedVerzoek.verzoek) {
+            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId; // Haal de juiste ID uit selectedVerzoek
+
+            try {
+                console.log('Payload:', { verzoekId });
+                await axios.post(
+                    `https://localhost:7281/api/verhuurVerzoekBehandelen/KeurVerzoekGoed/${verzoekId}`,
+                    { verzoekId },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                console.log(`Verzoek met ID ${verzoekId} succesvol goedgekeurd.`);
+                fetchVerzoeken(); // Haal de verzoeken opnieuw op
+            } catch (err) {
+                console.error(`Er is een fout opgetreden bij het goedkeuren van verzoek met ID ${verzoekId}.`, err);
+            }
+        }
     };
 
-    // Functie om verzoek af te wijzen
-    const afwijzen = (id) => {
-        const updatedVerzoeken = verzoeken.map((verzoek) =>
-            verzoek.id === id ? { ...verzoek, afgewezen: true } : verzoek
-        );
-        setVerzoeken(updatedVerzoeken);
+
+    const postAfwijzen = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
+        if (selectedVerzoek && selectedVerzoek.verzoek) {
+            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId; // Haal de juiste ID uit selectedVerzoek
+
+            try {
+                await axios.post(
+                    `https://localhost:7281/api/verhuurVerzoekBehandelen/KeurVerzoekGoed/${verzoekId}`,
+                    { verzoekId },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                console.log(`Verzoek met ID ${verzoekId} succesvol afgewezen.`);
+                fetchVerzoeken(); // Haal de verzoeken opnieuw op
+            } catch (err) {
+                console.error(`Er is een fout opgetreden bij het afwijzen van verzoek met ID ${verzoekId}.`, err);
+            }
+        }
     };
 
-    // Functie om de bevestigingsmodal te tonen
+
     const handleShowModal = (verzoek, action) => {
         setSelectedVerzoek({ verzoek, action });
         setShowModal(true);
     };
 
-    // Functie om de modal te sluiten zonder actie
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedVerzoek(null);
     };
 
-    // Functie om actie te bevestigen en modal te sluiten
     const handleConfirmAction = () => {
         if (selectedVerzoek) {
             const { verzoek, action } = selectedVerzoek;
             if (action === 'goedgekeuren') {
-                goedkeuren(verzoek.id);
+                postGoedkeuren(verzoek.id);
             } else if (action === 'afwijzen') {
-                afwijzen(verzoek.id);
+                postAfwijzen(verzoek.id);
             }
         }
-        handleCloseModal(); // Sluit de modal na bevestiging
+        handleCloseModal();
     };
 
-    // Filter alleen de onbehandelde verzoeken
     const onbehandeldeVerzoeken = verzoeken.filter(
         (verzoek) => !verzoek.goedgekeurd && !verzoek.afgewezen
     );
@@ -102,13 +147,13 @@ const BoHuurVerzoekBehandeling = () => {
                                         onbehandeldeVerzoeken.map((verzoek) => (
                                             <Card key={verzoek.id} className="mb-3">
                                                 <Card.Body>
-                                                    <Card.Title><strong>Naam:</strong> {verzoek.naam}</Card.Title>
-                                                    <Card.Text><strong>Voertuig:</strong> {verzoek.voertuig}</Card.Text>
-                                                    <Card.Text><strong>Adres:</strong> {verzoek.adres}</Card.Text>
-                                                    <Card.Text><strong>Rijbewijsnummer:</strong> {verzoek.rijbewijsNummer}</Card.Text>
-                                                    <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardVanRij}</Card.Text>
-                                                    <Card.Text><strong>Verste bestemming:</strong> {verzoek.versteBestemming}</Card.Text>
-                                                    <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachteKilometers}</Card.Text>
+                                                    <Card.Title><strong>Naam:</strong> {verzoek.volledigeNaam}</Card.Title>
+                                                    <Card.Text><strong>Voertuig:</strong> {`${verzoek.voertuigMerk} ${verzoek.voertuigType}`}</Card.Text>
+                                                    <Card.Text><strong>Startdatum:</strong> {verzoek.startDatum}</Card.Text>
+                                                    <Card.Text><strong>Einddatum:</strong> {verzoek.eindDatum}</Card.Text>
+                                                    <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardReis}</Card.Text>
+                                                    <Card.Text><strong>Verste bestemming:</strong> {verzoek.bestemming}</Card.Text>
+                                                    <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachtteKM}</Card.Text>
 
                                                     <div className="d-flex justify-content-start">
                                                         <Button
@@ -139,7 +184,6 @@ const BoHuurVerzoekBehandeling = () => {
                 </Col>
             </Container>
 
-            {/* Bevestigingsmodal */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Bevestiging</Modal.Title>

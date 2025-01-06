@@ -61,7 +61,7 @@ const HuurVerzoek = () => {
                 }
             );
             console.log('Formulier succesvol ingediend:', response.data);
-            navigate('/succes');
+            navigate('/Home');
         } catch (error) {
             console.error('Fout bij het indienen van het formulier:', error);
         }

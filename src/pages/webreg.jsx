@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
 
-const WbRegister = () => {
+const WbReg = () => {
     const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
@@ -97,7 +97,7 @@ const WbRegister = () => {
     };
 
     return (
-            <div className="achtergrond1">
+        <div className="achtergrond1">
             <Container className="RegistratieContainer">
                 <Row className="justify-content-center">
                     <Col>
@@ -131,7 +131,7 @@ const WbRegister = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>backendWorker of FrontendWorker</Form.Label>
+                                    <Form.Label>BackendWorker of FrontendWorker</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -162,7 +162,7 @@ const WbRegister = () => {
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
-                                    </Button>
+                                </Button>
 
                             </Form>
                             <div className="mt-3 text-center">
@@ -186,4 +186,4 @@ const WbRegister = () => {
     );
 };
 
-export default WbRegister;
+export default WbReg;
