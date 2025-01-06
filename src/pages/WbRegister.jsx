@@ -98,10 +98,10 @@ const WbRegister = () => {
 
     return (
             <div className="achtergrond1">
-            <Container className="RegistratieContainer">
-                <Row className="justify-content-center">
+            <Container fluid className="d-flex justify-content-center align-items-center vh-100">
+                <Row>
                     <Col>
-                        <div className="RegistratieKaart">
+                        <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Zakelijke accounts registreren</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
