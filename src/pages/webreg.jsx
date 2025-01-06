@@ -9,13 +9,17 @@ const WbReg = () => {
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [typeAccount, settypeAccount] = useState('');
+    const [phoneNumber, setphoneNumber] = useState('');
+    const [bedrijfsnaam, setbedrijfsnaam] = useState('');
+    const [bedrijfsString, setbedrijfsString] = useState('');
+    const [kvkNummer, setkvkNummer] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
+    
     const handleRegister = async (e) => {
         e.preventDefault();
         setError(null);
@@ -31,17 +35,27 @@ const WbReg = () => {
             console.log('Payload:', {
                 username,
                 email,
-                typeAccount,
+                voornaam,
+                achternaam,
                 password,
+                phoneNumber,
+                bedrijfsnaam,
+                bedrijfsString,
+                kvkNummer,
             });
 
             const response = await axios.post(
-                `https://localhost:7281/api/BackOfficeMedewerker/registerBackendAndFrontend`,
+                `https://localhost:7281/api/BackOfficeMedewerker/registerWagenparkBeheerder`,
                 {
                     username,
                     email,
-                    typeAccount,
+                    voornaam,
+                    achternaam,
                     password,
+                    phoneNumber,
+                    bedrijfsnaam,
+                    bedrijfsString,
+                    kvkNummer,
                 },
                 {
                     headers: {
@@ -59,8 +73,13 @@ const WbReg = () => {
 
                 setSuccess(true);
                 setUsername('');
-                settypeAccount('');
+                setVoornaam('');
+                setAchternaam('');
                 setEmail('');
+                setbedrijfsnaam('');
+                setbedrijfsString('');
+                setphoneNumber('');
+                setkvkNummer('')
                 setPassword('');
                 setConfirmPassword('');
 
@@ -98,11 +117,11 @@ const WbReg = () => {
 
     return (
         <div className="achtergrond1">
-            <Container className="RegistratieContainer">
-                <Row className="justify-content-center">
+            <Container className="Registratiecontainer">
+                <Row className="justify-content-center scrollable-table-container">
                     <Col>
                         <div className="RegistratieKaart">
-                            <h2 className="text-center mb-4">Zakelijke accounts registreren</h2>
+                            <h2 className="text-center mb-4">wagenpark accounts registreren</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
@@ -131,13 +150,63 @@ const WbReg = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>BackendWorker of FrontendWorker</Form.Label>
+                                    <Form.Label>voornaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
                                         placeholder="Voer uw accounttype in"
-                                        value={typeAccount}
-                                        onChange={(e) => settypeAccount(e.target.value)}
+                                        value={voornaam}
+                                        onChange={(e) => setVoornaam(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>achternaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw achternaam in"
+                                        value={achternaam}
+                                        onChange={(e) => setAchternaam(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>bedrijfsnaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw bedrijfsnaam in"
+                                        value={bedrijfsnaam}
+                                        onChange={(e) => setbedrijfsnaam(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>voornaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw @organisatie in"
+                                        value={bedrijfsString}
+                                        onChange={(e) => setbedrijfsString(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>voornaam</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                        placeholder="Voer uw kvknummer in"
+                                        value={kvkNummer}
+                                        onChange={(e) => setkvkNummer(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>telefoonnummer</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                        placeholder="Voer uw telefoonnummer in"
+                                        value={phoneNumber}
+                                        onChange={(e) => setphoneNumber(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">

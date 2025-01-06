@@ -1,8 +1,8 @@
 .RegistratieContainer {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
 }
 
 .RegistratieKaart {
