@@ -116,6 +116,7 @@ const AutoVinden = () => {
                                     <Card.Body>
                                         <Card.Title>{wagen.merk} {wagen.type}</Card.Title>
                                         <p>Kleur: {wagen.kleur}</p>
+                                        <p>prijs: ${50}</p>
                                         <p>Type: {wagen.soort}</p>
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
