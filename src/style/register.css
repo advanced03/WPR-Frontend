@@ -1,20 +1,13 @@
-.RegistratieContainer {
-    max-height: 800px;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-}
-
 .RegistratieKaart {
-    min-height: 400px;
-    min-width: 500px;
+    max-height: 90vh;
+    min-width: 40vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    width: 100%;
+
 }
+
 
 
 .RegistratieKaart h2 {
