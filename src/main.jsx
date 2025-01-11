@@ -17,7 +17,6 @@ import BoWagenparkBeheer from './pages/BoWagenparkBeheer.jsx';
 import WbRegister from './pages/WbRegister.jsx';
 import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
-import WbReg from './pages/WbReg.jsx';
 
 const App = () => {
     return (
@@ -25,7 +24,6 @@ const App = () => {
             <Routes> 
                 <Route path="/" element={<Login />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/WbReg" element={<WbReg />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
                 <Route path="/BoRegister" element={<BoRegister />} />

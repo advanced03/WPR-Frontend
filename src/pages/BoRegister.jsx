@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import BoNavbar from "../components/BoNavbar.jsx";
+import '../style/register.css';
 import axios from 'axios';
 
-const BoRegister = () => {
+const WbRegister = () => {
     const [username, setUsername] = useState('');
+    const [voornaam, setVoornaam] = useState('');
+    const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
+    const [typeAccount, settypeAccount] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [typeAccount, setTypeAccount] = useState('FrontendWorker'); // Default account type 'FrontendWorker'
-    const [bedrijfsnaam, setBedrijfsnaam] = useState('');
-    const [bedrijfsString, setBedrijfsString] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
@@ -22,26 +21,28 @@ const BoRegister = () => {
         setError(null);
         setSuccess(false);
 
-        // Validate passwords
+        // Wachtwoorden controleren
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
             return;
         }
 
         try {
-            const payload = {
+            console.log('Payload:', {
                 username,
                 email,
+                typeAccount,
                 password,
-                typeAccount,  // 'FrontendWorker' or 'BackendWorker'
-                bedrijfsnaam,
-                bedrijfsString
-            };
+            });
 
-            // API call to register the user
             const response = await axios.post(
-                'https://localhost:7281/manualRegister',  // Update to your actual API endpoint
-                payload,
+                `https://localhost:7281/api/BackOfficeMedewerker/registerBackendAndFrontend`,
+                {
+                    username,
+                    email,
+                    typeAccount,
+                    password,
+                },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -56,30 +57,28 @@ const BoRegister = () => {
                     sessionStorage.setItem('jwtToken', token);
                 }
 
-                setSuccess(true); // Registration successful
+                setSuccess(true);
                 setUsername('');
+                settypeAccount('');
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
-                setBedrijfsnaam('');
-                setBedrijfsString('');
 
-                // Redirect to login page after 2 seconds
+                // Navigeren naar de login-pagina
                 setTimeout(() => navigate('/Login'), 2000);
             } else {
-                {/*setError('Er is een probleem opgetreden bij de registratie.');*/}
                 setTimeout(() => navigate('/Login'), 2000);
             }
         } catch (error) {
             console.error('Error during registration:', error);
 
             if (error.response) {
-                console.error('Response from server:', error.response.data);  // Log de response van de server
-
-                // Handle error messages from backend
+                // Foutmelding van de backend weergeven
                 if (error.response.data && error.response.data.Errors) {
+                    // Dit is meestal het geval bij ModelState-validatie fouten
                     setError(error.response.data.Errors.join(' '));
                 } else if (error.response.data && error.response.data.Message) {
+                    // Specifieke foutmelding van de backend
                     setError(error.response.data.Message);
                 } else {
                     setError('Er is een fout opgetreden tijdens registratie.');
@@ -92,14 +91,18 @@ const BoRegister = () => {
         }
     };
 
+
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
+
     return (
-        <div className="achtergrond1">
-            <BoNavbar />
+            <div className="achtergrond1">
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
-                            <h2 className="text-center mb-4">Registratie</h2>
+                            <h2 className="text-center mb-4">Zakelijke accounts registreren</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
@@ -110,78 +113,71 @@ const BoRegister = () => {
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
+                                        required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formEmail" className="mb-3">
                                     <Form.Label>📧 E-Mail</Form.Label>
                                     <Form.Control
+                                        required
                                         type="email"
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </Form.Group>
-
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>backendWorker of FrontendWorker</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Voer uw accounttype in"
+                                        value={typeAccount}
+                                        onChange={(e) => settypeAccount(e.target.value)}
+                                    />
+                                </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Kies een wachtwoord"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
-
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
+                                        required
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </Form.Group>
-
-                                <Form.Group controlId="formTypeAccount" className="mb-3">
-                                    <Form.Label>🛠 Type Account</Form.Label>
-                                    <Form.Select
-                                        value={typeAccount}
-                                        onChange={(e) => setTypeAccount(e.target.value)}
-                                    >
-                                        <option value="FrontendWorker">Frontoffice Medewerker</option>
-                                        <option value="BackendWorker">Backoffice Medewerker</option>
-                                    </Form.Select>
-                                </Form.Group>
-
-                                <Form.Group controlId="formBedrijfsnaam" className="mb-3">
-                                    <Form.Label>🏢 Bedrijfsnaam</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Voer de bedrijfsnaam in"
-                                        value={bedrijfsnaam}
-                                        onChange={(e) => setBedrijfsnaam(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="formBedrijfsString" className="mb-3">
-                                    <Form.Label>🏢 Bedrijf String</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Voer de bedrijfsstring in"
-                                        value={bedrijfsString}
-                                        onChange={(e) => setBedrijfsString(e.target.value)}
-                                    />
-                                </Form.Group>
-
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
-                                </Button>
+                                    </Button>
+
                             </Form>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Heeft u al een{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/login')}
+                                        className="Link"
+                                    >
+                                        account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
                         </div>
                     </Col>
                 </Row>
@@ -190,4 +186,4 @@ const BoRegister = () => {
     );
 };
 
-export default BoRegister;
+export default WbRegister;

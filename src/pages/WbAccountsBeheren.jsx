@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, FormControl, Table, InputGroup, Modal } from 'react-bootstrap';
+import { Button, FormControl, Table, InputGroup, Modal, Container } from 'react-bootstrap';
 import '../style/wagenpark.css';
 import WbNavbar from "../components/WbNavbar.jsx";
 
@@ -53,11 +53,11 @@ const WbAccountsBeheren = () => {
   return (
     <div className="achtergrond2">
       <WbNavbar />
-      <div>
+      <Container fluid className="align-items-center w-75">
         <h1 className="pagina-titel text-center my-5">Zakelijke Huurders Beheren</h1>
 
         <div className="d-flex justify-content-center mb-3">
-          <InputGroup className="w-75">
+          <InputGroup>
             <FormControl
               placeholder="Zoek medewerkers"
               aria-label="Zoek medewerkers"
@@ -66,7 +66,6 @@ const WbAccountsBeheren = () => {
             />
           </InputGroup>
         </div>
-
 
         <div className="scrollable-table-container">
           <Table striped bordered hover responsive>
@@ -100,7 +99,7 @@ const WbAccountsBeheren = () => {
             </tbody>
           </Table>
         </div>
-      </div>
+      </Container>
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -121,5 +120,4 @@ const WbAccountsBeheren = () => {
     </div>
   );
 };
-
 export default WbAccountsBeheren;
