@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Col, Card, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import PartNavbar from "../components/PartNavbar.jsx";
 
 const HuurVerzoek = () => {
     const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
@@ -73,6 +74,7 @@ const HuurVerzoek = () => {
 
     return (
         <div className="achtergrond2">
+            <PartNavbar />
             <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
             <Container fluid className="d-flex justify-content-center align-items-center huren-background">
                 <Col md={6}>

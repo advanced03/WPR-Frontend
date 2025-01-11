@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import '../style/navbar.css';
 
-function WbNavbar() {
+function FoNavbar() {
   const navigate = useNavigate();
   const location = useLocation(); // Gebruik de useLocation hook
 
@@ -25,19 +25,14 @@ function WbNavbar() {
                 Profiel
               </Nav.Link>
             )}
-            {location.pathname !== '/WbAccountsBeheren' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/WbAccountsBeheren')}>
-                Accounts beheren
+            {location.pathname !== '/FoVoertuigInname' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/FoVoertuigInname')}>
+                Voertuig inname registreren
               </Nav.Link>
             )}
-            {location.pathname !== '/WbRegister' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/WbRegister')}>
-                Zakelijke gebruikers registreren
-              </Nav.Link>
-            )}
-            {location.pathname !== '/WbStatus' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/WbStatus')}>
-                Overzicht voertuigen
+            {location.pathname !== '/FoVOertuigUitgifte' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/FoVOertuigUitgifte')}>
+                Voertuig uitgifte registreren
               </Nav.Link>
             )}
           </Nav>
@@ -47,4 +42,4 @@ function WbNavbar() {
   );
 }
 
-export default WbNavbar;
+export default FoNavbar;

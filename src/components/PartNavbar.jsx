@@ -35,8 +35,13 @@ function PartNavbar() {
                 Profiel
               </Nav.Link>
             )}
+            {location.pathname !== '/Geschiedenis' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/Geschiedenis')}>
+                Huurgeschiedenis
+              </Nav.Link>
+            )}
           </Nav>
-        </Navbar.Collapse>  
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

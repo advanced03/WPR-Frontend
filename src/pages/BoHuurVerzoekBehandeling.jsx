@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Col, Card, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import '../style/backoffice.css';
+import BoNavbar from "../components/BoNavbar"
 
 const BoHuurVerzoekBehandeling = () => {
     const [verzoeken, setVerzoeken] = useState([]);
@@ -132,6 +133,7 @@ const BoHuurVerzoekBehandeling = () => {
 
     return (
         <div className="achtergrond2">
+        <BoNavbar />
             <h1 className="text-center pagina-titel my-3">Openstaande huurverzoeken</h1>
             <Container fluid className="d-flex justify-content-center align-items-center">
                 <Col md={8}>

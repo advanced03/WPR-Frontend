@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Modal } from "react-bootstrap";
 import "../style/tabel.css";
+import PartNavbar from "../components/PartNavbar.jsx";
 
 const HuurGeschiedenis = () => {
   const [huurData, setHuurData] = useState([
@@ -81,6 +82,7 @@ const HuurGeschiedenis = () => {
 
   return (
     <div className="achtergrond2">
+      <PartNavbar />
       <Container className="mt-4">
         <h2 className="pagina-titel text-center my-4">Mijn Huurgeschiedenis</h2>
         <Table striped bordered hover className="tabel mt-5">

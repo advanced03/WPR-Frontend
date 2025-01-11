@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
+import FoNavbar from "../components/FoNavbar"
 
 const FoVoertuigInname = () => {
     const [autos, zetAutos] = useState([]); // Bevat de lijst van auto's
@@ -65,10 +66,11 @@ const FoVoertuigInname = () => {
             .includes(zoekTerm.toLowerCase())
     );
 
-    return (
-        <div className='achtergrond2'>
-            <Container fluid>
-                <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
+  return (
+    <div className='achtergrond2'>
+      <FoNavbar />
+      <Container fluid>
+        <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
 
                 <FormControl
                     type="text"

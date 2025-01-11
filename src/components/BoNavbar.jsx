@@ -20,11 +20,6 @@ function BoNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            {location.pathname !== '/Home' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/Home')}>
-                Homepagina
-              </Nav.Link>
-            )}
             {location.pathname !== '/Profiel' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/Profiel')}>
                 Profiel
@@ -37,7 +32,7 @@ function BoNavbar() {
             )}
             {location.pathname !== '/BoRegister' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/BoRegister')}>
-                Medewerkeraccount aanmaken
+                Front/Backoffice aanmaken
               </Nav.Link>
             )}
             {location.pathname !== '/BoWagenparkbeheer' && (

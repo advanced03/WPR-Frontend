@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, ButtonGroup, Form } from 'react-bootstrap';
 import axios from 'axios';
 import '../style/huren.css';
 import '../style/knop.css';
@@ -12,6 +12,8 @@ const AutoVinden = () => {
     const [wagens, setWagens] = useState([]); // Lege lijst voor de voertuigen
     const [loading, setLoading] = useState(true); // Voor het tonen van een laadindicatie
     const [error, setError] = useState(null); // Voor het afhandelen van errors
+    const [startDate, setStartDate] = useState(''); // State voor de van datum
+    const [endDate, setEndDate] = useState(''); // State voor de tot datum
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -56,6 +58,9 @@ const AutoVinden = () => {
             wagen.type.toLowerCase().includes(searchTerm.toLowerCase())) // Filter op type
     );
 
+    const handleStartDateChange = (e) => setStartDate(e.target.value);
+    const handleEndDateChange = (e) => setEndDate(e.target.value);
+
     if (loading) {
         return <div>Loading...</div>; // Toon "Loading..." tijdens het ophalen van data
     }
@@ -70,20 +75,16 @@ const AutoVinden = () => {
             <Container fluid className="p-2 my-4">
                 <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
 
-                <div className="d-flex justify-content-center mt-5">
+                <div className="huren-box text-center mt-5 p-5">
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Zoek voertuigen..."
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        style={{ width: '300px' }}
                     />
-                </div>
 
-                {/* ButtonGroup */}
-                <div className="d-flex justify-content-center mb-4">
-                    <ButtonGroup className="mt-5 knoppengroep">
+                    <ButtonGroup className="my-5 knoppengroep">
                         <Button
                             variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
                             onClick={() => handleSelect('auto')}
@@ -103,6 +104,29 @@ const AutoVinden = () => {
                             Camper 🚐
                         </Button>
                     </ButtonGroup>
+
+                    <Row>
+                        <Col sm={6} className="px-2 p-2">
+                            <Form.Group controlId="startDate">
+                                <Form.Label>Van Datum</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={startDate}
+                                    onChange={handleStartDateChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6} className="px-2 p-2">
+                            <Form.Group controlId="endDate">
+                                <Form.Label>Tot Datum</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={endDate}
+                                    onChange={handleEndDateChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
                 </div>
 
                 {/* Vehicle Grid */}
@@ -135,4 +159,3 @@ const AutoVinden = () => {
 };
 
 export default AutoVinden;
-

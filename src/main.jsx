@@ -6,7 +6,6 @@ import PartRegister from './pages/partRegister.jsx';
 import Login from './pages/login.jsx';
 import BoRegister from './pages/BoRegister.jsx';
 import Home from './pages/Home.jsx';
-import AutoZoeken from './pages/AutoZoeken.jsx';
 import AutoVinden from './pages/AutoVinden.jsx';
 import HuurVerzoek from './pages/HuurVerzoek.jsx';
 import HuurGeschiedenis from './pages/HuurGeschiedenis.jsx';
@@ -18,7 +17,7 @@ import BoWagenparkBeheer from './pages/BoWagenparkBeheer.jsx';
 import WbRegister from './pages/WbRegister.jsx';
 import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
-import WbReg from './pages/WbReg.jsx';
+import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 
 const App = () => {
     return (
@@ -26,11 +25,9 @@ const App = () => {
             <Routes> 
                 <Route path="/" element={<Login />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/WbReg" element={<WbReg />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
                 <Route path="/BoRegister" element={<BoRegister />} />
-                <Route path="/AutoZoeken" element={<AutoZoeken />} />
                 <Route path="/AutoVinden" element={<AutoVinden />} />
                 <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
                 <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
@@ -42,6 +39,7 @@ const App = () => {
                 <Route path="/WbRegister" element={<WbRegister />} />
                 <Route path="/WbAccountsBeheren" element={<WbAccountsBeheren />} />
                 <Route path="/WbStatus" element={<WbStatus />} />
+                <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
             </Routes>
         </Router>
     );

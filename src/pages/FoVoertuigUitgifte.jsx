@@ -8,6 +8,9 @@ import {
     Form,
     FormControl,
 } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
+import FoNavbar from "../components/FoNavbar"
 
 const FoVoertuigUitgifte = () => {
     const [autos, zetAutos] = useState([]); // Bevat de lijst met auto's
@@ -79,17 +82,11 @@ const FoVoertuigUitgifte = () => {
             .includes(zoekTerm.toLowerCase())
     );
 
-    return (
-        <div className="achtergrond2">
-            <Container fluid>
-                <h1 className="pagina-titel text-center my-5">
-                    Beschikbare Auto's voor Uitgifte
-                </h1>
-
-                {/* Error melding */}
-                {laadFout && (
-                    <div className="alert alert-danger text-center">{laadFout}</div>
-                )}
+  return (
+    <div className='achtergrond2'>
+      <FoNavbar />
+      <Container fluid>
+        <h1 className="pagina-titel text-center my-5">Beschikbare Auto's voor Uitgifte</h1>
 
                 {/* Zoekveld */}
                 <FormControl
