@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
+import FoNavbar from "../components/FoNavbar"
 
 const FoVoertuigInname = () => {
   const [autos, zetAutos] = useState([
@@ -64,6 +65,7 @@ const FoVoertuigInname = () => {
 
   return (
     <div className='achtergrond2'>
+      <FoNavbar />
       <Container fluid>
         <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
 

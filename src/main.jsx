@@ -17,6 +17,7 @@ import BoWagenparkBeheer from './pages/BoWagenparkBeheer.jsx';
 import WbRegister from './pages/WbRegister.jsx';
 import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
+import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 
 const App = () => {
     return (
@@ -38,6 +39,7 @@ const App = () => {
                 <Route path="/WbRegister" element={<WbRegister />} />
                 <Route path="/WbAccountsBeheren" element={<WbAccountsBeheren />} />
                 <Route path="/WbStatus" element={<WbStatus />} />
+                <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
             </Routes>
         </Router>
     );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Table, Button, Modal, Form, Dropdown, DropdownButton, InputGroup, FormControl } from 'react-bootstrap';
+import BoNavbar from "../components/BoNavbar"
 
 const BOWagenparkBeheer = () => {
   const [vehicles, setVehicles] = useState([
@@ -111,6 +112,7 @@ const BOWagenparkBeheer = () => {
 
   return (
     <div className="achtergrond2">
+      <BoNavbar />
       <Container>
         <h1 className="pagina-titel text-center my-4">Wagenparkbeheer</h1>
         

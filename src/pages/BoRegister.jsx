@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
+import BoNavbar from "../components/BoNavbar"
 
 const WbRegister = () => {
     const [username, setUsername] = useState('');
@@ -97,12 +98,13 @@ const WbRegister = () => {
     };
 
     return (
-            <div className="achtergrond1">
+        <div className="achtergrond1">
+            <BoNavbar />
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
-                            <h2 className="text-center mb-4">Zakelijke accounts registreren</h2>
+                            <h2 className="text-center mb-4">Front/Backoffice Account Registratie</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
@@ -130,15 +132,17 @@ const WbRegister = () => {
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>backendWorker of FrontendWorker</Form.Label>
+                                <Form.Group controlId="formAccountType" className="mb-3">
+                                    <Form.Label>👤 Kies Accounttype</Form.Label>
                                     <Form.Control
+                                        as="select"
                                         required
-                                        type="text"
-                                        placeholder="Voer uw accounttype in"
                                         value={typeAccount}
                                         onChange={(e) => settypeAccount(e.target.value)}
-                                    />
+                                    >
+                                        <option value="backendWorker">Backoffice Medewerker</option>
+                                        <option value="frontendWorker">Frontoffice Medewerker</option>
+                                    </Form.Control>
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
@@ -162,7 +166,7 @@ const WbRegister = () => {
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
-                                    </Button>
+                                </Button>
 
                             </Form>
                             <div className="mt-3 text-center">
