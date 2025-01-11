@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
+import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbReg = () => {
     const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const WbReg = () => {
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
-    
+
     const handleRegister = async (e) => {
         e.preventDefault();
         setError(null);
@@ -117,7 +118,8 @@ const WbReg = () => {
 
     return (
         <div className="achtergrond1">
-        <Container fluid className="d-flex justify-content-center align-items-center vh-100">
+            <WbNavbar />
+            <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
@@ -139,8 +141,9 @@ const WbReg = () => {
                                         onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
+
                                 <Form.Group controlId="formEmail" className="mb-3">
-                                    <Form.Label>📧 E-Mail</Form.Label>
+                                    <Form.Label>📧 E-mail</Form.Label>
                                     <Form.Control
                                         required
                                         type="email"
@@ -149,18 +152,20 @@ const WbReg = () => {
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </Form.Group>
+
                                 <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>voornaam</Form.Label>
+                                    <Form.Label>👤 Voornaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
-                                        placeholder="Voer uw accounttype in"
+                                        placeholder="Voer uw voornaam in"
                                         value={voornaam}
                                         onChange={(e) => setVoornaam(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>achternaam</Form.Label>
+
+                                <Form.Group controlId="formAchternaam" className="mb-3">
+                                    <Form.Label>👤 Achternaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -169,8 +174,9 @@ const WbReg = () => {
                                         onChange={(e) => setAchternaam(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>bedrijfsnaam</Form.Label>
+
+                                <Form.Group controlId="formBedrijfsnaam" className="mb-3">
+                                    <Form.Label>🏢 Bedrijfsnaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -179,8 +185,9 @@ const WbReg = () => {
                                         onChange={(e) => setbedrijfsnaam(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>voornaam</Form.Label>
+
+                                <Form.Group controlId="formBedrijfsString" className="mb-3">
+                                    <Form.Label>🏢 Organisatie</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -189,26 +196,29 @@ const WbReg = () => {
                                         onChange={(e) => setbedrijfsString(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>voornaam</Form.Label>
+
+                                <Form.Group controlId="formKvkNummer" className="mb-3">
+                                    <Form.Label>🏢 KvK-nummer</Form.Label>
                                     <Form.Control
                                         required
-                                        type="number"
+                                        type="text"
                                         placeholder="Voer uw kvknummer in"
                                         value={kvkNummer}
                                         onChange={(e) => setkvkNummer(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>telefoonnummer</Form.Label>
+
+                                <Form.Group controlId="formPhoneNumber" className="mb-3">
+                                    <Form.Label>📱 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         required
-                                        type="number"
+                                        type="text"
                                         placeholder="Voer uw telefoonnummer in"
                                         value={phoneNumber}
                                         onChange={(e) => setphoneNumber(e.target.value)}
                                     />
                                 </Form.Group>
+
                                 <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
@@ -219,6 +229,7 @@ const WbReg = () => {
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
+
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
@@ -229,6 +240,7 @@ const WbReg = () => {
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </Form.Group>
+
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
                                 </Button>
