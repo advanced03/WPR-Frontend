@@ -55,7 +55,7 @@ const WbStatus = () => {
     <div className="achtergrond2">
       <WbNavbar />
       <Container>
-        <h1 className="pagina-titel text-center my-4">Overzicht Verhuurde Voertuigen</h1>
+        <h1 className="pagina-titel text-center my-5">Overzicht Wagenpark</h1>
 
         {/* Filter en zoekbalk boven de tabel */}
         <div className="d-flex justify-content-between mb-3">
