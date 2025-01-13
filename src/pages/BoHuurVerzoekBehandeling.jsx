@@ -58,7 +58,7 @@ const BoHuurVerzoekBehandeling = () => {
             try {
                 console.log('Payload:', { verzoekId });
                 await axios.post(
-                    `https://localhost:7281/api/verhuurVerzoekBehandelen/KeurVerzoekGoed/${verzoekId}`,
+                    `https://localhost:7281/api/Reserveringen/KeurVerzoekGoed/${verzoekId}`,
                     { verzoekId },
                     {
                         headers: {
@@ -88,7 +88,7 @@ const BoHuurVerzoekBehandeling = () => {
 
             try {
                 await axios.post(
-                    `https://localhost:7281/api/verhuurVerzoekBehandelen/KeurVerzoekAf/${verzoekId}`,
+                    `https://localhost:7281/api/Reserveringen/KeurVerzoekAf/${verzoekId}`,
                     { verzoekId },
                     {
                         headers: {

@@ -1,16 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {
-    Container,
-    Table,
-    Button,
-    Modal,
-    Form,
-    FormControl,
-} from "react-bootstrap";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
-import FoNavbar from "../components/FoNavbar"
+import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigUitgifte = () => {
     const [autos, zetAutos] = useState([]); // Bevat de lijst met auto's
@@ -20,20 +11,23 @@ const FoVoertuigUitgifte = () => {
     const [opmerking, zetOpmerking] = useState(""); // Opmerking voor uitgifte
     const [laadFout, zetLaadFout] = useState(null); // Error state
 
+    // Functie om reserveringen op te halen
+    const haalReserveringenOp = async () => {
+        try {
+            const respons = await axios.get(
+                "https://localhost:7281/api/Reserveringen/GetAllReserveringen"
+            );
+            const data = respons.data;
+            zetAutos(data);
+            zetLaadFout(null); // Reset de foutmelding als het ophalen succesvol is
+        } catch (error) {
+            zetLaadFout("Kon de reserveringen niet ophalen. Controleer de API.");
+            console.error(error);
+        }
+    };
+
     // Data ophalen bij component mount
     useEffect(() => {
-        const haalReserveringenOp = async () => {
-            try {
-                const respons = await axios.get(
-                    "https://localhost:7281/api/Reserveringen/GetAllReserveringen"
-                );
-                const data = respons.data;
-                zetAutos(data);
-            } catch (error) {
-                zetLaadFout("Kon de reserveringen niet ophalen. Controleer de API.");
-                console.error(error);
-            }
-        };
         haalReserveringenOp();
     }, []);
 
@@ -43,15 +37,26 @@ const FoVoertuigUitgifte = () => {
     };
 
     const opslaanUitgifte = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
         try {
-            const verzoekId = geselecteerdeAuto.reserveringId;
-            await axios.post(
-                `https://localhost:7281/api/FrontOfficeMedewerker/GeefVoertuiguit`,
-                { verzoekId }
+            const id = geselecteerdeAuto.reserveringId;
+            console.log('Payload:', { id });
+            await axios.put(
+                'https://localhost:7281/api/FrontOfficeMedewerker/GeefVoertuigUit',
+                { id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             );
-            console.log(`Registratie succesvol voor verzoekId: ${verzoekId}`);
-            // Verwijder het goedgekeurde verzoek uit de lijst
-            zetAutos(autos.filter((auto) => auto.reserveringId !== verzoekId));
+            // Na succesvolle registratie, data opnieuw ophalen
+            haalReserveringenOp();
         } catch (error) {
             console.error("Fout bij het registreren van de uitgifte:", error);
         } finally {
@@ -62,13 +67,25 @@ const FoVoertuigUitgifte = () => {
     };
 
     const verwijderUitgifte = async (verzoekId) => {
+        const token = sessionStorage.getItem('jwtToken');
+
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
         try {
-            await axios.post(
-                `https://localhost:7281/api/FrontOfficeMedewerker/NeemVoertuigIn`, verzoekId
+            const id = verzoekId;
+            await axios.put(
+                'https://localhost:7281/api/FrontOfficeMedewerker/NeemIn',
+                { id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             );
-            console.log(`Verzoek met ID ${verzoekId} afgewezen.`);
-            // Verwijder het afgewezen verzoek uit de lijst
-            zetAutos(autos.filter((auto) => auto.reserveringId !== verzoekId));
+            // Na succesvolle verwijdering, data opnieuw ophalen
+            haalReserveringenOp();
         } catch (error) {
             console.error("Fout bij het verwijderen van de uitgifte:", error);
         }
@@ -82,11 +99,11 @@ const FoVoertuigUitgifte = () => {
             .includes(zoekTerm.toLowerCase())
     );
 
-  return (
-    <div className='achtergrond2'>
-      <FoNavbar />
-      <Container fluid>
-        <h1 className="pagina-titel text-center my-5">Beschikbare Auto's voor Uitgifte</h1>
+    return (
+        <div className='achtergrond2'>
+            <FoNavbar />
+            <Container fluid>
+                <h1 className="pagina-titel text-center my-5">Beschikbare Auto's voor Uitgifte</h1>
 
                 {/* Zoekveld */}
                 <FormControl
@@ -178,3 +195,4 @@ const FoVoertuigUitgifte = () => {
 };
 
 export default FoVoertuigUitgifte;
+
