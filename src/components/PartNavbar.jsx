@@ -1,11 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import '../style/navbar.css';
 
-function PartNavbar() {
+function PartNavbar() { // Navigatie methode IPV Html link voor snellere laadtijden.
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -13,6 +11,7 @@ function PartNavbar() {
     navigate(path);
   };
 
+// Als het pad overeenkomt met het pad waar de gebruiker zich al bevindt, laat die link niet zien in de navigatiebalk.
   return (
     <Navbar expand="lg" className="navigatiebalk">
       <Container>
