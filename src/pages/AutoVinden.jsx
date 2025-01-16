@@ -10,28 +10,32 @@ const AutoVinden = () => {
     const [selectedType, setSelectedType] = useState('auto');
     const [searchTerm, setSearchTerm] = useState('');
     const [wagens, setWagens] = useState([]); // Lege lijst voor de voertuigen
-    const [loading, setLoading] = useState(true); // Voor het tonen van een laadindicatie
-    const [error, setError] = useState(null); // Voor het afhandelen van errors
-    const [startDate, setStartDate] = useState(''); // State voor de van datum
+    const [loading, setLoading] = useState(true); // Laad indicator
+    const [error, setError] = useState(null); // Error afhandeling
+    const [startDate, setStartDate] = useState(''); // State voor datum
     const [endDate, setEndDate] = useState(''); // State voor de tot datum
     const navigate = useNavigate();
 
+// Functie om de data van de API op te halen
+//      Log de ontvangen data om te controleren
+//      Zet de ontvangen data in de state
+//      Schakel de loading state uit
     useEffect(() => {
-        // Functie om de data van de API op te halen
         const fetchWagens = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/voertuigen/AllVoertuigen');
-                console.log('Response Data:', response.data); // Log de ontvangen data om te controleren
-                setWagens(response.data); // Zet de ontvangen data in state
-                setLoading(false); // Stop de loading state
+                console.log('Response Data:', response.data); 
+                setWagens(response.data); 
+                setLoading(false); 
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
-                setLoading(false); // Stop de loading state bij error
+// Stop de loading state bij een error
+                setLoading(false); 
             }
         };
 
         fetchWagens();
-    }, []); // Deze useEffect wordt maar één keer uitgevoerd, bij het laden van de component
+    }, []);
 
     const handleSelect = (type) => {
         setSelectedType(type);
@@ -40,33 +44,31 @@ const AutoVinden = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-
+// Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
     const handleRentClick = (wagen) => {
-        // Sla de geselecteerde wagen op in sessionStorage
         sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
         const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
-        console.log(storedWagen); // Controleer wat er in sessionStorage zit
-
-        // Optioneel: Navigeren naar een andere pagina, bijvoorbeeld naar een huurpagina
+        console.log(storedWagen);
+// Navigeren naar een andere pagina
         navigate('/Huurverzoek');
     };
 
-    // Filter de voertuigen op type en zoekterm
+// Methode om voertuigen te filteren voor de zoekbalk
     const filteredWagens = wagens.filter(wagen =>
-        wagen.soort === selectedType && // Gebruik 'soort' voor filtering, niet 'type'
-        (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) || // Filter op merk
-            wagen.type.toLowerCase().includes(searchTerm.toLowerCase())) // Filter op type
+        wagen.soort === selectedType && 
+        (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            wagen.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
-
+// Laat "Loading..." zien tijdens het ophalen van data.
     if (loading) {
-        return <div>Loading...</div>; // Toon "Loading..." tijdens het ophalen van data
+        return <div>Loading...</div>; 
     }
-
+// Toon een foutmelding als er iets misgaat.
     if (error) {
-        return <div>{error}</div>; // Toon foutmelding als er iets misgaat
+        return <div>{error}</div>; 
     }
 
     return (
@@ -83,7 +85,7 @@ const AutoVinden = () => {
                         value={searchTerm}
                         onChange={handleSearchChange}
                     />
-
+//  Verander de variant van de knop als deze geselecteerd wordt
                     <ButtonGroup className="my-5 knoppengroep">
                         <Button
                             variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
@@ -129,10 +131,10 @@ const AutoVinden = () => {
                     </Row>
                 </div>
 
-                {/* Vehicle Grid */}
+// Toon een bericht als er geen resultaten zijn.
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
-                        <div className="no-results">Geen voertuigen gevonden!</div> // Toon bericht als geen resultaten
+                        <div className="no-results">Geen voertuigen gevonden!</div>
                     ) : (
                         filteredWagens.map(wagen => (
                             <Col key={wagen.voertuigId} sm={12} md={6} lg={4} className="mb-4">
