@@ -18,6 +18,7 @@ import WbRegister from './pages/WbRegister.jsx';
 import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
 import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
+import RegZak from './pages/regZakelijk.jsx';
 
 const App = () => {
     return (
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
+                <Route path="/RegZakelijk" element={<RegZak />} />
                 <Route path="/BoRegister" element={<BoRegister />} />
                 <Route path="/AutoVinden" element={<AutoVinden />} />
                 <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
