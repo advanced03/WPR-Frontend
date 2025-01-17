@@ -28,8 +28,8 @@ const Login = () => {
             );
 
             if (response.status === 200) {
-                // JWT-token opslaan in localStorage
-                const token = response.data.token; // Zorg ervoor dat de server dit terugstuurt
+// JWT-token opslaan in localStorage en zorg ervoor dat de server de responsetoken terugstuurt.
+                const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
                 }

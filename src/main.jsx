@@ -19,6 +19,7 @@ import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
 import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 import RegZak from './pages/regZakelijk.jsx';
+import Privacy from './pages/Privacy.jsx';
 
 const App = () => {
     return (
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/WbAccountsBeheren" element={<WbAccountsBeheren />} />
                 <Route path="/WbStatus" element={<WbStatus />} />
                 <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
+                <Route path="/Privacy" element={<Privacy />} />
             </Routes>
         </Router>
     );
