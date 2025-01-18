@@ -6,8 +6,8 @@ const Privacy = () => {
         <div className="achtergrond2">
             <h1 className="pagina-titel text-center my-4">Privacyverklaring</h1>
 
-            <Container className="mt-5">
-                <Card>
+            <Container className="mt-5 mb-5">
+                <Card className="p-2">
                     <Card.Body>
                         <p className="mb-4">
                             <strong>CarAndAll</strong>, gevestigd aan Johanna Westerdijkplein 75, 2521 EN Den Haag, is verantwoordelijk voor de verwerking van persoonsgegevens zoals weergegeven in deze privacyverklaring.

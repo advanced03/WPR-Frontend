@@ -11,7 +11,7 @@ function BoNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
     navigate(path);
   };
 
-// Als het pad overeenkomt met het pad waar de gebruiker zich al bevindt, laat die link niet zien in de navigatiebalk.
+  // Als het pad overeenkomt met het pad waar de gebruiker zich al bevindt, laat die link niet zien in de navigatiebalk.
   return (
     <Navbar expand="lg" className="navigatiebalk">
       <Container>
@@ -39,6 +39,11 @@ function BoNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
                 Wagenpark Beheren
               </Nav.Link>
             )}
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link className="hover privacy" onClick={() => handleNavigation('/Privacy')}>
+              Privacyverklaring
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

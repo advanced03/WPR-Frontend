@@ -22,7 +22,7 @@ body {
 /* Eerste achtergrond voor wanneer de gebruiker niet is ingelogd */
 .achtergrond1 {
   width: 100vw;
-  height: 100%;
+  height: 100vh; /* Hoogte van het volledige scherm */
   overflow: auto;
   background-image: url('../assets/achtergrond1.png');
   background-size: cover;
@@ -34,7 +34,7 @@ body {
 /* Tweede achtergrond voor wanneer de gebruiker is ingelogd */
 .achtergrond2 {
   width: 100vw;
-  height: 100%;
+  height: 100vh; /* Hoogte van het volledige scherm */
   overflow: auto;
   background-image: url('../assets/achtergrond2.png');
   background-size: cover;

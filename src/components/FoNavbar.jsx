@@ -4,14 +4,14 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import '../style/navbar.css';
 
 function FoNavbar() { // Navigatie methode IPV Html link voor snellere laadtijden.
-  const navigate = useNavigate(); 
-  const location = useLocation(); 
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavigation = (path) => {
     navigate(path);
   };
 
-// Als het pad overeenkomt met het pad waar de gebruiker zich al bevindt, laat die link niet zien in de navigatiebalk.
+  // Als het pad overeenkomt met het pad waar de gebruiker zich al bevindt, laat die link niet zien in de navigatiebalk.
   return (
     <Navbar expand="lg" className="navigatiebalk">
       <Container>
@@ -34,6 +34,11 @@ function FoNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
                 Voertuig uitgifte registreren
               </Nav.Link>
             )}
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link className="hover privacy" onClick={() => handleNavigation('/Privacy')}>
+              Privacyverklaring
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
