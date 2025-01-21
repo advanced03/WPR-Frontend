@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import WbNavbar from "../components/WbNavbar"
 
 const WbAbboBeheer = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [toonModal, setModal] = useState(false);
   const [selectedAbonnement, setSelectedAbonnement] = useState("");
   const [currentAbonnement, setCurrentAbonnement] = useState("Pay as You Go");
 
@@ -24,7 +24,7 @@ const WbAbboBeheer = () => {
 
   const handleAbonnementChange = () => {
     setCurrentAbonnement(selectedAbonnement);
-    setShowModal(false);
+    setModal(false);
   };
 
   return (
@@ -50,7 +50,7 @@ const WbAbboBeheer = () => {
                     className="knop"
                     onClick={() => {
                       setSelectedAbonnement(abbo.type);
-                      setShowModal(true);
+                      setModal(true);
                     }}
                   >
                     Kies dit abonnement
@@ -63,7 +63,7 @@ const WbAbboBeheer = () => {
         <div className="text-center my-4 p-4 huren-box">
           <h4>Huidig abonnement: {currentAbonnement}</h4>
         </div>
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={toonModal} onHide={() => setModal(false)}>
           <Modal.Header closees >
             <Modal.Title>Bevestig abonnement</Modal.Title>
           </Modal.Header>
@@ -74,7 +74,7 @@ const WbAbboBeheer = () => {
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={() => setShowModal(false)}>
+            <Button variant="danger" onClick={() => setModal(false)}>
               Annuleren
             </Button>
             <Button variant="success" onClick={handleAbonnementChange}>

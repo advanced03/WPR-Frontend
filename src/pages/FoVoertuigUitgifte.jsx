@@ -7,7 +7,7 @@ const FoVoertuigUitgifte = () => {
     const [autos, zetAutos] = useState([]); // Bevat de lijst met auto's
     const [zoekTerm, zetZoekTerm] = useState(""); // Zoekterm voor filtering
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null); // Geselecteerde auto
-    const [toonModal, zetToonModal] = useState(false); // Modal zichtbaar?
+    const [toonModal, setModal] = useState(false); // Modal zichtbaar?
     const [opmerking, zetOpmerking] = useState(""); // Opmerking voor uitgifte
     const [laadFout, zetLaadFout] = useState(null); // Error state
 
@@ -33,7 +33,7 @@ const FoVoertuigUitgifte = () => {
 
     const registreerUitgifte = (auto) => {
         zetGeselecteerdeAuto(auto);
-        zetToonModal(true);
+        setModal(true);
     };
 
     const opslaanUitgifte = async () => {
@@ -60,7 +60,7 @@ const FoVoertuigUitgifte = () => {
         } catch (error) {
             console.error("Fout bij het registreren van de uitgifte:", error);
         } finally {
-            zetToonModal(false);
+            setModal(false);
             zetGeselecteerdeAuto(null);
             zetOpmerking("");
         }
@@ -163,7 +163,7 @@ const FoVoertuigUitgifte = () => {
                 </div>
 
                 {/* Modal voor registratie */}
-                <Modal show={toonModal} onHide={() => zetToonModal(false)}>
+                <Modal show={toonModal} onHide={() => setModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Registreer Uitgifte</Modal.Title>
                     </Modal.Header>
@@ -181,7 +181,7 @@ const FoVoertuigUitgifte = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => zetToonModal(false)}>
+                        <Button variant="danger" onClick={() => setModal(false)}>
                             Annuleren
                         </Button>
                         <Button variant="success" onClick={opslaanUitgifte}>

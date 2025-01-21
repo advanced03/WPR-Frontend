@@ -6,7 +6,7 @@ import WbNavbar from "../components/WbNavbar.jsx";
 const WbAccountsBeheren = () => {
     const [accounts, setAccounts] = useState([]);
     const [zoekterm, setZoekterm] = useState('');
-    const [toonModal, setToonModal] = useState(false);
+    const [toonModal, setModal] = useState(false);
     const [teVerwerkenAccount, setTeVerwerkenAccount] = useState(null);
     const [actieType, setActieType] = useState('goedkeuren'); // 'goedkeuren', 'weigeren', of 'verwijderen'
 
@@ -56,11 +56,11 @@ const WbAccountsBeheren = () => {
     const toonModalVoorActie = (account, type) => {
         setTeVerwerkenAccount(account);
         setActieType(type);
-        setToonModal(true);
+        setModal(true);
     };
 
     const sluitModal = () => {
-        setToonModal(false);
+        setModal(false);
         setTeVerwerkenAccount(null);
     };
 

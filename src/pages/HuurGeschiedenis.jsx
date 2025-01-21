@@ -52,7 +52,7 @@ const HuurGeschiedenis = () => {
     },
   ]);
 
-  const [showModal, setShowModal] = useState(false);
+  const [toonModal, setModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const statusKleur = {
@@ -63,20 +63,20 @@ const HuurGeschiedenis = () => {
 
   const sortedHuurData = [...huurData].sort((a, b) => new Date(b.einddatum) - new Date(a.einddatum));
 
-  const handleShowModal = (index) => {
+  const handletoonModal = (index) => {
     setSelectedIndex(index);
-    setShowModal(true);
+    setModal(true);
   };
 
   const handleAnnuleren = () => {
     const nieuweHuurData = [...huurData];
     nieuweHuurData[selectedIndex].status = "Geannuleerd";
     setHuurData(nieuweHuurData);
-    setShowModal(false); // Close the modal after cancelling
+    setModal(false); // Close the modal after cancelling
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
+    setModal(false);
     setSelectedIndex(null);
   };
 
@@ -116,7 +116,7 @@ const HuurGeschiedenis = () => {
                   {item.status !== "Afgekeurd" && item.status !== "Geannuleerd" && (
                     <Button
                       className="knop"
-                      onClick={() => handleShowModal(index)}
+                      onClick={() => handletoonModal(index)}
                     >
                       Annuleren
                     </Button>
@@ -129,7 +129,7 @@ const HuurGeschiedenis = () => {
       </Container>
 
       {/* Modal for cancellation confirmation */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={toonModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Bevestiging Annuleren</Modal.Title>
         </Modal.Header>

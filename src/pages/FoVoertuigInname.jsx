@@ -7,7 +7,7 @@ const FoVoertuigInname = () => {
     const [autos, zetAutos] = useState([]); // Bevat de lijst van auto's
     const [zoekTerm, zetZoekTerm] = useState(''); // Zoekterm voor filtering
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null); // Geselecteerde auto
-    const [toonModal, zetToonModal] = useState(false); // Modal zichtbaar?
+    const [toonModal, setModal] = useState(false); // Modal zichtbaar?
     const [schadeInfo, zetSchadeInfo] = useState(''); // Beschrijving van schade
     const [heeftSchade, zetHeeftSchade] = useState(false); // Schade aanwezig of niet
     const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false }); // Validatie fouten
@@ -28,7 +28,7 @@ const FoVoertuigInname = () => {
 
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
-        zetToonModal(true);
+        setModal(true);
     };
 
     const opslaanInname = () => {
@@ -51,7 +51,7 @@ const FoVoertuigInname = () => {
         // Verwijder de ingeleverde auto uit de lijst
         zetAutos(autos.filter((auto) => auto.reserveringId !== geselecteerdeAuto.reserveringId));
 
-        zetToonModal(false);
+        setModal(false);
         zetGeselecteerdeAuto(null);
         zetSchadeInfo('');
         zetHeeftSchade(false);
@@ -115,7 +115,7 @@ const FoVoertuigInname = () => {
                     </Table>
                 </div>
 
-                <Modal show={toonModal} onHide={() => zetToonModal(false)}>
+                <Modal show={toonModal} onHide={() => setModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Registreer Inname</Modal.Title>
                     </Modal.Header>
@@ -153,7 +153,7 @@ const FoVoertuigInname = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => zetToonModal(false)}>
+                        <Button variant="danger" onClick={() => setModal(false)}>
                             Annuleren
                         </Button>
                         <Button variant="success" onClick={opslaanInname}>

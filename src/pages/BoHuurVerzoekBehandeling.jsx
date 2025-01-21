@@ -7,7 +7,7 @@ import BoNavbar from "../components/BoNavbar"
 const BoHuurVerzoekBehandeling = () => {
     // Usestates initializeren
     const [verzoeken, setVerzoeken] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+    const [toonModal, setModal] = useState(false);
     const [selectedVerzoek, setSelectedVerzoek] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,12 +15,11 @@ const BoHuurVerzoekBehandeling = () => {
     // Functie om huurverzoeken op te halen
     const fetchVerzoeken = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
+        // Check of JWT token aanwezig is
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
         try {
             setLoading(true);
             const response = await axios.get(
@@ -40,11 +39,11 @@ const BoHuurVerzoekBehandeling = () => {
             setLoading(false);
         }
     };
-
+    // Verzoeken ophalen
     useEffect(() => {
         fetchVerzoeken();
     }, []);
-
+    // Methode om huurverzoeken goed te keuren
     const postGoedkeuren = async () => {
         const token = sessionStorage.getItem('jwtToken');
 
@@ -52,9 +51,9 @@ const BoHuurVerzoekBehandeling = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
+        // Haal de juiste ID uit selectedVerzoek
         if (selectedVerzoek && selectedVerzoek.verzoek) {
-            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId; // Haal de juiste ID uit selectedVerzoek
+            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId;
 
             try {
                 console.log('Payload:', { verzoekId });
@@ -75,7 +74,7 @@ const BoHuurVerzoekBehandeling = () => {
         }
     };
 
-
+    // Methode om huurverzoeken goed te keuren
     const postAfwijzen = async () => {
         const token = sessionStorage.getItem('jwtToken');
 
@@ -106,16 +105,17 @@ const BoHuurVerzoekBehandeling = () => {
     };
 
 
-    const handleShowModal = (verzoek, action) => {
+    const handletoonModal = (verzoek, action) => {
         setSelectedVerzoek({ verzoek, action });
-        setShowModal(true);
+        setModal(true);
     };
 
     const handleCloseModal = () => {
-        setShowModal(false);
+        setModal(false);
         setSelectedVerzoek(null);
     };
 
+    // Geef de verzoekid mee als er een verzoek wordt goedgekeurd of afgewezen.
     const handleConfirmAction = () => {
         if (selectedVerzoek) {
             const { verzoek, action } = selectedVerzoek;
@@ -162,14 +162,14 @@ const BoHuurVerzoekBehandeling = () => {
                                                         <Button
                                                             className="mx-1"
                                                             variant="success"
-                                                            onClick={() => handleShowModal(verzoek, 'goedgekeuren')}
+                                                            onClick={() => handletoonModal(verzoek, 'goedgekeuren')}
                                                         >
                                                             Goedkeuren
                                                         </Button>
                                                         <Button
                                                             className="mx-1"
                                                             variant="danger"
-                                                            onClick={() => handleShowModal(verzoek, 'afwijzen')}
+                                                            onClick={() => handletoonModal(verzoek, 'afwijzen')}
                                                         >
                                                             Afwijzen
                                                         </Button>
@@ -187,7 +187,7 @@ const BoHuurVerzoekBehandeling = () => {
                 </Col>
             </Container>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal show={toonModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Bevestiging</Modal.Title>
                 </Modal.Header>

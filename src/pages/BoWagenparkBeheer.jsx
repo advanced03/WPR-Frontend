@@ -29,7 +29,7 @@ const BOWagenparkBeheer = () => {
       status: 'Niet Beschikbaar',
     },
   ]);
-  const [showModal, setShowModal] = useState(false);
+  const [toonModal, setModal] = useState(false);
   const [currentVehicle, setCurrentVehicle] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
@@ -59,13 +59,13 @@ const BOWagenparkBeheer = () => {
     }
     setForm({ merk: '', type: '', kleur: '', bouwjaar: '', kenteken: '', status: 'Beschikbaar' });
     setCurrentVehicle(null);
-    setShowModal(false);
+    setModal(false);
   };
 
   const handleEditVehicle = (index) => {
     setCurrentVehicle(index);
     setForm(vehicles[index]);
-    setShowModal(true);
+    setModal(true);
   };
 
   const handleDeleteVehicle = () => {
@@ -136,7 +136,7 @@ const BOWagenparkBeheer = () => {
             <Dropdown.Item eventKey="Geblokkeerd">Alleen Geblokkeerd</Dropdown.Item>
           </DropdownButton>
 
-          <Button className="mb-3 knop" onClick={() => setShowModal(true)}>
+          <Button className="mb-3 knop" onClick={() => setModal(true)}>
             Voertuig Toevoegen
           </Button>
         </div>
@@ -209,7 +209,7 @@ const BOWagenparkBeheer = () => {
         </Table>
 
         {/* Toevoegen/Wijzigen Modal */}
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={toonModal} onHide={() => setModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>{currentVehicle !== null ? 'Voertuig Wijzigen' : 'Voertuig Toevoegen'}</Modal.Title>
           </Modal.Header>
@@ -263,7 +263,7 @@ const BOWagenparkBeheer = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={() => setShowModal(false)}>
+            <Button variant="danger" onClick={() => setModal(false)}>
               Annuleren
             </Button>
             <Button variant="success" onClick={handleAddOrUpdateVehicle}>
