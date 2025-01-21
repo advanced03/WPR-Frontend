@@ -1,3 +1,4 @@
+/* Styling voor de registratie pagina */
 .RegistratieKaart {
     max-height: 90vh;
     min-width: 40vh;
@@ -7,8 +8,6 @@
     background-color: white;
 
 }
-
-
 
 .RegistratieKaart h2 {
     color: #600339ff;

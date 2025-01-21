@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, FormControl, Table, InputGroup, Modal, Container } from 'react-bootstrap';
-import '../style/wagenpark.css';
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbAccountsBeheren = () => {
@@ -128,7 +127,7 @@ const WbAccountsBeheren = () => {
                     </InputGroup>
                 </div>
 
-                <div className="scrollable-table-container">
+                <div className="autovinden">
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>

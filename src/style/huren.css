@@ -1,3 +1,4 @@
+/* Dit is een css klasse voor de styling van alle box achtige elementen die in de web applicatie voorkomen. */
 .huren-box {
     background-color: white;
     border-radius: 5px;
@@ -6,6 +7,7 @@
     margin: 0 auto;
 }
 
+/* Auto-logo's styling */
 .car-image {
     max-width: 100%;
     height: auto;    
@@ -13,16 +15,13 @@
     object-fit: contain; 
   }
 
-  .gekozen-auto {
-    font-size: 1.5rem;
-  }
-
+  /* Styling voor de knoppen van de huurverzoek UI */
   .knoppengroep {
     background-color: #600339;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   }
   
-
+  /* Zorgen dat de huurverzoek pagina scrollbaar is en een maximale hoogte heeft */
   .autovinden {
     max-height: 60vh;
     overflow-y: auto;

@@ -21,6 +21,7 @@ import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 import RegZak from './pages/regZakelijk.jsx';
 import Privacy from './pages/Privacy.jsx';
 
+/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
 const App = () => {
     return (
         <Router>

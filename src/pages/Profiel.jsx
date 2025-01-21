@@ -90,7 +90,7 @@ function Profiel() {
         <div className="achtergrond2">
             <PartNavbar />
             <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
-            <Container className="py-5 scroll-container">
+            <Container className="py-5">
                 {editModus ? (
                     <Form onSubmit={handleSubmit}>
                         <Row className="justify-content-center">

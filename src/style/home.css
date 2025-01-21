@@ -1,3 +1,4 @@
+/* CSS Klasse voor de container van de foto's in de homepagina */
 .home-image-container {
   overflow: hidden;
   border-radius: 20px;
@@ -11,6 +12,7 @@
   height: auto;
 }
 
+/* CSS Voor de homepagina zelf */
 .home-inhoud {
   background-color: #600339;
   border-radius: 20px;

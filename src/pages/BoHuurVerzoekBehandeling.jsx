@@ -144,7 +144,7 @@ const BoHuurVerzoekBehandeling = () => {
                             ) : error ? (
                                 <p className="text-center text-danger">{error}</p>
                             ) : (
-                                <div className="verzoeken-lijst">
+                                <div className="tabel-container">
                                     {onbehandeldeVerzoeken.length > 0 ? (
                                         onbehandeldeVerzoeken.map((verzoek) => (
                                             <Card key={verzoek.id} className="mb-3">
