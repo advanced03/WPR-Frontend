@@ -115,7 +115,7 @@ const BOWagenparkBeheer = () => {
       <BoNavbar />
       <Container>
         <h1 className="pagina-titel text-center my-4">Wagenparkbeheer</h1>
-        
+
         {/* Filter en zoekbalk boven de tabel */}
         <div className="d-flex justify-content-between mb-3">
           <InputGroup className="w-50">
@@ -135,7 +135,7 @@ const BOWagenparkBeheer = () => {
             <Dropdown.Item eventKey="Actief">Alleen Actief</Dropdown.Item>
             <Dropdown.Item eventKey="Geblokkeerd">Alleen Geblokkeerd</Dropdown.Item>
           </DropdownButton>
-          
+
           <Button className="mb-3 knop" onClick={() => setShowModal(true)}>
             Voertuig Toevoegen
           </Button>

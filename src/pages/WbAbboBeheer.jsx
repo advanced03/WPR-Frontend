@@ -60,9 +60,9 @@ const WbAbboBeheer = () => {
             </Col>
           ))}
         </Row>
-          <div className="text-center my-4 p-4 huren-box">
-            <h4>Huidig abonnement: {currentAbonnement}</h4>
-          </div>
+        <div className="text-center my-4 p-4 huren-box">
+          <h4>Huidig abonnement: {currentAbonnement}</h4>
+        </div>
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closees >
             <Modal.Title>Bevestig abonnement</Modal.Title>

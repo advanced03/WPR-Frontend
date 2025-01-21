@@ -191,7 +191,7 @@ function Profiel() {
                 )}
             </Container>
         </div>
-    );    
+    );
 }
 
 export default Profiel;

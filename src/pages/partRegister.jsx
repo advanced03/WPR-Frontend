@@ -103,7 +103,7 @@ const PartRegister = () => {
     };
 
     return (
-            <div className="achtergrond1">
+        <div className="achtergrond1">
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>

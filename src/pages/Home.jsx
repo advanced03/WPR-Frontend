@@ -11,7 +11,7 @@ const Home = () => {
     <div className="achtergrond2">
       <PartNavbar />
       <h1 className="pagina-titel text-center my-5">Welkom bij Car And All!</h1>
-      
+
       <Container className="text-center">
         <Row className="justify-content-center">
           <Col xs={12} md={4} className="my-4">

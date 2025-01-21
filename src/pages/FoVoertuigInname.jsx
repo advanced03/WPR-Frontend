@@ -66,11 +66,11 @@ const FoVoertuigInname = () => {
             .includes(zoekTerm.toLowerCase())
     );
 
-  return (
-    <div className='achtergrond2'>
-      <FoNavbar />
-      <Container fluid>
-        <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
+    return (
+        <div className='achtergrond2'>
+            <FoNavbar />
+            <Container fluid>
+                <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
 
                 <FormControl
                     type="text"
