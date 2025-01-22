@@ -4,77 +4,38 @@ import "../style/tabel.css";
 import PartNavbar from "../components/PartNavbar.jsx";
 
 const HuurGeschiedenis = () => {
-  const [huurData, setHuurData] = useState([
-    {
-      merk: "Volkswagen",
-      model: "Golf",
-      kleur: "Blauw",
-      startdatum: "01-12-2024",
-      einddatum: "10-12-2024",
-      prijs: 250,
-      status: "In Behandeling",
-    },
-    {
-      merk: "BMW",
-      model: "X5",
-      kleur: "Zwart",
-      startdatum: "12-08-2024",
-      einddatum: "19-08-2024",
-      prijs: 500,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Mercedes",
-      model: "Sprinter",
-      kleur: "Wit",
-      startdatum: "05-10-2024",
-      einddatum: "15-10-2024",
-      prijs: 450,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Audi",
-      model: "A3",
-      kleur: "Rood",
-      startdatum: "10-07-2024",
-      einddatum: "18-07-2024",
-      prijs: 300,
-      status: "Goedgekeurd",
-    },
-    {
-      merk: "Peugeot",
-      model: "208",
-      kleur: "Grijs",
-      startdatum: "18-04-2024",
-      einddatum: "25-04-2024",
-      prijs: 240,
-      status: "Afgekeurd",
-    },
-  ]);
-
+  // State voor huurdata, modaal weergave en geselecteerde index
+  const [huurData, setHuurData] = useState([]);
   const [toonModal, setModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
+  // Kleurcodes voor verschillende huurstatussen
   const statusKleur = {
     Goedgekeurd: "green",
     Afgekeurd: "red",
     "In Behandeling": "gray",
   };
 
-  const sortedHuurData = [...huurData].sort((a, b) => new Date(b.einddatum) - new Date(a.einddatum));
+  // Sorteer huurdata op einddatum (aflopend)
+  const sortedHuurData = [...huurData].sort(
+    (a, b) => new Date(b.einddatum) - new Date(a.einddatum)
+  );
 
+  // Toon annuleringsmodaal
   const handletoonModal = (index) => {
     setSelectedIndex(index);
     setModal(true);
   };
 
+  // Huurverzoek annuleren
   const handleAnnuleren = () => {
     const nieuweHuurData = [...huurData];
     nieuweHuurData[selectedIndex].status = "Geannuleerd";
     setHuurData(nieuweHuurData);
-    setModal(false); // Close the modal after cancelling
+    setModal(false);
   };
 
+  // Sluit het annuleringsmodaal
   const handleCloseModal = () => {
     setModal(false);
     setSelectedIndex(null);
@@ -128,7 +89,7 @@ const HuurGeschiedenis = () => {
         </Table>
       </Container>
 
-      {/* Modal for cancellation confirmation */}
+      {/* Modaal layout ui */}
       <Modal show={toonModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Bevestiging Annuleren</Modal.Title>

@@ -3,41 +3,22 @@ import { Container, Table, Dropdown, DropdownButton, InputGroup, FormControl } f
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbStatus = () => {
-  const [vehicles, setVehicles] = useState([
-    {
-      merk: 'Tesla',
-      type: 'Model 3',
-      huurDatum: '2023-11-01',
-      huurder: 'Jan Jansen',
-      status: 'Verhuurd',
-    },
-    {
-      merk: 'Volkswagen',
-      type: 'Golf',
-      huurDatum: '2023-12-15',
-      huurder: 'Piet Pietersen',
-      status: 'Verhuurd',
-    },
-    {
-      merk: 'BMW',
-      type: 'X5',
-      huurDatum: '2023-10-10',
-      huurder: 'Sophie de Vries',
-      status: 'Niet Verhuurd',
-    },
-  ]);
+  const [vehicles, setVehicles] = useState([]); // Lege lijst van voertuigen
 
-  const [statusFilter, setStatusFilter] = useState('Alle');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('Alle'); // Filterstatus
+  const [searchQuery, setSearchQuery] = useState(''); // Zoekopdracht
 
+  // Verandert het filter op basis van de geselecteerde status
   const handleFilterChange = (status) => {
     setStatusFilter(status);
   };
 
+  // Verandert de zoekterm bij het typen in de zoekbalk
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  // Filtert de voertuigen op basis van status en zoekterm
   const filteredVehicles = vehicles.filter((vehicle) => {
     const matchesStatus =
       statusFilter === 'Alle' ||
@@ -57,7 +38,7 @@ const WbStatus = () => {
       <Container>
         <h1 className="pagina-titel text-center my-5">Overzicht Wagenpark</h1>
 
-        {/* Filter en zoekbalk boven de tabel */}
+        {/* Zoekbalk */}
         <div className="d-flex justify-content-between mb-3">
           <InputGroup className="w-50">
             <FormControl
@@ -78,7 +59,6 @@ const WbStatus = () => {
           </DropdownButton>
         </div>
 
-        {/* Tabel met voertuigen */}
         <Table striped bordered hover>
           <thead>
             <tr>

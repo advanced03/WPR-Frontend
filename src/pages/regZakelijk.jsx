@@ -5,6 +5,7 @@ import '../style/register.css';
 import axios from 'axios';
 
 const RegZak = () => {
+    // State hooks voor het beheren van formuliergegevens en foutmeldingen
     const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
@@ -12,22 +13,24 @@ const RegZak = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    const [error, setError] = useState(null); // Voor foutmeldingen
+    const [success, setSuccess] = useState(false); // Voor het succesbericht na registratie
+    const navigate = useNavigate(); // Gebruik voor navigatie naar een andere pagina
 
+    // Functie die wordt aangeroepen bij het indienen van het registratieformulier
     const handleRegister = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setSuccess(false);
+        e.preventDefault(); // Voorkomt het standaard herladen van de pagina bij formulierinzending
+        setError(null); // Foutmelding resetten
+        setSuccess(false); // Succesbericht resetten
 
-        // Wachtwoorden controleren
+        // Controleer of de wachtwoorden overeenkomen
         if (password !== confirmPassword) {
-            setError('Wachtwoorden komen niet overeen.');
-            return;
+            setError('Wachtwoorden komen niet overeen.'); // Zet foutmelding als wachtwoorden niet overeenkomen
+            return; // Stop de functie als de wachtwoorden niet overeenkomen
         }
 
         try {
+            // Payload voor het registratieverzoek
             const payload = {
                 username,
                 email,
@@ -37,22 +40,24 @@ const RegZak = () => {
                 phoneNumber,
             };
 
-            console.log('Payload:', payload);
+            console.log('Payload:', payload); // Log de payload voor debugging
 
+            // Verstuur de registratiegegevens naar de API
             const response = await axios.post(
                 `https://localhost:7281/api/Account/registerZakelijk`,
                 payload,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json', // Zet de content type header voor JSON
                     },
                 }
             );
 
+            // Controleer of de registratie succesvol was (status 201)
             if (response.status === 201) {
-                setSuccess(true);
+                setSuccess(true); // Zet het succesbericht
 
-                // Velden leegmaken
+                // Leeg de invoervelden na succesvolle registratie
                 setUsername('');
                 setVoornaam('');
                 setAchternaam('');
@@ -61,30 +66,35 @@ const RegZak = () => {
                 setPassword('');
                 setConfirmPassword('');
 
-                // Navigeren naar de login-pagina
+                // Na 2 seconden naar de login-pagina navigeren
                 setTimeout(() => {
-                    navigate('/Login');
+                    navigate('/Login'); // Navigeer naar login-pagina
                 }, 2000);
             }
         } catch (error) {
-            console.error('Error during registration:', error);
+            console.error('Error during registration:', error); // Log eventuele fouten in de console
 
+            // Foutafhandelingslogica
             if (error.response) {
+                // Fout van de server
                 if (error.response.data && error.response.data.Message) {
-                    setError(error.response.data.Message);
+                    setError(error.response.data.Message); // Toon specifieke foutmelding
                 } else {
-                    setError('Er is een fout opgetreden tijdens registratie.');
+                    setError('Er is een fout opgetreden tijdens registratie.'); // Algemene foutmelding
                 }
             } else if (error.request) {
+                // Geen antwoord van de server
                 setError('Geen antwoord van de server. Probeer het later opnieuw.');
             } else {
-                setError(error.message);
+                // Fout in de configuratie van het verzoek
+                setError(error.message); // Toon de foutmelding
             }
         }
     };
 
+    // Functie om naar een andere pagina te navigeren
     const handleNavigation = (path) => {
-        navigate(path);
+        navigate(path); // Navigeer naar de opgegeven path
     };
 
     return (

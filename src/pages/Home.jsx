@@ -9,7 +9,9 @@ import PartNavbar from "../components/PartNavbar.jsx";
 const Home = () => {
   return (
     <div className="achtergrond2">
+
       <PartNavbar />
+
       <h1 className="pagina-titel text-center my-5">Welkom bij Car And All!</h1>
 
       <Container className="text-center">
@@ -20,12 +22,14 @@ const Home = () => {
               <img src={auto} className="img-fluid p-1" alt="Auto" />
             </div>
           </Col>
+
           <Col xs={12} md={4} className="my-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2">Caravans</h3>
               <img src={caravan} className="img-fluid p-1" alt="Caravan" />
             </div>
           </Col>
+
           <Col xs={12} md={4} className="my-4">
             <div className="home-image-container">
               <h3 className="HomeFotoTekst mt-2">Campers</h3>
@@ -45,6 +49,7 @@ const Home = () => {
               Maak vandaag nog een account aan en begin jouw avontuur op de weg!
             </p>
           </Col>
+
           <Col xs={12} md={6}>
             <h3>Waarom kiezen voor Car And All? 🤔</h3>
             <ul className="list-unstyled">

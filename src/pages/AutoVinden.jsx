@@ -38,11 +38,11 @@ const AutoVinden = () => {
         fetchWagens();
     }, []);
 
-    const handleSelect = (type) => {
+    const handleSelecteren = (type) => {
         setSelectedType(type);
     };
 
-    const handleSearchChange = (e) => {
+    const handleZoeken = (e) => {
         setSearchTerm(e.target.value);
     };
     // Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
@@ -77,37 +77,37 @@ const AutoVinden = () => {
             <PartNavbar />
             <Container fluid className="p-2 my-4">
                 <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
-
+                {/* Zoekbalk methode */}
                 <div className="huren-box text-center mt-5 p-5">
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Zoek voertuigen..."
                         value={searchTerm}
-                        onChange={handleSearchChange}
+                        onChange={handleZoeken}
                     />
                     {/*Verander de variant van de knop als deze geselecteerd wordt*/}
                     <ButtonGroup className="my-5 knoppengroep">
                         <Button
                             variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelect('auto')}
+                            onClick={() => handleSelecteren('auto')}
                         >
                             Auto 🚗
                         </Button>
                         <Button
                             variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelect('caravan')}
+                            onClick={() => handleSelecteren('caravan')}
                         >
                             Caravan ⛺
                         </Button>
                         <Button
                             variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelect('camper')}
+                            onClick={() => handleSelecteren('camper')}
                         >
                             Camper 🚐
                         </Button>
                     </ButtonGroup>
-
+                    {/*Van en tot datum row*/}
                     <Row>
                         <Col sm={6} className="px-2 p-2">
                             <Form.Group controlId="startDate">

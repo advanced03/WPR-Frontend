@@ -77,14 +77,14 @@ const BoHuurVerzoekBehandeling = () => {
     // Methode om huurverzoeken goed te keuren
     const postAfwijzen = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
+        // Geef een error als het JWT token mist.
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
+        // Haal de juiste ID uit selectedVerzoek
         if (selectedVerzoek && selectedVerzoek.verzoek) {
-            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId; // Haal de juiste ID uit selectedVerzoek
+            const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId;
 
             try {
                 await axios.post(
@@ -97,14 +97,15 @@ const BoHuurVerzoekBehandeling = () => {
                     }
                 );
                 console.log(`Verzoek met ID ${verzoekId} succesvol afgewezen.`);
-                fetchVerzoeken(); // Haal de verzoeken opnieuw op
+                // Haal de verzoeken opnieuw op
+                fetchVerzoeken();
             } catch (err) {
                 console.error(`Er is een fout opgetreden bij het afwijzen van verzoek met ID ${verzoekId}.`, err);
             }
         }
     };
 
-
+    // Toon of verberg de modal
     const handletoonModal = (verzoek, action) => {
         setSelectedVerzoek({ verzoek, action });
         setModal(true);
@@ -186,7 +187,7 @@ const BoHuurVerzoekBehandeling = () => {
                     </Card>
                 </Col>
             </Container>
-
+            {/* Modal layout */}
             <Modal show={toonModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Bevestiging</Modal.Title>

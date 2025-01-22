@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
-import FoNavbar from "../components/FoNavbar"
+import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigInname = () => {
-    const [autos, zetAutos] = useState([]); // Bevat de lijst van auto's
-    const [zoekTerm, zetZoekTerm] = useState(''); // Zoekterm voor filtering
-    const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null); // Geselecteerde auto
-    const [toonModal, setModal] = useState(false); // Modal zichtbaar?
-    const [schadeInfo, zetSchadeInfo] = useState(''); // Beschrijving van schade
-    const [heeftSchade, zetHeeftSchade] = useState(false); // Schade aanwezig of niet
-    const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false }); // Validatie fouten
+    // State voor auto's, zoekterm, geselecteerde auto, modaal, schade-informatie en validaties
+    const [autos, zetAutos] = useState([]);
+    const [zoekTerm, zetZoekTerm] = useState('');
+    const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
+    const [toonModal, setModal] = useState(false);
+    const [schadeInfo, zetSchadeInfo] = useState('');
+    const [heeftSchade, zetHeeftSchade] = useState(false);
+    const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false });
 
-    // Data ophalen bij component mount
+    // Ophalen van data bij het laden van de component
     useEffect(() => {
         const haalReserveringenOp = async () => {
             try {
@@ -26,31 +27,27 @@ const FoVoertuigInname = () => {
         haalReserveringenOp();
     }, []);
 
+    // Openen van het modaal om een inname te registreren
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
 
+    // Valideer en registreer de inname van een voertuig
     const opslaanInname = () => {
-        // Validatie voor schade
-        if (heeftSchade) {
-            const fouten = {
-                schadeInfo: schadeInfo.trim() === '',
-            };
-            zetFoutmeldingen(fouten);
-
-            if (fouten.schadeInfo) {
-                return;
-            }
+        if (heeftSchade && schadeInfo.trim() === '') {
+            zetFoutmeldingen({ schadeInfo: true });
+            return;
         }
 
         console.log(`Auto: ${geselecteerdeAuto.fullname}`);
         console.log(`Schade: ${heeftSchade ? schadeInfo : 'Geen schade'}`);
         console.log(`Datum schade: ${heeftSchade ? new Date().toLocaleDateString() : 'Geen schade'}`);
 
-        // Verwijder de ingeleverde auto uit de lijst
+        // Verwijderen van het ingeleverde voertuig
         zetAutos(autos.filter((auto) => auto.reserveringId !== geselecteerdeAuto.reserveringId));
 
+        // Reset state na registratie
         setModal(false);
         zetGeselecteerdeAuto(null);
         zetSchadeInfo('');
@@ -58,7 +55,7 @@ const FoVoertuigInname = () => {
         zetFoutmeldingen({ schadeInfo: false });
     };
 
-    // Gefilterde lijst van auto's
+    // Filter de auto's op basis van de zoekterm
     const gefilterdeAutos = autos.filter((auto) =>
         Object.values(auto)
             .join(' ')
@@ -72,6 +69,7 @@ const FoVoertuigInname = () => {
             <Container fluid>
                 <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
 
+                {/* Zoekbalk */}
                 <FormControl
                     type="text"
                     placeholder="Zoek op naam, bestemming of andere velden..."
@@ -115,6 +113,7 @@ const FoVoertuigInname = () => {
                     </Table>
                 </div>
 
+                {/* Modal layout code */}
                 <Modal show={toonModal} onHide={() => setModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Registreer Inname</Modal.Title>
@@ -167,4 +166,3 @@ const FoVoertuigInname = () => {
 };
 
 export default FoVoertuigInname;
-

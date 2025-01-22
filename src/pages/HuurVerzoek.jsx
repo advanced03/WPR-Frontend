@@ -5,19 +5,21 @@ import axios from 'axios';
 import PartNavbar from "../components/PartNavbar.jsx";
 
 const HuurVerzoek = () => {
+    // Haal de geselecteerde wagen op uit sessionStorage
     const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
     const [formData, setFormData] = useState({
-        voertuigId: storedWagen?.voertuigId || '',  // fallback in case sessionStorage is empty
+        voertuigId: storedWagen?.voertuigId || '', // fallback indien geen wagen geselecteerd
         startDatum: '',
         eindDatum: '',
         aardReis: '',
         bestemming: '',
-        verwachteKM: '',  // Voeg een lege string toe voor verwachteKM
+        verwachteKM: '',  // leeg voor verwachte kilometers
     });
 
     const [wagen, setWagen] = useState(null);
     const navigate = useNavigate();
 
+    // Laad wagen info uit sessionStorage bij component mount
     useEffect(() => {
         const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
         if (storedWagen) {
@@ -25,25 +27,30 @@ const HuurVerzoek = () => {
         }
     }, []);
 
+    // Verwerk veranderingen in formulier input
     const handleChange = (e) => {
         const { name, value } = e.target;
+        // Beperk de verwachte kilometers tot cijfers en max 5 karakters
         if (name === "verwachteKM" && (!/^\d*$/.test(value) || value.length > 5)) {
             return;
         }
         setFormData({ ...formData, [name]: value });
     };
 
+    // Ga terug naar de vorige pagina
     const handleGoBack = () => {
-        navigate(-1); // Gaat terug naar de vorige pagina
+        navigate(-1);
     };
 
+    // Verzend formulier data naar API
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('FormData die verstuurd wordt:', formData); // Hier kun je de payload inspecteren
+        console.log('FormData die verstuurd wordt:', formData); // Inspecteer de data
 
-        // Verwijder beginDatum uit formData
+        // Verwijder onnodige velden (zoals beginDatum)
         const { beginDatum, ...filteredFormData } = formData;
 
+        // Haal JWT-token op uit sessionStorage
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
@@ -51,14 +58,15 @@ const HuurVerzoek = () => {
         }
 
         try {
+            // Verstuur het formulier naar de API
             const response = await axios.post(
                 'https://localhost:7281/api/verhuurVerzoek/VerhuurVerzoekRequest',
-                filteredFormData, // Verstuur alleen de gefilterde data
+                filteredFormData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
                 }
             );
             console.log('Formulier succesvol ingediend:', response.data);
@@ -69,7 +77,7 @@ const HuurVerzoek = () => {
     };
 
     if (!wagen) {
-        return <div>Loading wagen info...</div>;
+        return <div>Loading wagen info...</div>; // Toon loading boodschap totdat wagen info geladen is
     }
 
     return (
@@ -125,7 +133,7 @@ const HuurVerzoek = () => {
                                 <Form.Group controlId="formKilometers" className="p-2">
                                     <Form.Label>📏 Verwachte kilometers</Form.Label>
                                     <Form.Control
-                                        type="number"  // verander 'int' naar 'number'
+                                        type="number"
                                         name="verwachteKM"
                                         value={formData.verwachteKM}
                                         onChange={handleChange}
@@ -148,6 +156,3 @@ const HuurVerzoek = () => {
 };
 
 export default HuurVerzoek;
-
-
-

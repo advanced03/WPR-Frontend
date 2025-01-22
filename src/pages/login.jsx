@@ -5,16 +5,16 @@ import axios from 'axios';
 import '../style/login.css';
 import '../style/universeel.css';
 
-
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [username, setUsername] = useState('');  // Gebruikersnaam state
+    const [password, setPassword] = useState('');  // Wachtwoord state
+    const [error, setError] = useState(null);  // Errormelding state
     const navigate = useNavigate();
 
+    // Inlogfunctie die gegevens naar de server verstuurt
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(null);
+        setError(null);  // Reset foutmelding
 
         try {
             const response = await axios.post(
@@ -28,7 +28,7 @@ const Login = () => {
             );
 
             if (response.status === 200) {
-                // JWT-token opslaan in localStorage en zorg ervoor dat de server de responsetoken terugstuurt.
+                // Sla het JWT-token op in sessionStorage
                 const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
@@ -44,13 +44,14 @@ const Login = () => {
         } catch (error) {
             console.error('Error logging in:', error);
             if (error.response && error.response.data.message) {
-                setError(error.response.data.message); // Toon foutmelding van de server
+                setError(error.response.data.message);  // Toon foutmelding van de server
             } else {
-                setError('Er is een fout opgetreden tijdens het inloggen.');
+                setError('Er is een fout opgetreden tijdens het inloggen.');  // Algemene foutmelding
             }
         }
     };
 
+    // Functie voor navigeren naar andere pagina's
     const handleNavigation = (path) => {
         navigate(path);
     };
@@ -62,7 +63,7 @@ const Login = () => {
                     <Col>
                         <div className="LoginKaart">
                             <h2 className="text-center mb-4">Inloggen</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {error && <Alert variant="danger">{error}</Alert>}  // Toon foutmelding als er is
                             <Form onSubmit={handleLogin}>
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
@@ -70,7 +71,7 @@ const Login = () => {
                                         type="text"
                                         placeholder="Voer uw gebruikersnaam in"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        onChange={(e) => setUsername(e.target.value)}  // Update gebruikersnaam
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
@@ -79,7 +80,7 @@ const Login = () => {
                                         type="password"
                                         placeholder="Voer uw wachtwoord in"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={(e) => setPassword(e.target.value)}  // Update wachtwoord
                                     />
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop" disabled={!username || !password}>
@@ -107,4 +108,3 @@ const Login = () => {
 };
 
 export default Login;
-

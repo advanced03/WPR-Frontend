@@ -10,26 +10,29 @@ const WbAccountsBeheren = () => {
     const [teVerwerkenAccount, setTeVerwerkenAccount] = useState(null);
     const [actieType, setActieType] = useState('goedkeuren'); // 'goedkeuren', 'weigeren', of 'verwijderen'
 
+    // Haal de accountgegevens op bij de eerste render
     useEffect(() => {
         const fetchAccounts = async () => {
             const token = sessionStorage.getItem('jwtToken');
-
             if (!token) {
                 console.error('JWT-token ontbreekt in sessionStorage.');
                 return;
             }
+
             try {
                 const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllVerzoeken', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                // Mapt de gegevens naar een nieuw formaat voor de accs
                 const mappedAccounts = response.data.map((item) => ({
                     id: item.wagenparkVerzoekId,
                     naam: `User ${item.voornaam}`,
                     email: `${item.email}`,
                     isGoedgekeurd: false
                 }));
+
                 setAccounts(mappedAccounts);
             } catch (error) {
                 console.error('Fout bij ophalen van data:', error);
@@ -39,38 +42,44 @@ const WbAccountsBeheren = () => {
         fetchAccounts();
     }, []);
 
+    // Filter accounts op basis van zoekterm
     const gefilterdeAccounts = accounts.filter((account) =>
         account.naam.toLowerCase().includes(zoekterm.toLowerCase())
     );
 
+    // Functie om account goed te keuren
     const goedkeurenAccount = (account) => {
         setAccounts(accounts.map(a =>
             a.id === account.id ? { ...a, isGoedgekeurd: true } : a
         ));
     };
 
+    // Functie om account te weigeren
     const weigerenAccount = (account) => {
         setAccounts(accounts.filter(a => a.id !== account.id));
     };
 
+    // Toon de modal voor de geselecteerde actie
     const toonModalVoorActie = (account, type) => {
         setTeVerwerkenAccount(account);
         setActieType(type);
         setModal(true);
     };
 
+    // Sluit de modal zonder actie
     const sluitModal = () => {
         setModal(false);
         setTeVerwerkenAccount(null);
     };
 
+    // Voer goedkeuren actie uit
     const voerGoedkeurenUit = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
             const payload = { id: teVerwerkenAccount.id };
@@ -80,6 +89,7 @@ const WbAccountsBeheren = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             goedkeurenAccount(teVerwerkenAccount);
             sluitModal();
         } catch (error) {
@@ -87,13 +97,14 @@ const WbAccountsBeheren = () => {
         }
     };
 
+    // Voer weigeren of verwijderen actie uit
     const voerWeigerenOfVerwijderenUit = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
             const payload = { id: teVerwerkenAccount.id };
@@ -103,6 +114,7 @@ const WbAccountsBeheren = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             weigerenAccount(teVerwerkenAccount);
             sluitModal();
         } catch (error) {
