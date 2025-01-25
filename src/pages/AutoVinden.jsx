@@ -38,7 +38,37 @@ const AutoVinden = () => {
         fetchWagens();
     }, []);
 
-    const handleSelecteren = (type) => {
+    const handleFetchByDate = async () => {
+        if (!startDate || !endDate) {
+            setError('Vul zowel een begin- als einddatum in.');
+            return;
+        }
+
+        setLoading(true); // Zet de laadstatus op true terwijl we de voertuigen ophalen
+        try {
+            console.log('Dates:',
+                {                params: {
+                startDate: startDate,
+                endDate: endDate
+            }
+            });
+            const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
+                params: {
+                startDate: startDate,
+                endDate: endDate
+            }
+        });
+            console.log('Response Data:', response.data);
+            setWagens(response.data); // Update de wagens met de opgehaalde data
+            setError(null); // Reset de error als het ophalen succesvol is
+        } catch (error) {
+            setError('Er is een fout opgetreden bij het ophalen van voertuigen op basis van de datums.');
+        } finally {
+            setLoading(false); // Zet de laadstatus terug naar false
+        }
+    };
+
+    const handleSelect = (type) => {
         setSelectedType(type);
     };
 
@@ -130,9 +160,22 @@ const AutoVinden = () => {
                             </Form.Group>
                         </Col>
                     </Row>
+                    <div className="text-center mt-4">
+                        <Button
+                            variant="primary"
+                            onClick={handleFetchByDate}
+                            disabled={!startDate || !endDate} // Schakel de knop uit als de datums niet zijn ingevuld
+                        >
+                            Zoek voertuigen op datum
+                        </Button>
+                    </div>
                 </div>
 
-                {/*Toon een bericht als er geen resultaten zijn.*/}
+                {/* Toon de laadindicator of foutmeldingen als dat nodig is */}
+                {loading && <div className="text-center mt-3">Laden...</div>}
+                {error && <div className="text-danger text-center mt-3">{error}</div>}
+
+                {/* Toon een bericht als er geen resultaten zijn. */}
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
                         <div className="no-results">Geen voertuigen gevonden!</div>
@@ -143,7 +186,7 @@ const AutoVinden = () => {
                                     <Card.Body>
                                         <Card.Title>{wagen.merk} {wagen.type}</Card.Title>
                                         <p>Kleur: {wagen.kleur}</p>
-                                        <p>prijs: ${50}</p>
+                                        <p>Prijs: ${50}</p>
                                         <p>Type: {wagen.soort}</p>
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
@@ -162,3 +205,4 @@ const AutoVinden = () => {
 };
 
 export default AutoVinden;
+
