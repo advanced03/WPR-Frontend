@@ -63,7 +63,7 @@ const Login = () => {
                     <Col>
                         <div className="LoginKaart">
                             <h2 className="text-center mb-4">Inloggen</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}  // Toon foutmelding als er is
+                            {error && <Alert variant="danger">{error}</Alert>} 
                             <Form onSubmit={handleLogin}>
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>

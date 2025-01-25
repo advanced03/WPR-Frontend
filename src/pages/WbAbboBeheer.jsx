@@ -4,27 +4,27 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import WbNavbar from "../components/WbNavbar";
 
 const WbAbboBeheer = () => {
-  // State hooks voor het beheren van de modal en geselecteerde abonnement
-  const [toonModal, setModal] = useState(false); // Toont of verbergt de modal
-  const [selectedAbonnement, setSelectedAbonnement] = useState(""); // Bewaart het geselecteerde abonnement
-  const [currentAbonnement, setCurrentAbonnement] = useState("Pay as You Go"); // Bewaart het huidige abonnement
     const [showModal, setShowModal] = useState(false);
     const [selectedAbonnement, setSelectedAbonnement] = useState(null);
-    const [currentAbonnement, setCurrentAbonnement] = useState("Pay as You Go");
+    const [currentAbonnement, setCurrentAbonnement] = useState(null);
     const [abonnementen, setAbonnementen] = useState([]);
 
+    // Haal alle abonnementen op bij component-mount
     useEffect(() => {
         const fetchAbonnementen = async () => {
             try {
-                const response = await axios.get("https://localhost:7281/api/Abonnement/GetAllAbonnementen");
+                const response = await axios.get("https://localhost:7281/api/Abonnementen/GetAllAbonnementen");
                 if (response.status === 200) {
                     const formattedAbonnementen = response.data.map((abbo) => ({
                         id: abbo.abonnementId,
-                        type: abbo.abonnementType,
-                        kosten: `€${abbo.abonnementPrijs} per maand`,
-                        description: `Abonnement type ${abbo.abonnementType} met een prijs van €${abbo.abonnementPrijs}.`,
+                        type: abbo.naam,
+                        kosten: `€${abbo.prijs} per maand`,
+                        description: `Abonnement type ${abbo.naam} met een prijs van €${abbo.prijs}.`,
                     }));
                     setAbonnementen(formattedAbonnementen);
+
+                    // Zorg ervoor dat het huidige abonnement wordt opgehaald na het laden van de lijst
+                    getCurrentAbonnement(formattedAbonnementen);
                 } else {
                     console.error("Er is iets misgegaan bij het ophalen van de abonnementen.");
                 }
@@ -36,10 +36,56 @@ const WbAbboBeheer = () => {
         fetchAbonnementen();
     }, []);
 
-    const handleAbonnementChange = async () => {
+    const getCurrentAbonnement = async (loadedAbonnementen) => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
         try {
-            const response = await axios.put("https://localhost:7281/api/Abonnement/ChangeAbonnement", {
-                abonnementId: selectedAbonnement,
+            const response = await axios.get(
+                "https://localhost:7281/api/Abonnementen/GetCurrentAbonnement",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                const currentAbboId = response.data.abonnementId; // Het huidige abonnement-ID dat wordt geretourneerd
+                const selected = loadedAbonnementen.find((abbo) => abbo.id === currentAbboId);
+
+                if (selected) {
+                    setCurrentAbonnement(selected.type); // Stel de abonnementsnaam in
+                } else {
+                    console.warn("Geen overeenkomstig abonnement gevonden.");
+                    setCurrentAbonnement("Onbekend abonnement");
+                }
+            } else {
+                console.error("Er is iets misgegaan bij het ophalen van het huidige abonnement.");
+            }
+        } catch (error) {
+            console.error("Fout bij het ophalen van het huidige abonnement:", error);
+        }
+    };
+
+    const handleAbonnementChange = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+        try {
+            const response = await axios.post("https://localhost:7281/api/Abonnementen/wijzig-abonnement-user", {
+                Id: selectedAbonnement,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             });
 
             if (response.status === 200) {
@@ -89,7 +135,7 @@ const WbAbboBeheer = () => {
                 </Row>
 
                 <div className="text-center my-4 p-4 huren-box">
-                    <h4>Huidig abonnement: {currentAbonnement}</h4>
+                    <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
                 </div>
 
                 <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -116,3 +162,4 @@ const WbAbboBeheer = () => {
 };
 
 export default WbAbboBeheer;
+
