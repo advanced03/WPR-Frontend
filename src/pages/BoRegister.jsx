@@ -6,6 +6,7 @@ import axios from 'axios';
 import BoNavbar from "../components/BoNavbar"
 
 const WbRegister = () => {
+    // Usestates initializeren
     const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
@@ -22,7 +23,7 @@ const WbRegister = () => {
         setError(null);
         setSuccess(false);
 
-        // Wachtwoorden controleren
+        // Controleer of het wachtwoord overeenkomt
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
             return;
@@ -51,8 +52,8 @@ const WbRegister = () => {
                 }
             );
 
+            // JWT-token opslaan in sessionStorage
             if (response.status === 201) {
-                // JWT-token opslaan in sessionStorage
                 const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
@@ -73,13 +74,11 @@ const WbRegister = () => {
         } catch (error) {
             console.error('Error during registration:', error);
 
+            // Foutmelding van de backend weergeven
             if (error.response) {
-                // Foutmelding van de backend weergeven
                 if (error.response.data && error.response.data.Errors) {
-                    // Dit is meestal het geval bij ModelState-validatie fouten
                     setError(error.response.data.Errors.join(' '));
                 } else if (error.response.data && error.response.data.Message) {
-                    // Specifieke foutmelding van de backend
                     setError(error.response.data.Message);
                 } else {
                     setError('Er is een fout opgetreden tijdens registratie.');
@@ -91,8 +90,7 @@ const WbRegister = () => {
             }
         }
     };
-
-
+    // Kleine methode om te navigeren.
     const handleNavigation = (path) => {
         navigate(path);
     };

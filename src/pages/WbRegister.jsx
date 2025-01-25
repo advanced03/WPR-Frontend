@@ -6,6 +6,7 @@ import axios from 'axios';
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbReg = () => {
+    // Usestates initializeren
     const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
@@ -20,19 +21,20 @@ const WbReg = () => {
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
-
+    // Verwerking van register formulier
     const handleRegister = async (e) => {
         e.preventDefault();
         setError(null);
         setSuccess(false);
 
-        // Wachtwoorden controleren
+        // Kijken of ww overeenkomt
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
             return;
         }
 
         try {
+            // Payload voor het inloggen
             console.log('Payload:', {
                 username,
                 email,
@@ -65,14 +67,15 @@ const WbReg = () => {
                 }
             );
 
+            // Als registratie succesvol is, sla het JWT-token op en navigeer naar login
             if (response.status === 201) {
-                // JWT-token opslaan in sessionStorage
                 const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
                 }
 
                 setSuccess(true);
+                // Reset formuliervelden na succesvolle registratie
                 setUsername('');
                 setVoornaam('');
                 setAchternaam('');
@@ -80,25 +83,24 @@ const WbReg = () => {
                 setbedrijfsnaam('');
                 setbedrijfsString('');
                 setphoneNumber('');
-                setkvkNummer('')
+                setkvkNummer('');
                 setPassword('');
                 setConfirmPassword('');
 
-                // Navigeren naar de login-pagina
+                // Navigeer naar login
                 setTimeout(() => navigate('/Login'), 2000);
             } else {
                 setTimeout(() => navigate('/Login'), 2000);
             }
         } catch (error) {
+            // Error handling mislukte register
             console.error('Error during registration:', error);
 
             if (error.response) {
-                // Foutmelding van de backend weergeven
+                // Backendfoutmelding tonen
                 if (error.response.data && error.response.data.Errors) {
-                    // Dit is meestal het geval bij ModelState-validatie fouten
                     setError(error.response.data.Errors.join(' '));
                 } else if (error.response.data && error.response.data.Message) {
-                    // Specifieke foutmelding van de backend
                     setError(error.response.data.Message);
                 } else {
                     setError('Er is een fout opgetreden tijdens registratie.');
@@ -111,7 +113,7 @@ const WbReg = () => {
         }
     };
 
-
+    // Navigatie methode
     const handleNavigation = (path) => {
         navigate(path);
     };

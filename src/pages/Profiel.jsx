@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLa
 import PartNavbar from "../components/PartNavbar.jsx";
 
 function Profiel() {
+    // State voor gebruikergegevens, editmodus en laadstatus
     const [gebruiker, setGebruiker] = useState({
         username: '',
         email: '',
@@ -15,82 +16,62 @@ function Profiel() {
         wachtwoord: ''
     });
 
-    const [editModus, setEditModus] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [editModus, setEditModus] = useState(false); // Bepaalt of het formulier in bewerkingsmodus is
+    const [loading, setLoading] = useState(true); // Laadstatus
 
+    // Functie om gebruikersgegevens op te halen
     const fetchUserData = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
-        if (!token) {
-            console.error('JWT-token ontbreekt in sessionStorage.');
-            return;
-        }
+        if (!token) return; // Controleer of JWT-token bestaat
 
         try {
             const response = await axios.get('https://localhost:7281/api/account/getUserData', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             });
-
-            setGebruiker(response.data);
+            setGebruiker(response.data); // Zet opgehaalde gegevens in state
             setLoading(false);
         } catch (error) {
-            console.error('Er is een fout opgetreden bij het ophalen van de gebruikersgegevens:', error);
+            console.error('Fout bij ophalen gegevens:', error);
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchUserData();
+        fetchUserData(); // Ophalen van gegevens bij het laden van de component
     }, []);
 
+    // Verwerkt het formulier en slaat de gegevens op
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const token = sessionStorage.getItem('jwtToken');
-
-        if (!token) {
-            console.error('JWT-token ontbreekt in sessionStorage.');
-            return;
-        }
+        if (!token) return;
 
         try {
-            const response = await axios.put(
-                'https://localhost:7281/api/account/updateUserData',
-                {
-                    username: gebruiker.username,
-                    email: gebruiker.email,
-                    phoneNumber: gebruiker.phoneNumber
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const response = await axios.put('https://localhost:7281/api/account/updateUserData', {
+                username: gebruiker.username,
+                email: gebruiker.email,
+                phoneNumber: gebruiker.phoneNumber
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-            console.log('Gebruiker succesvol bijgewerkt:', response.data);
-
-            setEditModus(false);
             setGebruiker(response.data);
-
-            // Herlaad de gebruikersgegevens
-            fetchUserData();
+            setEditModus(false); // Zet bewerkingsmodus uit
+            fetchUserData(); // Herlaad gegevens na update
         } catch (error) {
-            console.error('Er is een fout opgetreden bij het opslaan van de gebruikersgegevens:', error);
+            console.error('Fout bij opslaan gegevens:', error);
         }
     };
 
     if (loading) {
-        return <div>Laden...</div>;
+        return <div>Laden...</div>; // Weergeven tijdens het laden
     }
 
     return (
         <div className="achtergrond2">
             <PartNavbar />
             <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
-            <Container className="py-5 scroll-container">
+            <Container className="py-5">
                 {editModus ? (
                     <Form onSubmit={handleSubmit}>
                         <Row className="justify-content-center">
@@ -100,7 +81,6 @@ function Profiel() {
                                         <h3 className="mb-0">Profiel Bewerken</h3>
                                     </Card.Header>
                                     <Card.Body>
-                                        {/* Form Fields */}
                                         <FormGroup controlId="gebruikersnaam">
                                             <FormLabel>Gebruikersnaam</FormLabel>
                                             <FormControl
@@ -155,7 +135,7 @@ function Profiel() {
                                 className="mx-2"
                                 onClick={() => {
                                     setEditModus(false);
-                                    fetchUserData();  // Voeg dit toe om opnieuw de gegevens op te halen
+                                    fetchUserData();  // Herlaad gegevens bij annuleren
                                 }}
                             >
                                 Annuleren
@@ -191,9 +171,7 @@ function Profiel() {
                 )}
             </Container>
         </div>
-    );    
+    );
 }
 
 export default Profiel;
-
-

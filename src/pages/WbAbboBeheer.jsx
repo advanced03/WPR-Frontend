@@ -4,6 +4,10 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import WbNavbar from "../components/WbNavbar";
 
 const WbAbboBeheer = () => {
+  // State hooks voor het beheren van de modal en geselecteerde abonnement
+  const [toonModal, setModal] = useState(false); // Toont of verbergt de modal
+  const [selectedAbonnement, setSelectedAbonnement] = useState(""); // Bewaart het geselecteerde abonnement
+  const [currentAbonnement, setCurrentAbonnement] = useState("Pay as You Go"); // Bewaart het huidige abonnement
     const [showModal, setShowModal] = useState(false);
     const [selectedAbonnement, setSelectedAbonnement] = useState(null);
     const [currentAbonnement, setCurrentAbonnement] = useState("Pay as You Go");

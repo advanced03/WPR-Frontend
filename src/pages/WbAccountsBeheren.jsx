@@ -1,36 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, FormControl, Table, InputGroup, Modal, Container } from 'react-bootstrap';
-import '../style/wagenpark.css';
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbAccountsBeheren = () => {
     const [accounts, setAccounts] = useState([]);
     const [zoekterm, setZoekterm] = useState('');
-    const [toonModal, setToonModal] = useState(false);
+    const [toonModal, setModal] = useState(false);
     const [teVerwerkenAccount, setTeVerwerkenAccount] = useState(null);
     const [actieType, setActieType] = useState('goedkeuren'); // 'goedkeuren', 'weigeren', of 'verwijderen'
 
+    // Haal de accountgegevens op bij de eerste render
     useEffect(() => {
         const fetchAccounts = async () => {
             const token = sessionStorage.getItem('jwtToken');
-
             if (!token) {
                 console.error('JWT-token ontbreekt in sessionStorage.');
                 return;
             }
+
             try {
                 const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllVerzoeken', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                // Mapt de gegevens naar een nieuw formaat voor de accs
                 const mappedAccounts = response.data.map((item) => ({
                     id: item.wagenparkVerzoekId,
                     naam: `User ${item.voornaam}`,
                     email: `${item.email}`,
                     isGoedgekeurd: false
                 }));
+
                 setAccounts(mappedAccounts);
             } catch (error) {
                 console.error('Fout bij ophalen van data:', error);
@@ -40,38 +42,44 @@ const WbAccountsBeheren = () => {
         fetchAccounts();
     }, []);
 
+    // Filter accounts op basis van zoekterm
     const gefilterdeAccounts = accounts.filter((account) =>
         account.naam.toLowerCase().includes(zoekterm.toLowerCase())
     );
 
+    // Functie om account goed te keuren
     const goedkeurenAccount = (account) => {
         setAccounts(accounts.map(a =>
             a.id === account.id ? { ...a, isGoedgekeurd: true } : a
         ));
     };
 
+    // Functie om account te weigeren
     const weigerenAccount = (account) => {
         setAccounts(accounts.filter(a => a.id !== account.id));
     };
 
+    // Toon de modal voor de geselecteerde actie
     const toonModalVoorActie = (account, type) => {
         setTeVerwerkenAccount(account);
         setActieType(type);
-        setToonModal(true);
+        setModal(true);
     };
 
+    // Sluit de modal zonder actie
     const sluitModal = () => {
-        setToonModal(false);
+        setModal(false);
         setTeVerwerkenAccount(null);
     };
 
+    // Voer goedkeuren actie uit
     const voerGoedkeurenUit = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
             const payload = { id: teVerwerkenAccount.id };
@@ -81,6 +89,7 @@ const WbAccountsBeheren = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             goedkeurenAccount(teVerwerkenAccount);
             sluitModal();
         } catch (error) {
@@ -88,13 +97,14 @@ const WbAccountsBeheren = () => {
         }
     };
 
+    // Voer weigeren of verwijderen actie uit
     const voerWeigerenOfVerwijderenUit = async () => {
         const token = sessionStorage.getItem('jwtToken');
-
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
             const payload = { id: teVerwerkenAccount.id };
@@ -104,6 +114,7 @@ const WbAccountsBeheren = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             weigerenAccount(teVerwerkenAccount);
             sluitModal();
         } catch (error) {
@@ -128,7 +139,7 @@ const WbAccountsBeheren = () => {
                     </InputGroup>
                 </div>
 
-                <div className="scrollable-table-container">
+                <div className="autovinden">
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>
