@@ -16,26 +16,52 @@ const AutoVinden = () => {
     const [endDate, setEndDate] = useState(''); // State voor de tot datum
     const navigate = useNavigate();
 
-// Functie om de data van de API op te halen
-//      Log de ontvangen data om te controleren
-//      Zet de ontvangen data in de state
-//      Schakel de loading state uit
+    // Functie om de data van de API op te halen
     useEffect(() => {
         const fetchWagens = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/voertuigen/AllVoertuigen');
-                console.log('Response Data:', response.data); 
-                setWagens(response.data); 
-                setLoading(false); 
+                console.log('Response Data:', response.data);
+                setWagens(response.data);
+                setLoading(false);
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
-// Stop de loading state bij een error
-                setLoading(false); 
+                setLoading(false);
             }
         };
 
         fetchWagens();
     }, []);
+
+    const handleFetchByDate = async () => {
+        if (!startDate || !endDate) {
+            setError('Vul zowel een begin- als einddatum in.');
+            return;
+        }
+
+        setLoading(true); // Zet de laadstatus op true terwijl we de voertuigen ophalen
+        try {
+            console.log('Dates:',
+                {                params: {
+                startDate: startDate,
+                endDate: endDate
+            }
+            });
+            const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
+                params: {
+                startDate: startDate,
+                endDate: endDate
+            }
+        });
+            console.log('Response Data:', response.data);
+            setWagens(response.data); // Update de wagens met de opgehaalde data
+            setError(null); // Reset de error als het ophalen succesvol is
+        } catch (error) {
+            setError('Er is een fout opgetreden bij het ophalen van voertuigen op basis van de datums.');
+        } finally {
+            setLoading(false); // Zet de laadstatus terug naar false
+        }
+    };
 
     const handleSelect = (type) => {
         setSelectedType(type);
@@ -44,32 +70,25 @@ const AutoVinden = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-// Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
+
+    // Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
     const handleRentClick = (wagen) => {
         sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
         const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
         console.log(storedWagen);
-// Navigeren naar een andere pagina
+        // Navigeren naar een andere pagina
         navigate('/Huurverzoek');
     };
 
-// Methode om voertuigen te filteren voor de zoekbalk
+    // Methode om voertuigen te filteren voor de zoekbalk
     const filteredWagens = wagens.filter(wagen =>
-        wagen.soort === selectedType && 
+        wagen.soort === selectedType &&
         (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) ||
             wagen.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
-// Laat "Loading..." zien tijdens het ophalen van data.
-    if (loading) {
-        return <div>Loading...</div>; 
-    }
-// Toon een foutmelding als er iets misgaat.
-    if (error) {
-        return <div>{error}</div>; 
-    }
 
     return (
         <div className="achtergrond2">
@@ -85,7 +104,7 @@ const AutoVinden = () => {
                         value={searchTerm}
                         onChange={handleSearchChange}
                     />
-//  Verander de variant van de knop als deze geselecteerd wordt
+                    {/* Verander de variant van de knop als deze geselecteerd wordt */}
                     <ButtonGroup className="my-5 knoppengroep">
                         <Button
                             variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
@@ -129,9 +148,22 @@ const AutoVinden = () => {
                             </Form.Group>
                         </Col>
                     </Row>
+                    <div className="text-center mt-4">
+                        <Button
+                            variant="primary"
+                            onClick={handleFetchByDate}
+                            disabled={!startDate || !endDate} // Schakel de knop uit als de datums niet zijn ingevuld
+                        >
+                            Zoek voertuigen op datum
+                        </Button>
+                    </div>
                 </div>
 
-// Toon een bericht als er geen resultaten zijn.
+                {/* Toon de laadindicator of foutmeldingen als dat nodig is */}
+                {loading && <div className="text-center mt-3">Laden...</div>}
+                {error && <div className="text-danger text-center mt-3">{error}</div>}
+
+                {/* Toon een bericht als er geen resultaten zijn. */}
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
                         <div className="no-results">Geen voertuigen gevonden!</div>
@@ -142,7 +174,7 @@ const AutoVinden = () => {
                                     <Card.Body>
                                         <Card.Title>{wagen.merk} {wagen.type}</Card.Title>
                                         <p>Kleur: {wagen.kleur}</p>
-                                        <p>prijs: ${50}</p>
+                                        <p>Prijs: ${50}</p>
                                         <p>Type: {wagen.soort}</p>
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
@@ -161,3 +193,4 @@ const AutoVinden = () => {
 };
 
 export default AutoVinden;
+
