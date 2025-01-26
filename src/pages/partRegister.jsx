@@ -86,66 +86,71 @@ const PartRegister = () => {
                                         onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Form.Group controlId="formEmail" className="mb-3">
-                                    <Form.Label>📧 E-Mail</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="email"
-                                        placeholder="Voer uw e-mail in"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formVoornaam" className="mb-3">
-                                    <Form.Label>Voornaam</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Voer uw voornaam in"
-                                        value={voornaam}
-                                        onChange={(e) => setVoornaam(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formAchternaam" className="mb-3">
-                                    <Form.Label>Achternaam</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Voer uw achternaam in"
-                                        value={achternaam}
-                                        onChange={(e) => setAchternaam(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formPhone" className="mb-3">
-                                    <Form.Label>📞 Telefoonnummer</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="tel"
-                                        placeholder="Voer uw telefoonnummer in"
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formPassword" className="mb-3">
-                                    <Form.Label>🔐 Wachtwoord</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="password"
-                                        placeholder="Kies een wachtwoord"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formConfirmPassword" className="mb-3">
-                                    <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="password"
-                                        placeholder="Bevestig uw wachtwoord"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                    />
-                                </Form.Group>
+                                    <Form.Group controlId="formEmail" className="mb-3">
+                                        <Form.Label>📧 E-mail</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="email"
+                                            placeholder="Voer uw e-mail in"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formVoornaam" className="mb-3">
+                                        <Form.Label>👤 Voornaam</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Voer uw voornaam in"
+                                            value={voornaam}
+                                            onChange={(e) => setVoornaam(e.target.value)}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formAchternaam" className="mb-3">
+                                        <Form.Label>👤 Achternaam</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Voer uw achternaam in"
+                                            value={achternaam}
+                                            onChange={(e) => setAchternaam(e.target.value)}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formPhoneNumber" className="mb-3">
+                                        <Form.Label>📱 Telefoonnummer</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Voer uw telefoonnummer in"
+                                            value={phoneNumber}
+                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formPassword" className="mb-3">
+                                        <Form.Label>🔐 Wachtwoord</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="password"
+                                            placeholder="Kies een wachtwoord"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formConfirmPassword" className="mb-3">
+                                        <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="password"
+                                            placeholder="Bevestig uw wachtwoord"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                        />
+                                    </Form.Group>
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
                                 </Button>
