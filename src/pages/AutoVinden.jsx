@@ -10,6 +10,7 @@ import PartNavbar from "../components/PartNavbar.jsx";
 import WbNavbar from '../components/WbNavbar';
 
 const AutoVinden = () => {
+    // Usestates initializeren
     const [selectedType, setSelectedType] = useState('auto');
     const [searchTerm, setSearchTerm] = useState('');
     const [wagens, setWagens] = useState([]);
@@ -20,15 +21,21 @@ const AutoVinden = () => {
     const [userRole, setUserRole] = useState(null); // Nieuw: state voor de gebruikersrol
     const navigate = useNavigate();
 
+    // Functie om de data van de API op te halen
+    //  Log de ontvangen data om te controleren
+    //  Zet de ontvangen data in de state
+    //  Schakel de loading state uit
     useEffect(() => {
         // Haal voertuigen op
         const fetchWagens = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/voertuigen/AllVoertuigen');
+                console.log('Response Data:', response.data);
                 setWagens(response.data);
                 setLoading(false);
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
+                // Stop de loading state bij een error
                 setLoading(false);
             }
         };
@@ -73,6 +80,15 @@ const AutoVinden = () => {
 
     const handleSelect = (type) => setSelectedType(type);
 
+    // Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
+    const handleRentClick = (wagen) => {
+        sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
+        const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
+        console.log(storedWagen);
+        // Navigeren naar een andere pagina
+        navigate('/Huurverzoek');
+    };
+
     const filteredWagens = wagens.filter(wagen =>
         wagen.soort === selectedType &&
         (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -81,6 +97,10 @@ const AutoVinden = () => {
 
     const renderNavbar = () => {
         switch (userRole) {
+            case 'backendWorker':
+                return <BoNavbar />;
+            case 'wagenparkBeheerder':
+                return <WbNavbar />;
             case 'particuliereKlant':
                 return <PartNavbar />;
             case 'frontendWorker':
@@ -89,9 +109,16 @@ const AutoVinden = () => {
                 return <PartNavbar />;
         }
     };
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    const handleStartDateChange = (e) => setStartDate(e.target.value);
+    const handleEndDateChange = (e) => setEndDate(e.target.value);
+    // Laat "Loading..." zien tijdens het ophalen van data.
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    // Toon een foutmelding als er iets misgaat.
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div className="achtergrond2">
