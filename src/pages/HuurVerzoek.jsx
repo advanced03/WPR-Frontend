@@ -95,7 +95,7 @@ const HuurVerzoek = () => {
                             <Card.Title className="mb-3 p-2"><strong>Uw persoonlijke informatie</strong></Card.Title>
                             <Form className="p-2" onSubmit={handleSubmit}>
                                 <Form.Group controlId="formstartDatum" className="p-2">
-                                    <Form.Label>startdatum</Form.Label>
+                                    <Form.Label>Startdatum</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="startDatum"
@@ -104,7 +104,7 @@ const HuurVerzoek = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formEinddatum" className="p-2">
-                                    <Form.Label>einddatum</Form.Label>
+                                    <Form.Label>Einddatum</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="eindDatum"
@@ -133,7 +133,7 @@ const HuurVerzoek = () => {
                                 <Form.Group controlId="formKilometers" className="p-2">
                                     <Form.Label>📏 Verwachte kilometers</Form.Label>
                                     <Form.Control
-                                        type="number"
+                                        type="text"
                                         name="verwachteKM"
                                         value={formData.verwachteKM}
                                         onChange={handleChange}

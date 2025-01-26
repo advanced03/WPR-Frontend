@@ -22,9 +22,6 @@ const AutoVinden = () => {
     const navigate = useNavigate();
 
     // Functie om de data van de API op te halen
-    //  Log de ontvangen data om te controleren
-    //  Zet de ontvangen data in de state
-    //  Schakel de loading state uit
     useEffect(() => {
         // Haal voertuigen op
         const fetchWagens = async () => {
@@ -35,7 +32,6 @@ const AutoVinden = () => {
                 setLoading(false);
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
-                // Stop de loading state bij een error
                 setLoading(false);
             }
         };
@@ -48,7 +44,7 @@ const AutoVinden = () => {
                 const response = await axios.get('https://localhost:7281/api/Account/getUserData', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setUserRole(response.data.role); // Veronderstel dat `role` het veld is
+                setUserRole(response.data.role);
             } catch (error) {
                 console.error('Fout bij het ophalen van de gebruikersrol:', error);
             }
@@ -63,7 +59,7 @@ const AutoVinden = () => {
             setError('Vul zowel een begin- als einddatum in.');
             return;
         }
-
+    
         setLoading(true);
         try {
             const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
@@ -80,12 +76,10 @@ const AutoVinden = () => {
 
     const handleSelect = (type) => setSelectedType(type);
 
-    // Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
     const handleRentClick = (wagen) => {
         sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
         const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
         console.log(storedWagen);
-        // Navigeren naar een andere pagina
         navigate('/Huurverzoek');
     };
 
@@ -109,13 +103,13 @@ const AutoVinden = () => {
                 return <PartNavbar />;
         }
     };
+
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
-    // Laat "Loading..." zien tijdens het ophalen van data.
+
     if (loading) {
         return <div>Loading...</div>;
     }
-    // Toon een foutmelding als er iets misgaat.
     if (error) {
         return <div>{error}</div>;
     }
@@ -123,10 +117,6 @@ const AutoVinden = () => {
     return (
         <div className="achtergrond2">
             {renderNavbar()} {/* Dynamisch de juiste navbar renderen */}
-            <div className="text-center my-3">
-                <p><strong>Huidige rol:</strong> {userRole || 'Laden...'}</p>
-            </div>
-
             <Container fluid className="p-2 my-4">
                 <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
                 <div className="huren-box text-center mt-5 p-5">
@@ -147,14 +137,14 @@ const AutoVinden = () => {
                         <Button
                             variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
                             onClick={() => handleSelect('caravan')}
-                            disabled={userRole === 'bedrijfsKlant'} // Schakel de caravan-knop uit voor bedrijfKlant
+                            disabled={userRole === 'bedrijfsKlant'} // Schakel de caravan-knop uit voor bedrijfsKlant
                         >
                             Caravan ⛺
                         </Button>
                         <Button
                             variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
                             onClick={() => handleSelect('camper')}
-                            disabled={userRole === 'bedrijfsKlant'} // Schakel de camper-knop uit voor bedrijfKlant
+                            disabled={userRole === 'bedrijfsKlant'} // Schakel de camper-knop uit voor bedrijfsKlant
                         >
                             Camper 🚐
                         </Button>
@@ -167,7 +157,7 @@ const AutoVinden = () => {
                                 <Form.Control
                                     type="date"
                                     value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
+                                    onChange={handleStartDateChange}
                                 />
                             </Form.Group>
                         </Col>
@@ -177,7 +167,7 @@ const AutoVinden = () => {
                                 <Form.Control
                                     type="date"
                                     value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
+                                    onChange={handleEndDateChange}
                                 />
                             </Form.Group>
                         </Col>
@@ -186,12 +176,13 @@ const AutoVinden = () => {
                         <Button
                             className="knop"
                             onClick={handleFetchByDate}
-                            disabled={!startDate || !endDate}
+                            disabled={!startDate || !endDate || startDate.trim() === '' || endDate.trim() === ''}
                         >
                             Zoek voertuigen op datum
                         </Button>
                     </div>
                 </div>
+
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
                         <div className="no-results">Geen voertuigen gevonden!</div>

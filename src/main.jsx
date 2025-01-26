@@ -21,6 +21,7 @@ import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 import RegZak from './pages/regZakelijk.jsx';
 import Wbaccbeheer from './pages/wbAccbeheer.jsx';
 import Privacy from './pages/Privacy.jsx';
+import Betaal from './pages/Betaal.jsx';
 
 /* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
                 <Route path="/WbStatus" element={<WbStatus />} />
                 <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
                 <Route path="/Privacy" element={<Privacy />} />
+                <Route path="/Betaal" element={<Betaal />} />
             </Routes>
         </Router>
     );
