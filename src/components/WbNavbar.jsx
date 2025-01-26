@@ -39,7 +39,14 @@ function WbNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
                 Overzicht voertuigen
               </Nav.Link>
             )}
+            {location.pathname !== '/WbAbboBeheer' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/WbAbboBeheer')}>
+                Abbonement kiezen/aanpassen
+              </Nav.Link>
+            )}
           </Nav>
+
+
           <Nav className="ms-auto">
             <Nav.Link className="hover privacy" onClick={() => handleNavigation('/Privacy')}>
               Privacyverklaring

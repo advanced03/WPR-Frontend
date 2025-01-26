@@ -35,6 +35,8 @@ function FoNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
               </Nav.Link>
             )}
           </Nav>
+
+          
           <Nav className="ms-auto">
             <Nav.Link className="hover privacy" onClick={() => handleNavigation('/Privacy')}>
               Privacyverklaring
