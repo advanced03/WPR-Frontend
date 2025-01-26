@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PartRegister from './pages/partRegister.jsx';
 import Login from './pages/login.jsx';
@@ -22,31 +22,78 @@ import RegZak from './pages/regZakelijk.jsx';
 import Wbaccbeheer from './pages/wbAccbeheer.jsx';
 import Privacy from './pages/Privacy.jsx';
 
-/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
+/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden */
 const App = () => {
+    const token = sessionStorage.getItem('jwtToken'); // Haal het token uit sessionStorage
+
     return (
         <Router>
-            <Routes> 
+            <Routes>
+                {/* Openbare routes */}
                 <Route path="/" element={<Login />} />
-                <Route path="/wbaccbeheer" element={<Wbaccbeheer />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />
-                <Route path="/RegZakelijk" element={<RegZak />} />
                 <Route path="/BoRegister" element={<BoRegister />} />
-                <Route path="/AutoVinden" element={<AutoVinden />} />
-                <Route path="/HuurVerzoek" element={<HuurVerzoek />} />
-                <Route path="/Geschiedenis" element={<HuurGeschiedenis />} />
-                <Route path="/Profiel" element={<Profiel />} />
-                <Route path="/FoVoertuigInname" element={<FoVoertuigInname />} />
-                <Route path="/FoVoertuigUitgifte" element={<FoVoertuigUitgifte />} />
-                <Route path="/BoHuurVerzoekBehandeling" element={<BoHuurVerzoekBehandeling />} />
-                <Route path="/BoWagenparkBeheer" element={<BoWagenparkBeheer />} />
-                <Route path="/WbRegister" element={<WbRegister />} />
-                <Route path="/WbAccountsBeheren" element={<WbAccountsBeheren />} />
-                <Route path="/WbStatus" element={<WbStatus />} />
-                <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
+                <Route path="/RegZakelijk" element={<RegZak />} />
                 <Route path="/Privacy" element={<Privacy />} />
+
+                {/* Routes waar gebruikers eerst ingelogd moeten zijn */}
+                <Route
+                    path="/Home"
+                    element={token ? <Home /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/AutoVinden"
+                    element={token ? <AutoVinden /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/HuurVerzoek"
+                    element={token ? <HuurVerzoek /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/HuurGeschiedenis"
+                    element={token ? <HuurGeschiedenis /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/Profiel"
+                    element={token ? <Profiel /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/FoVoertuigInname"
+                    element={token ? <FoVoertuigInname /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/FoVoertuigUitgifte"
+                    element={token ? <FoVoertuigUitgifte /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/BoHuurVerzoekBehandeling"
+                    element={token ? <BoHuurVerzoekBehandeling /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/BoWagenparkBeheer"
+                    element={token ? <BoWagenparkBeheer /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/WbRegister"
+                    element={token ? <WbRegister /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/WbAccountsBeheren"
+                    element={token ? <WbAccountsBeheren /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/WbStatus"
+                    element={token ? <WbStatus /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/WbAbboBeheer"
+                    element={token ? <WbAbboBeheer /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/Wbaccbeheer"
+                    element={token ? <Wbaccbeheer /> : <Navigate to="/Login" />}
+                />
             </Routes>
         </Router>
     );
