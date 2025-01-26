@@ -51,7 +51,7 @@ const RegZak = () => {
                 }
             );
 
-            if (antwoord.status === 201) {
+            if (antwoord.status === 200) {
                 setSucces(true);
                 setGebruikersnaam('');
                 setVoornaam('');
