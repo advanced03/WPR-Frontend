@@ -7,7 +7,6 @@ import '../style/knop.css';
 import PartNavbar from "../components/PartNavbar.jsx";
 
 const AutoVinden = () => {
-    // Usestates initializeren
     const [selectedType, setSelectedType] = useState('auto');
     const [searchTerm, setSearchTerm] = useState('');
     const [wagens, setWagens] = useState([]);
@@ -15,27 +14,38 @@ const AutoVinden = () => {
     const [error, setError] = useState(null);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [userRole, setUserRole] = useState(null); // Nieuw: state voor de gebruikersrol
     const navigate = useNavigate();
 
-    // Functie om de data van de API op te halen
-    //  Log de ontvangen data om te controleren
-    //  Zet de ontvangen data in de state
-    //  Schakel de loading state uit
     useEffect(() => {
+        // Haal voertuigen op
         const fetchWagens = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/voertuigen/AllVoertuigen');
-                console.log('Response Data:', response.data);
                 setWagens(response.data);
                 setLoading(false);
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
-                // Stop de loading state bij een error
                 setLoading(false);
             }
         };
 
+        // Haal gebruikersrol op
+        const fetchUserRole = async () => {
+            const token = sessionStorage.getItem('jwtToken');
+            if (!token) return; // Controleer of JWT-token bestaat
+            try {
+                const response = await axios.get('https://localhost:7281/api/Account/getUserData', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUserRole(response.data.role); // Veronderstel dat `role` het veld is
+            } catch (error) {
+                console.error('Fout bij het ophalen van de gebruikersrol:', error);
+            }
+        };
+
         fetchWagens();
+        fetchUserRole();
     }, []);
 
     const handleFetchByDate = async () => {
@@ -44,100 +54,71 @@ const AutoVinden = () => {
             return;
         }
 
-        setLoading(true); // Zet de laadstatus op true terwijl we de voertuigen ophalen
+        setLoading(true);
         try {
-            console.log('Dates:',
-                {                params: {
-                startDate: startDate,
-                endDate: endDate
-            }
-            });
             const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
-                params: {
-                startDate: startDate,
-                endDate: endDate
-            }
-        });
-            console.log('Response Data:', response.data);
-            setWagens(response.data); // Update de wagens met de opgehaalde data
-            setError(null); // Reset de error als het ophalen succesvol is
+                params: { startDate, endDate }
+            });
+            setWagens(response.data);
+            setError(null);
         } catch (error) {
             setError('Er is een fout opgetreden bij het ophalen van voertuigen op basis van de datums.');
         } finally {
-            setLoading(false); // Zet de laadstatus terug naar false
+            setLoading(false);
         }
     };
 
-    const handleSelect = (type) => {
-        setSelectedType(type);
-    };
+    const handleSelect = (type) => setSelectedType(type);
 
-    const handleZoeken = (e) => {
-        setSearchTerm(e.target.value);
-    };
-    // Sla de geselecteerde wagen op in de sessionstorage en controleert of er wat in sessionstorage zit.
-    const handleRentClick = (wagen) => {
-        sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
-        const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
-        console.log(storedWagen);
-        // Navigeren naar een andere pagina
-        navigate('/Huurverzoek');
-    };
-
-    // Methode om voertuigen te filteren voor de zoekbalk
     const filteredWagens = wagens.filter(wagen =>
         wagen.soort === selectedType &&
         (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) ||
             wagen.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-    const handleStartDateChange = (e) => setStartDate(e.target.value);
-    const handleEndDateChange = (e) => setEndDate(e.target.value);
-    // Laat "Loading..." zien tijdens het ophalen van data.
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    // Toon een foutmelding als er iets misgaat.
-    if (error) {
-        return <div>{error}</div>;
-    }
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <div className="achtergrond2">
             <PartNavbar />
+            <div className="text-center my-3">
+                <p><strong>Huidige rol:</strong> {userRole || 'Laden...'}</p>
+            </div>
+
             <Container fluid className="p-2 my-4">
                 <h1 className="pagina-titel text-center my-4">Kies een Voertuig om te Huren</h1>
-                {/* Zoekbalk methode */}
                 <div className="huren-box text-center mt-5 p-5">
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Zoek voertuigen..."
                         value={searchTerm}
-                        onChange={handleZoeken}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {/*Verander de variant van de knop als deze geselecteerd wordt*/}
                     <ButtonGroup className="my-5 knoppengroep">
                         <Button
                             variant={selectedType === 'auto' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelecteren('auto')}
+                            onClick={() => handleSelect('auto')}
                         >
                             Auto 🚗
                         </Button>
                         <Button
                             variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelecteren('caravan')}
+                            onClick={() => handleSelect('caravan')}
+                            disabled={userRole === 'bedrijfsKlant'} // Schakel de caravan-knop uit voor bedrijfKlant
                         >
                             Caravan ⛺
                         </Button>
                         <Button
                             variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
-                            onClick={() => handleSelecteren('camper')}
+                            onClick={() => handleSelect('camper')}
+                            disabled={userRole === 'bedrijfsKlant'} // Schakel de camper-knop uit voor bedrijfKlant
                         >
                             Camper 🚐
                         </Button>
                     </ButtonGroup>
-                    {/*Van en tot datum row*/}
+
                     <Row>
                         <Col sm={6} className="px-2 p-2">
                             <Form.Group controlId="startDate">
@@ -145,7 +126,7 @@ const AutoVinden = () => {
                                 <Form.Control
                                     type="date"
                                     value={startDate}
-                                    onChange={handleStartDateChange}
+                                    onChange={(e) => setStartDate(e.target.value)}
                                 />
                             </Form.Group>
                         </Col>
@@ -155,7 +136,7 @@ const AutoVinden = () => {
                                 <Form.Control
                                     type="date"
                                     value={endDate}
-                                    onChange={handleEndDateChange}
+                                    onChange={(e) => setEndDate(e.target.value)}
                                 />
                             </Form.Group>
                         </Col>
@@ -164,18 +145,12 @@ const AutoVinden = () => {
                         <Button
                             className="knop"
                             onClick={handleFetchByDate}
-                            disabled={!startDate || !endDate} // Schakel de knop uit als de datums niet zijn ingevuld
+                            disabled={!startDate || !endDate}
                         >
                             Zoek voertuigen op datum
                         </Button>
                     </div>
                 </div>
-
-                {/* Toon de laadindicator of foutmeldingen als dat nodig is */}
-                {loading && <div className="text-center mt-3">Laden...</div>}
-                {error && <div className="text-danger text-center mt-3">{error}</div>}
-
-                {/* Toon een bericht als er geen resultaten zijn. */}
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
                         <div className="no-results">Geen voertuigen gevonden!</div>
@@ -205,4 +180,3 @@ const AutoVinden = () => {
 };
 
 export default AutoVinden;
-
