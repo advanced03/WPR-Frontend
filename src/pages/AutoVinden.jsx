@@ -162,7 +162,7 @@ const AutoVinden = () => {
                     </Row>
                     <div className="text-center mt-4">
                         <Button
-                            variant="primary"
+                            className="knop"
                             onClick={handleFetchByDate}
                             disabled={!startDate || !endDate} // Schakel de knop uit als de datums niet zijn ingevuld
                         >

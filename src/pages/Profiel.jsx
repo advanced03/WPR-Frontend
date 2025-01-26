@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
-import PartNavbar from "../components/PartNavbar.jsx";
 import { useNavigate } from 'react-router-dom';  // Voeg deze import toe voor navigatie
+import BoNavbar from '../components/BoNavbar';
+import FoNavbar from '../components/FoNavbar';
+import PartNavbar from "../components/PartNavbar.jsx";
+import WbNavbar from '../components/WbNavbar';
 
 function Profiel() {
     const navigate = useNavigate(); // Voeg de navigate hook toe
@@ -21,6 +24,7 @@ function Profiel() {
 
     const [editModus, setEditModus] = useState(false); // Bepaalt of het formulier in bewerkingsmodus is
     const [loading, setLoading] = useState(true); // Laadstatus
+    const [role, setRole] = useState(''); // Staat voor de rol van de gebruiker
 
     // Functie om gebruikersgegevens op te halen
     const fetchUserData = async () => {
@@ -32,6 +36,7 @@ function Profiel() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setGebruiker(response.data); // Zet opgehaalde gegevens in state
+            setRole(response.data.role); // Zet de rol in de state
             setLoading(false);
         } catch (error) {
             console.error('Fout bij ophalen gegevens:', error);
@@ -76,9 +81,26 @@ function Profiel() {
         return <div>Laden...</div>; // Weergeven tijdens het laden
     }
 
+    // Functie om de juiste navbar weer te geven op basis van de rol
+    const renderNavbar = () => {
+        switch (role) {
+            case 'backendWorker':
+                return <BoNavbar />;
+            case 'wagenparkBeheerder':
+                return <WbNavbar />;
+            case 'particuliereKlant':
+            case 'bedrijfsKlant':
+                return <PartNavbar />;
+            case 'frontendWorker':
+                return <FoNavbar />;
+            default:
+                return <PartNavbar />;
+        }
+    };
+
     return (
         <div className="achtergrond2">
-            <PartNavbar />
+            {renderNavbar()} {/* Navbar op basis van de rol */}
             <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
             <Container className="py-5">
                 {editModus ? (
