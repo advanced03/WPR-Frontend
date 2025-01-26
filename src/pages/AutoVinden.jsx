@@ -4,7 +4,10 @@ import { Container, Row, Col, Card, Button, ButtonGroup, Form } from 'react-boot
 import axios from 'axios';
 import '../style/huren.css';
 import '../style/knop.css';
+import BoNavbar from '../components/BoNavbar';
+import FoNavbar from '../components/FoNavbar';
 import PartNavbar from "../components/PartNavbar.jsx";
+import WbNavbar from '../components/WbNavbar';
 
 const AutoVinden = () => {
     const [selectedType, setSelectedType] = useState('auto');
@@ -76,12 +79,23 @@ const AutoVinden = () => {
             wagen.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
+    const renderNavbar = () => {
+        switch (userRole) {
+            case 'particuliereKlant':
+                return <PartNavbar />;
+            case 'frontendWorker':
+                return <FoNavbar />;
+            default:
+                return <PartNavbar />;
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <div className="achtergrond2">
-            <PartNavbar />
+            {renderNavbar()} {/* Dynamisch de juiste navbar renderen */}
             <div className="text-center my-3">
                 <p><strong>Huidige rol:</strong> {userRole || 'Laden...'}</p>
             </div>
