@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import PartNavbar from "../components/PartNavbar.jsx";
+import { useNavigate } from 'react-router-dom';  // Voeg deze import toe voor navigatie
 
 function Profiel() {
+    const navigate = useNavigate(); // Voeg de navigate hook toe
+
     // State voor gebruikergegevens, editmodus en laadstatus
     const [gebruiker, setGebruiker] = useState({
         username: '',
@@ -61,6 +64,12 @@ function Profiel() {
         } catch (error) {
             console.error('Fout bij opslaan gegevens:', error);
         }
+    };
+
+    // Functie om uit te loggen
+    const handleLogout = () => {
+        sessionStorage.removeItem('jwtToken');  // Verwijder het token uit sessionStorage
+        navigate('/Login');  // Navigeer de gebruiker naar de loginpagina
     };
 
     if (loading) {
@@ -163,8 +172,14 @@ function Profiel() {
                             </Col>
                         </Row>
                         <div className="d-flex justify-content-center mt-5">
+                            {/* Wijzig knop */}
                             <Button className="knop" size="lg" onClick={() => setEditModus(true)}>
                                 Wijzig
+                            </Button>
+
+                            {/* Log uit knop naast de Wijzig knop */}
+                            <Button className="knop ms-3" size="lg" onClick={handleLogout}>
+                                Log uit
                             </Button>
                         </div>
                     </>

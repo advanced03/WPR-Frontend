@@ -44,7 +44,7 @@ const RegZak = () => {
             };
 
             const antwoord = await axios.post(
-                `https://localhost:5188/api/Account/registerZakelijk`,
+                `https://localhost:7281/api/Account/registerZakelijk`,
                 gegevens,
                 {
                     headers: { 'Content-Type': 'application/json' },

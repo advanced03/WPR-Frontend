@@ -44,7 +44,7 @@ const partRegister = () => {
 
         try {
             const reactie = await axios.post(
-                `https://localhost:5188/api/account/registerParticulier`,
+                `https://localhost:7281/api/account/registerParticulier`,
                 { gebruikersnaam, email, telefoonnummer, voornaam, achternaam, wachtwoord },
                 { headers: { 'Content-Type': 'application/json' } }
             );

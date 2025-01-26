@@ -22,77 +22,87 @@ import RegZak from './pages/regZakelijk.jsx';
 import Wbaccbeheer from './pages/wbAccbeheer.jsx';
 import Privacy from './pages/Privacy.jsx';
 
-/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden */
-const App = () => {
-    const token = sessionStorage.getItem('jwtToken'); // Haal het token uit sessionStorage
+/* Functie om te controleren of de gebruiker is ingelogd */
+const isAuthenticated = () => {
+    return sessionStorage.getItem('jwtToken') !== null;
+};
 
+const App = () => {
     return (
         <Router>
             <Routes>
-                {/* Openbare routes */}
+                {/* Publieke route voor de loginpagina */}
                 <Route path="/" element={<Login />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/PartRegister" element={<PartRegister />} />
-                <Route path="/BoRegister" element={<BoRegister />} />
-                <Route path="/RegZakelijk" element={<RegZak />} />
-                <Route path="/Privacy" element={<Privacy />} />
 
-                {/* Routes waar gebruikers eerst ingelogd moeten zijn */}
+                {/* Beschermde routes, alleen toegankelijk met een geldig token */}
                 <Route
                     path="/Home"
-                    element={token ? <Home /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <Home /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/PartRegister"
+                    element={isAuthenticated() ? <PartRegister /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/RegZakelijk"
+                    element={isAuthenticated() ? <RegZak /> : <Navigate to="/Login" />}
+                />
+                <Route
+                    path="/BoRegister"
+                    element={isAuthenticated() ? <BoRegister /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/AutoVinden"
-                    element={token ? <AutoVinden /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <AutoVinden /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/HuurVerzoek"
-                    element={token ? <HuurVerzoek /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <HuurVerzoek /> : <Navigate to="/Login" />}
                 />
                 <Route
-                    path="/HuurGeschiedenis"
-                    element={token ? <HuurGeschiedenis /> : <Navigate to="/Login" />}
+                    path="/Geschiedenis"
+                    element={isAuthenticated() ? <HuurGeschiedenis /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/Profiel"
-                    element={token ? <Profiel /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <Profiel /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/FoVoertuigInname"
-                    element={token ? <FoVoertuigInname /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <FoVoertuigInname /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/FoVoertuigUitgifte"
-                    element={token ? <FoVoertuigUitgifte /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <FoVoertuigUitgifte /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/BoHuurVerzoekBehandeling"
-                    element={token ? <BoHuurVerzoekBehandeling /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <BoHuurVerzoekBehandeling /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/BoWagenparkBeheer"
-                    element={token ? <BoWagenparkBeheer /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <BoWagenparkBeheer /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/WbRegister"
-                    element={token ? <WbRegister /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <WbRegister /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/WbAccountsBeheren"
-                    element={token ? <WbAccountsBeheren /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <WbAccountsBeheren /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/WbStatus"
-                    element={token ? <WbStatus /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <WbStatus /> : <Navigate to="/Login" />}
                 />
                 <Route
                     path="/WbAbboBeheer"
-                    element={token ? <WbAbboBeheer /> : <Navigate to="/Login" />}
+                    element={isAuthenticated() ? <WbAbboBeheer /> : <Navigate to="/Login" />}
                 />
                 <Route
-                    path="/Wbaccbeheer"
-                    element={token ? <Wbaccbeheer /> : <Navigate to="/Login" />}
+                    path="/Privacy"
+                    element={isAuthenticated() ? <Privacy /> : <Navigate to="/Login" />}
                 />
             </Routes>
         </Router>
