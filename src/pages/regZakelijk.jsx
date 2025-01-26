@@ -5,92 +5,81 @@ import '../style/register.css';
 import axios from 'axios';
 
 const RegZak = () => {
-    // State hooks voor het beheren van formuliergegevens en foutmeldingen
-    const [username, setUsername] = useState('');
+    const [gebruikersnaam, setGebruikersnaam] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null); // Voor foutmeldingen
-    const [success, setSuccess] = useState(false); // Voor het succesbericht na registratie
-    const navigate = useNavigate(); // Gebruik voor navigatie naar een andere pagina
+    const [telefoonnummer, setTelefoonnummer] = useState('');
+    const [wachtwoord, setWachtwoord] = useState('');
+    const [bevestigWachtwoord, setBevestigWachtwoord] = useState('');
+    const [foutmelding, setFoutmelding] = useState(null);
+    const [succes, setSucces] = useState(false);
+    const navigeren = useNavigate();
 
-    // Functie die wordt aangeroepen bij het indienen van het registratieformulier
-    const handleRegister = async (e) => {
-        e.preventDefault(); // Voorkomt het standaard herladen van de pagina bij formulierinzending
-        setError(null); // Foutmelding resetten
-        setSuccess(false); // Succesbericht resetten
+    const registreren = async (e) => {
+        e.preventDefault();
+        setFoutmelding(null);
+        setSucces(false);
 
-        // Controleer of de wachtwoorden overeenkomen
-        if (password !== confirmPassword) {
-            setError('Wachtwoorden komen niet overeen.'); // Zet foutmelding als wachtwoorden niet overeenkomen
-            return; // Stop de functie als de wachtwoorden niet overeenkomen
+        // Controleer of wachtwoorden overeenkomen
+        if (wachtwoord !== bevestigWachtwoord) {
+            setFoutmelding('Wachtwoorden komen niet overeen.');
+            return;
+        }
+
+        // Controleer op lege velden
+        if (!gebruikersnaam || !voornaam || !achternaam || !email || !telefoonnummer || !wachtwoord) {
+            setFoutmelding('Alle velden zijn verplicht.');
+            return;
         }
 
         try {
-            // Payload voor het registratieverzoek
-            const payload = {
-                username,
-                email,
-                password,
+            const gegevens = {
+                username: gebruikersnaam,
                 voornaam,
                 achternaam,
-                phoneNumber,
+                email,
+                phoneNumber: telefoonnummer,
+                password: wachtwoord,
             };
 
-            console.log('Payload:', payload); // Log de payload voor debugging
-
-            // Verstuur de registratiegegevens naar de API
-            const response = await axios.post(
+            const antwoord = await axios.post(
                 `https://localhost:7281/api/Account/registerZakelijk`,
-                payload,
-                
+                gegevens,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                }
             );
 
-            // Controleer of de registratie succesvol was (status 201)
-            if (response.status === 201) {
-                setSuccess(true); // Zet het succesbericht
-
-                // Leeg de invoervelden na succesvolle registratie
-                setUsername('');
+            if (antwoord.status === 201) {
+                setSucces(true);
+                setGebruikersnaam('');
                 setVoornaam('');
                 setAchternaam('');
                 setEmail('');
-                setPhoneNumber('');
-                setPassword('');
-                setConfirmPassword('');
-
-                // Na 2 seconden naar de login-pagina navigeren
-                setTimeout(() => {
-                    navigate('/Login'); // Navigeer naar login-pagina
-                }, 2000);
+                setTelefoonnummer('');
+                setWachtwoord('');
+                setBevestigWachtwoord('');
+                setTimeout(() => navigeren('/Login'), 2000);
             }
         } catch (error) {
-            console.error('Error during registration:', error); // Log eventuele fouten in de console
-
-            // Foutafhandelingslogica
-            if (error.response) {
-                // Fout van de server
-                if (error.response.data && error.response.data.Message) {
-                    setError(error.response.data.Message); // Toon specifieke foutmelding
-                } else {
-                    setError('uw email komt niet overeen met een wagenpark'); // Algemene foutmelding
-                }
-            } else if (error.request) {
-                // Geen antwoord van de server
-                setError('Geen antwoord van de server. Probeer het later opnieuw.');
+            if (error.response && error.response.data) {
+                setFoutmelding(error.response.data.Message || 'Er is een fout opgetreden.');
             } else {
-                // Fout in de configuratie van het verzoek
-                setError(error.message); // Toon de foutmelding
+                setFoutmelding('Kan geen verbinding maken met de server. Probeer later opnieuw.');
             }
         }
     };
 
-    // Functie om naar een andere pagina te navigeren
-    const handleNavigation = (path) => {
-        navigate(path); // Navigeer naar de opgegeven path
+    const filterTelefoonnummer = (waarde) => {
+        const alleenCijfers = waarde.replace(/\D/g, ''); // Verwijder niet-cijferkarakters
+        if (alleenCijfers.length <= 13) { // Controleer of het maximaal 13 cijfers bevat
+            setTelefoonnummer(alleenCijfers);
+        }
+    };    
+
+    const navigatie = (pad) => {
+        navigeren(pad);
     };
 
     return (
@@ -100,21 +89,21 @@ const RegZak = () => {
                     <Col>
                         <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Zakelijk account registreren</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}
-                            {success && (
+                            {foutmelding && <Alert variant="danger">{foutmelding}</Alert>}
+                            {succes && (
                                 <Alert variant="success">
                                     Registratie succesvol! U wordt doorgestuurd naar de login-pagina.
                                 </Alert>
                             )}
-                            <Form onSubmit={handleRegister}>
-                                <Form.Group controlId="formUsername" className="mb-3">
+                            <Form onSubmit={registreren}>
+                                <Form.Group controlId="formGebruikersnaam" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={gebruikersnaam}
+                                        onChange={(e) => setGebruikersnaam(e.target.value)}
                                     />
                                 </Form.Group>
 
@@ -151,36 +140,36 @@ const RegZak = () => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formPhoneNumber" className="mb-3">
+                                <Form.Group controlId="formTelefoonnummer" className="mb-3">
                                     <Form.Label>📱 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         required
-                                        type="text"
+                                        type="tel"
                                         placeholder="Voer uw telefoonnummer in"
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                        value={telefoonnummer}
+                                        onChange={(e) => filterTelefoonnummer(e.target.value)}
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formPassword" className="mb-3">
+                                <Form.Group controlId="formWachtwoord" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         required
                                         type="password"
                                         placeholder="Kies een wachtwoord"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={wachtwoord}
+                                        onChange={(e) => setWachtwoord(e.target.value)}
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formConfirmPassword" className="mb-3">
+                                <Form.Group controlId="formBevestigWachtwoord" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
                                         required
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        value={bevestigWachtwoord}
+                                        onChange={(e) => setBevestigWachtwoord(e.target.value)}
                                     />
                                 </Form.Group>
 
@@ -193,7 +182,7 @@ const RegZak = () => {
                                     Heeft u al een{' '}
                                     <button
                                         type="button"
-                                        onClick={() => handleNavigation('/Login')}
+                                        onClick={() => navigatie('/Login')}
                                         className="Link"
                                     >
                                         account

@@ -4,153 +4,197 @@ import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
 
-const PartRegister = () => {
+const partRegister = () => {
     // State voor gebruikersinvoer en fout-/succesberichten
-    const [username, setUsername] = useState('');
+    const [gebruikersnaam, setGebruikersnaam] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    const [telefoonnummer, setTelefoonnummer] = useState('');
+    const [wachtwoord, setWachtwoord] = useState('');
+    const [bevestigWachtwoord, setBevestigWachtwoord] = useState('');
+    const [foutmelding, setFoutmelding] = useState(null);
+    const [veldFouten, setVeldFouten] = useState({});
+    const [succesvol, setSuccesvol] = useState(false);
+    const navigeer = useNavigate();
 
-    // Registreer de gebruiker en handel de API-aanroep af
-    const handleRegister = async (e) => {
+    // Velden controleren of ze wel goed ingevuld zijn
+    const valideerVelden = () => {
+        const fouten = {};
+        if (!gebruikersnaam) fouten.gebruikersnaam = 'Gebruikersnaam is verplicht.';
+        if (!voornaam) fouten.voornaam = 'Voornaam is verplicht.';
+        if (!achternaam) fouten.achternaam = 'Achternaam is verplicht.';
+        if (!email || !/\S+@\S+\.\S+/.test(email)) fouten.email = 'Voer een geldig e-mailadres in.';
+        if (!telefoonnummer || !/^\d{10,13}$/.test(telefoonnummer)) fouten.telefoonnummer = 'Voer een geldig telefoonnummer in';
+        if (!wachtwoord || wachtwoord.length < 8) fouten.wachtwoord = 'Wachtwoord moet minimaal 8 tekens lang zijn.';
+        if (wachtwoord !== bevestigWachtwoord) fouten.bevestigWachtwoord = 'Wachtwoorden komen niet overeen.';
+        return fouten;
+    };
+
+    // Registratieafhandeling
+    const verwerkRegistratie = async (e) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(false);
+        setFoutmelding(null);
+        setSuccesvol(false);
 
-        // Wachtwoorden validatie
-        if (password !== confirmPassword) {
-            setError('Wachtwoorden komen niet overeen.');
-            return;
-        }
+        const fouten = valideerVelden();
+        setVeldFouten(fouten);
+
+        if (Object.keys(fouten).length > 0) return; // Stop als er fouten zijn
 
         try {
-            // API-aanroep voor registratie
-            const response = await axios.post(
+            const reactie = await axios.post(
                 `https://localhost:7281/api/account/registerParticulier`,
-                { username, email, phoneNumber, voornaam, achternaam, password },
+                { gebruikersnaam, email, telefoonnummer, voornaam, achternaam, wachtwoord },
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            // Bij succesvolle registratie, token opslaan en doorverwijzen naar login
-            if (response.status === 201) {
-                const token = response.data.token;
+            if (reactie.status === 201) {
+                const token = reactie.data.token;
                 if (token) sessionStorage.setItem('jwtToken', token);
 
-                setSuccess(true);
-                setTimeout(() => navigate('/Login'), 2000);
+                setSuccesvol(true);
+                setTimeout(() => navigeer('/Login'), 2000);
             } else {
-                setTimeout(() => navigate('/Login'), 2000);
+                setFoutmelding('Registratie mislukt. Probeer het later opnieuw.');
             }
-        } catch (error) {
-            // Fouten afvangen en tonen
-            if (error.response) {
-                setError(error.response.data.Errors ? error.response.data.Errors.join(' ') : error.response.data.Message);
+        } catch (err) {
+            if (err.response) {
+                const serverFout = err.response.data.Errors
+                    ? err.response.data.Errors.join(' ')
+                    : err.response.data.Message || 'Er is een fout opgetreden tijdens registratie.';
+                setFoutmelding(serverFout);
+            } else if (err.request) {
+                setFoutmelding('Kan geen verbinding maken met de server. Controleer uw internetverbinding.');
             } else {
-                setError(error.message || 'Er is een fout opgetreden tijdens registratie.');
+                setFoutmelding('Er is een onverwachte fout opgetreden. Probeer het later opnieuw.');
             }
         }
     };
 
-    // Navigatie methoden
-    const handleNavigation = (path) => {
-        navigate(path);
+    // Navigatie methode
+    const navigeerNaar = (pad) => {
+        navigeer(pad);
     };
 
     return (
         <div className="achtergrond1">
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
-            <Row>
+                <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Registreren</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}
-                            {success && (
+                            {foutmelding && <Alert variant="danger">{foutmelding}</Alert>}
+                            {succesvol && (
                                 <Alert variant="success">
                                     Registratie succesvol! U wordt doorgestuurd naar de login-pagina.
                                 </Alert>
                             )}
-                            <Form onSubmit={handleRegister}>
-                                <Form.Group controlId="formUsername" className="mb-3">
+                            <Form onSubmit={verwerkRegistratie}>
+                                <Form.Group controlId="formGebruikersnaam" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
-                                        required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={gebruikersnaam}
+                                        onChange={(e) => setGebruikersnaam(e.target.value)}
+                                        isInvalid={!!veldFouten.gebruikersnaam}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.gebruikersnaam}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
-                                    <Form.Group controlId="formEmail" className="mb-3">
-                                        <Form.Label>📧 E-mail</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="email"
-                                            placeholder="Voer uw e-mail in"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                    </Form.Group>
 
-                                    <Form.Group controlId="formVoornaam" className="mb-3">
-                                        <Form.Label>👤 Voornaam</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="text"
-                                            placeholder="Voer uw voornaam in"
-                                            value={voornaam}
-                                            onChange={(e) => setVoornaam(e.target.value)}
-                                        />
-                                    </Form.Group>
+                                <Form.Group controlId="formEmail" className="mb-3">
+                                    <Form.Label>📧 E-mail</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Voer uw e-mail in"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        isInvalid={!!veldFouten.email}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.email}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
 
-                                    <Form.Group controlId="formAchternaam" className="mb-3">
-                                        <Form.Label>👤 Achternaam</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="text"
-                                            placeholder="Voer uw achternaam in"
-                                            value={achternaam}
-                                            onChange={(e) => setAchternaam(e.target.value)}
-                                        />
-                                    </Form.Group>
+                                <Form.Group controlId="formVoornaam" className="mb-3">
+                                    <Form.Label>👤 Voornaam</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Voer uw voornaam in"
+                                        value={voornaam}
+                                        onChange={(e) => setVoornaam(e.target.value)}
+                                        isInvalid={!!veldFouten.voornaam}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.voornaam}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
 
-                                    <Form.Group controlId="formPhoneNumber" className="mb-3">
-                                        <Form.Label>📱 Telefoonnummer</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="text"
-                                            placeholder="Voer uw telefoonnummer in"
-                                            value={phoneNumber}
-                                            onChange={(e) => setPhoneNumber(e.target.value)}
-                                        />
-                                    </Form.Group>
+                                <Form.Group controlId="formAchternaam" className="mb-3">
+                                    <Form.Label>👤 Achternaam</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Voer uw achternaam in"
+                                        value={achternaam}
+                                        onChange={(e) => setAchternaam(e.target.value)}
+                                        isInvalid={!!veldFouten.achternaam}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.achternaam}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
 
-                                    <Form.Group controlId="formPassword" className="mb-3">
-                                        <Form.Label>🔐 Wachtwoord</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="password"
-                                            placeholder="Kies een wachtwoord"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                        />
-                                    </Form.Group>
+                                <Form.Group controlId="formTelefoonnummer" className="mb-3">
+                                    <Form.Label>📱 Telefoonnummer</Form.Label>
+                                    <Form.Control
+                                        type="tel"
+                                        placeholder="Voer uw telefoonnummer in"
+                                        value={telefoonnummer}
+                                        onChange={(e) => {
+                                            const alleenCijfers = e.target.value.replace(/\D/g, ''); // Verwijdert alles wat geen numerieke waarden zijn.
+                                            if (alleenCijfers.length <= 13) {
+                                                setTelefoonnummer(alleenCijfers);
+                                            }
+                                        }}
+                                        isInvalid={!!veldFouten.telefoonnummer}
+                                    />
 
-                                    <Form.Group controlId="formConfirmPassword" className="mb-3">
-                                        <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="password"
-                                            placeholder="Bevestig uw wachtwoord"
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                        />
-                                    </Form.Group>
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.telefoonnummer}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                <Form.Group controlId="formWachtwoord" className="mb-3">
+                                    <Form.Label>🔐 Wachtwoord</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Kies een wachtwoord"
+                                        value={wachtwoord}
+                                        onChange={(e) => setWachtwoord(e.target.value)}
+                                        isInvalid={!!veldFouten.wachtwoord}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.wachtwoord}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                <Form.Group controlId="formBevestigWachtwoord" className="mb-3">
+                                    <Form.Label>🔐 Bevestig Wachtwoord</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Bevestig uw wachtwoord"
+                                        value={bevestigWachtwoord}
+                                        onChange={(e) => setBevestigWachtwoord(e.target.value)}
+                                        isInvalid={!!veldFouten.bevestigWachtwoord}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {veldFouten.bevestigWachtwoord}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
                                 </Button>
@@ -160,7 +204,7 @@ const PartRegister = () => {
                                     Heeft u al een{' '}
                                     <button
                                         type="button"
-                                        onClick={() => handleNavigation('/login')}
+                                        onClick={() => navigeerNaar('/login')}
                                         className="Link"
                                     >
                                         account
@@ -202,4 +246,4 @@ const PartRegister = () => {
     );
 };
 
-export default PartRegister;
+export default partRegister;
