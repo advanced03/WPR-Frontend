@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Modal } from "react-bootstrap";
+import axios from "axios";
 import "../style/tabel.css";
 import PartNavbar from "../components/PartNavbar.jsx";
 
@@ -18,7 +19,7 @@ const HuurGeschiedenis = () => {
 
   // Sorteer huurdata op einddatum (aflopend)
   const sortedHuurData = [...huurData].sort(
-    (a, b) => new Date(b.einddatum) - new Date(a.einddatum)
+    (a, b) => new Date(b.eindDatum) - new Date(a.eindDatum)
   );
 
   // Toon annuleringsmodaal
@@ -27,19 +28,79 @@ const HuurGeschiedenis = () => {
     setModal(true);
   };
 
-  // Huurverzoek annuleren
-  const handleAnnuleren = () => {
-    const nieuweHuurData = [...huurData];
-    nieuweHuurData[selectedIndex].status = "Geannuleerd";
-    setHuurData(nieuweHuurData);
-    setModal(false);
-  };
-
   // Sluit het annuleringsmodaal
   const handleCloseModal = () => {
     setModal(false);
     setSelectedIndex(null);
   };
+
+  // Haal de huurdata op van de API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+          console.error("Geen JWT-token gevonden.");
+          return;
+        }
+
+        const response = await axios.get("https://localhost:7281/api/verhuurVerzoek/GetMyVerzoeken", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (Array.isArray(response.data)) {
+          setHuurData(response.data);
+        } else {
+          console.error("Data is geen array:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching huur data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Huurverzoek annuleren
+  const handleAnnuleren = async () => {
+    const verhuurVerzoekId = huurData[selectedIndex].verhuurVerzoekId;
+    try {
+      const token = localStorage.getItem("jwtToken");
+      if (!token) {
+        console.error("Geen JWT-token gevonden.");
+        return;
+      }
+
+      // Gebruik PUT in plaats van DELETE
+      const response = await axios.put(
+        `https://localhost:7281/api/verhuurVerzoek/DeclineMyVerzoek/${verhuurVerzoekId}`,
+        {}, // Als je geen body nodig hebt, kun je dit leeg laten
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedData = [...huurData];
+        updatedData[selectedIndex].status = "Geannuleerd";
+        setHuurData(updatedData);
+        setModal(false);
+      } else {
+        console.error("Fout bij het annuleren van het verzoek:", response);
+      }
+    } catch (error) {
+      console.error("Error annuleringsverzoek:", error);
+      // Foutmelding die meer informatie geeft
+      if (error.response) {
+        console.error("Server Response Error:", error.response);
+      } else if (error.request) {
+        console.error("Request Error:", error.request);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
 
   return (
     <div className="achtergrond2">
@@ -50,12 +111,11 @@ const HuurGeschiedenis = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Merk</th>
-              <th>Model</th>
-              <th>Kleur</th>
+              <th>Aard Reis</th>
+              <th>Bestemming</th>
+              <th>Verwachte KM</th>
               <th>Startdatum</th>
               <th>Einddatum</th>
-              <th>Prijs</th>
               <th>Status</th>
               <th>Actie</th>
             </tr>
@@ -64,17 +124,16 @@ const HuurGeschiedenis = () => {
             {sortedHuurData.map((item, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{item.merk}</td>
-                <td>{item.model}</td>
-                <td>{item.kleur}</td>
-                <td>{item.startdatum}</td>
-                <td>{item.einddatum}</td>
-                <td>€{item.prijs}</td>
+                <td>{item.aardReis}</td>
+                <td>{item.bestemming}</td>
+                <td>{item.verwachtteKM}</td>
+                <td>{new Date(item.startDatum).toLocaleDateString()}</td>
+                <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
                 <td style={{ color: statusKleur[item.status] }}>
                   {item.status}
                 </td>
                 <td>
-                  {item.status !== "Afgekeurd" && item.status !== "Geannuleerd" && (
+                  {item.status === "Pending" && (
                     <Button
                       className="knop"
                       onClick={() => handletoonModal(index)}
