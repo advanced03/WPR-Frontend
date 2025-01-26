@@ -222,6 +222,32 @@ const PartRegister = () => {
                                     ?
                                 </span>
                             </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Wilt u een {' '} 
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/WbRegister')}
+                                        className="Link"
+                                    >
+                                        wagenpark
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Wilt u een {' '} 
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/regZakelijk')}
+                                        className="Link"
+                                    >
+                                        zakelijk account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
                         </div>
                     </Col>
                 </Row>
