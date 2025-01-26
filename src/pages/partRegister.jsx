@@ -168,6 +168,32 @@ const PartRegister = () => {
                                     ?
                                 </span>
                             </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    wilt u een {' '} aanmaken
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/regZakelijk')}
+                                        className="Link"
+                                    >
+                                         zakelijk account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    wilt u een {' '} aanmaken
+                                    <button
+                                        type="button"
+                                        onClick={() => handleNavigation('/wb')}
+                                        className="Link"
+                                    >
+                                        wagenpark
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
                         </div>
                     </Col>
                 </Row>

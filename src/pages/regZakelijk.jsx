@@ -46,11 +46,7 @@ const RegZak = () => {
             const response = await axios.post(
                 `https://localhost:7281/api/Account/registerZakelijk`,
                 payload,
-                {
-                    headers: {
-                        'Content-Type': 'application/json', // Zet de content type header voor JSON
-                    },
-                }
+                
             );
 
             // Controleer of de registratie succesvol was (status 201)
@@ -80,7 +76,7 @@ const RegZak = () => {
                 if (error.response.data && error.response.data.Message) {
                     setError(error.response.data.Message); // Toon specifieke foutmelding
                 } else {
-                    setError('Er is een fout opgetreden tijdens registratie.'); // Algemene foutmelding
+                    setError('uw email komt niet overeen met een wagenpark'); // Algemene foutmelding
                 }
             } else if (error.request) {
                 // Geen antwoord van de server
