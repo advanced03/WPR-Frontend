@@ -71,12 +71,6 @@ function Profiel() {
         }
     };
 
-    // Functie om uit te loggen
-    const handleLogout = () => {
-        sessionStorage.removeItem('jwtToken');  // Verwijder het token uit sessionStorage
-        navigate('/Login');  // Navigeer de gebruiker naar de loginpagina
-    };
-
     if (loading) {
         return <div>Laden...</div>; // Weergeven tijdens het laden
     }
@@ -197,11 +191,6 @@ function Profiel() {
                             {/* Wijzig knop */}
                             <Button className="knop" size="lg" onClick={() => setEditModus(true)}>
                                 Wijzig
-                            </Button>
-
-                            {/* Log uit knop naast de Wijzig knop */}
-                            <Button className="knop ms-3" size="lg" onClick={handleLogout}>
-                                Log uit
                             </Button>
                         </div>
                     </>

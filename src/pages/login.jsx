@@ -12,13 +12,15 @@ const Login = () => {
     const [fieldErrors, setFieldErrors] = useState({ username: '', password: '' });
     const navigate = useNavigate();
 
+    const token = sessionStorage.getItem('jwtToken');
+
     // Functie om de rol van de gebruiker op te halen na succesvolle login
     const fetchUserRole = async (token) => {
         try {
             const response = await axios.get('https://localhost:7281/api/account/getUserData', {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            const userRole = response.data.role; // Neem de rol van de gebruiker
+            const userRole = response.data.role;
 
             // Navigeer naar de juiste pagina op basis van de rol
             switch (userRole) {
@@ -47,6 +49,12 @@ const Login = () => {
         }
     };
 
+    useEffect(() => {
+        // Als het token beschikbaar is, haal dan de gebruikersrol op
+        if (token) {
+            fetchUserRole(token);
+        }
+    }, [token]);  // Effect wordt uitgevoerd wanneer token is ingesteld
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -74,7 +82,6 @@ const Login = () => {
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);  // Sla het token op in sessionStorage
                     console.log('Login successful:', response.data);
-                    fetchUserRole(token); // Haal de rol op na succesvolle login
                 }
             } else {
                 throw new Error('Inloggen mislukt. Controleer uw inloggegevens.');
@@ -148,6 +155,18 @@ const Login = () => {
                                         className="Link"
                                     >
                                         account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Bent u een{' '}
+                                    <button
+                                        onClick={() => navigate('/PartRegister')}
+                                        className="Link"
+                                    >
+                                        zakelijke klant
                                     </button>
                                     ?
                                 </span>

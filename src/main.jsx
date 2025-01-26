@@ -34,6 +34,7 @@ const App = () => {
                 {/* Publieke route voor de loginpagina */}
                 <Route path="/" element={<Login />} />
                 <Route path="/Login" element={<Login />} />
+                <Route path="/RegZak" element={<RegZak />} />
 
                 {/* Beschermde routes, alleen toegankelijk met een geldig token */}
                 <Route
@@ -44,10 +45,7 @@ const App = () => {
                     path="/PartRegister"
                     element={isAuthenticated() ? <PartRegister /> : <Navigate to="/Login" />}
                 />
-                <Route
-                    path="/RegZakelijk"
-                    element={isAuthenticated() ? <RegZak /> : <Navigate to="/Login" />}
-                />
+
                 <Route
                     path="/BoRegister"
                     element={isAuthenticated() ? <BoRegister /> : <Navigate to="/Login" />}
