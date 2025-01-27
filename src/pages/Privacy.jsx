@@ -120,8 +120,12 @@ const Privacy = () => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Opgeslagen gegevens</td>
+                                    <td>Overige gegevens</td>
                                     <td>6 maanden</td>
+                                </tr>
+                                <tr>
+                                    <td>Financiele gegevens</td>
+                                    <td>7 Jaar</td>
                                 </tr>
                             </tbody>
                         </Table>
