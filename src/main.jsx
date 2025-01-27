@@ -22,6 +22,7 @@ import RegZak from './pages/regZakelijk.jsx';
 import Wbaccbeheer from './pages/wbAccbeheer.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Betaal from './pages/Betaal.jsx';
+import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
 
 /* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Router>
             <Routes> 
                 <Route path="/" element={<Login />} />
+                <Route path="/Login" element={<Login />} />
                 <Route path="/wbaccbeheer" element={<Wbaccbeheer />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Home" element={<Home />} />
@@ -49,6 +51,7 @@ const App = () => {
                 <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
                 <Route path="/Privacy" element={<Privacy />} />
                 <Route path="/Betaal" element={<Betaal />} />
+                <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
             </Routes>
         </Router>
     );

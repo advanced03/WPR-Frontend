@@ -45,6 +45,11 @@ function BoNavbar() {
                 Wagenpark Beheren
               </Nav.Link>
             )}
+            {location.pathname !== '/BoSchadeRegister' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/BoSchadeRegister')}>
+                Schade Register
+              </Nav.Link>
+            )}
           </Nav>
 
           <Nav className="ms-auto">

@@ -138,8 +138,8 @@ const WbRegister = () => {
                                         value={typeAccount}
                                         onChange={(e) => settypeAccount(e.target.value)}
                                     >
-                                        <option value="backendWorker">Backoffice Medewerker</option>
-                                        <option value="frontendWorker">Frontoffice Medewerker</option>
+                                        <option value="BackendWorker">Backoffice Medewerker</option>
+                                        <option value="FrontendWorker">Frontoffice Medewerker</option>
                                     </Form.Control>
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
