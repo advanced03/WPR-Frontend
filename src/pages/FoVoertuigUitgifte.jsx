@@ -61,19 +61,19 @@ const FoVoertuigUitgifte = () => {
     };
 
     // Annuleer de uitgifte van een auto
-    const verwijderUitgifte = async(reserveringsId) => {
+    const verwijderUitgifte = async (reserveringId) => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-    
+
         try {
-            const reserveringsId = geselecteerdeAuto.reserveringId;
             await axios.delete(
-                'https://localhost:7281/api/Reserveringen/VerwijderReservering/{reserveringId}',
-                { reserveringsId },
-                { headers: { Authorization: `Bearer ${token}` } }
+                `https://localhost:7281/api/Reserveringen/VerwijderReservering/${reserveringId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
             );
             haalReserveringenOp(); // Ververs de data
         } catch (error) {
