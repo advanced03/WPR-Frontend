@@ -39,7 +39,7 @@ const FoVoertuigInname = () => {
             );
             haalReserveringenOp(); // Ververs de data
         } catch (error) {
-            console.error("Fout bij het in nemen van het voertuig:", error);
+            console.error("Fout bij het innemen van het voertuig:", error);
         }
     };
 
@@ -49,18 +49,22 @@ const FoVoertuigInname = () => {
     };
 
     const opslaanInname = async () => {
+        // Valideer schade-informatie als er schade is
         if (heeftSchade && schadeInfo.trim() === '') {
             zetFoutmeldingen({ schadeInfo: true });
             return;
         }
 
+        // Creëer het data-object
         const data = {
             reserveringId: geselecteerdeAuto.reserveringId,
             isSchade: heeftSchade,
-            schade: schadeInfo || "Geen schade",
-            geredenKilometers: 0,
-            beschrijvingFoto: "Foto ontbreekt",
+            schade: heeftSchade ? schadeInfo : null,
+            geredenKilometers: geselecteerdeAuto.geredenKilometers || 0,
+            beschrijvingFoto: null,
         };
+
+        console.log('Verstuur data:', data);
 
         try {
             const token = sessionStorage.getItem('jwtToken');
@@ -69,19 +73,23 @@ const FoVoertuigInname = () => {
                 return;
             }
 
-            await axios.post('https://localhost:7281/api/FrontOfficeMedewerker/RegistreerInname', data, {
+            // Verander de HTTP-methode naar PUT
+            console.log('Verstuur verzoek naar:', 'https://localhost:7281/api/FrontOfficeMedewerker/NeemIn');
+            await axios.put('https://localhost:7281/api/FrontOfficeMedewerker/NeemIn', data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            verwijderUitgifte(geselecteerdeAuto.reserveringId);
+            // Haal de reserveringen opnieuw op
+            haalReserveringenOp(); // Ververs de data (pagina herladen)
 
+            // Sluit de modal en reset velden
             setModal(false);
             zetGeselecteerdeAuto(null);
             zetSchadeInfo('');
             zetHeeftSchade(false);
             zetFoutmeldingen({ schadeInfo: false });
         } catch (error) {
-            console.error('Fout bij het registreren van de inname:', error);
+            console.error('Fout bij het registreren van de inname:', error.response?.data || error.message);
         }
     };
 
@@ -167,12 +175,6 @@ const FoVoertuigInname = () => {
                                         {foutmeldingen.schadeInfo && (
                                             <div className="invalid-feedback">Beschrijf de schade, dit veld is verplicht.</div>
                                         )}
-                                        <Form.Control
-                                            type="text"
-                                            value={new Date().toLocaleDateString()}
-                                            readOnly
-                                            className="mt-2"
-                                        />
                                     </>
                                 )}
                             </Form.Group>
@@ -193,4 +195,3 @@ const FoVoertuigInname = () => {
 };
 
 export default FoVoertuigInname;
-
