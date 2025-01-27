@@ -4,7 +4,6 @@ import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootst
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigInname = () => {
-    // State voor auto's, zoekterm, geselecteerde auto, modaal, schade-informatie en validaties
     const [autos, zetAutos] = useState([]);
     const [zoekTerm, zetZoekTerm] = useState('');
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
@@ -13,49 +12,79 @@ const FoVoertuigInname = () => {
     const [heeftSchade, zetHeeftSchade] = useState(false);
     const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false });
 
-    // Ophalen van data bij het laden van de component
     useEffect(() => {
-        const haalReserveringenOp = async () => {
-            try {
-                const respons = await axios.get('https://localhost:7281/api/Reserveringen/GetAllReserveringen');
-                zetAutos(respons.data);
-            } catch (error) {
-                console.error('Fout bij het ophalen van reserveringen:', error);
-            }
-        };
-
         haalReserveringenOp();
     }, []);
 
-    // Openen van het modaal om een inname te registreren
+    const haalReserveringenOp = async () => {
+        try {
+            const respons = await axios.get('https://localhost:7281/api/Reserveringen/GetAllReserveringen');
+            zetAutos(respons.data);
+        } catch (error) {
+            console.error('Fout bij het ophalen van reserveringen:', error);
+        }
+    };
+
+    const verwijderUitgifte = async (verzoekId) => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+        try {
+            await axios.put(
+                'https://localhost:7281/api/FrontOfficeMedewerker/NeemIn',
+                { id: verzoekId },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            haalReserveringenOp(); // Ververs de data
+        } catch (error) {
+            console.error("Fout bij het in nemen van het voertuig:", error);
+        }
+    };
+
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
 
-    // Valideer en registreer de inname van een voertuig
-    const opslaanInname = () => {
+    const opslaanInname = async () => {
         if (heeftSchade && schadeInfo.trim() === '') {
             zetFoutmeldingen({ schadeInfo: true });
             return;
         }
 
-        console.log(`Auto: ${geselecteerdeAuto.fullname}`);
-        console.log(`Schade: ${heeftSchade ? schadeInfo : 'Geen schade'}`);
-        console.log(`Datum schade: ${heeftSchade ? new Date().toLocaleDateString() : 'Geen schade'}`);
+        const data = {
+            reserveringId: geselecteerdeAuto.reserveringId,
+            isSchade: heeftSchade,
+            schade: schadeInfo || "Geen schade",
+            geredenKilometers: 0,
+            beschrijvingFoto: "Foto ontbreekt",
+        };
 
-        // Verwijderen van het ingeleverde voertuig
-        zetAutos(autos.filter((auto) => auto.reserveringId !== geselecteerdeAuto.reserveringId));
+        try {
+            const token = sessionStorage.getItem('jwtToken');
+            if (!token) {
+                console.error('JWT-token ontbreekt in sessionStorage.');
+                return;
+            }
 
-        // Reset state na registratie
-        setModal(false);
-        zetGeselecteerdeAuto(null);
-        zetSchadeInfo('');
-        zetHeeftSchade(false);
-        zetFoutmeldingen({ schadeInfo: false });
+            await axios.post('https://localhost:7281/api/FrontOfficeMedewerker/RegistreerInname', data, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            verwijderUitgifte(geselecteerdeAuto.reserveringId);
+
+            setModal(false);
+            zetGeselecteerdeAuto(null);
+            zetSchadeInfo('');
+            zetHeeftSchade(false);
+            zetFoutmeldingen({ schadeInfo: false });
+        } catch (error) {
+            console.error('Fout bij het registreren van de inname:', error);
+        }
     };
 
-    // Filter de auto's op basis van de zoekterm
     const gefilterdeAutos = autos.filter((auto) =>
         Object.values(auto)
             .join(' ')
@@ -69,7 +98,6 @@ const FoVoertuigInname = () => {
             <Container fluid>
                 <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
 
-                {/* Zoekbalk */}
                 <FormControl
                     type="text"
                     placeholder="Zoek op naam, bestemming of andere velden..."
@@ -113,7 +141,6 @@ const FoVoertuigInname = () => {
                     </Table>
                 </div>
 
-                {/* Modal layout code */}
                 <Modal show={toonModal} onHide={() => setModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Registreer Inname</Modal.Title>
@@ -166,3 +193,4 @@ const FoVoertuigInname = () => {
 };
 
 export default FoVoertuigInname;
+

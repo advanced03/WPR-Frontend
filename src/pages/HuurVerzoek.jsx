@@ -56,7 +56,7 @@ const HuurVerzoek = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
+        console.log(filteredFormData)
         try {
             // Verstuur het formulier naar de API
             const response = await axios.post(

@@ -28,7 +28,7 @@ const WbAccountsBeheren = () => {
                 // Mapt de gegevens naar een nieuw formaat voor de accs
                 const mappedAccounts = response.data.map((item) => ({
                     id: item.wagenparkVerzoekId,
-                    naam: `User ${item.voornaam}`,
+                    naam: `User ${item.username}`,
                     email: `${item.email}`,
                     isGoedgekeurd: false
                 }));
@@ -105,22 +105,38 @@ const WbAccountsBeheren = () => {
             return;
         }
 
+        // Log de token om te debuggen
+        console.log("Authorization Header:", `Bearer ${token}`);
+
+
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
-            const payload = { id: teVerwerkenAccount.id };
 
-            await axios.post(`${baseURL}/DenyUserToWagenPark`, payload, {
+            // Zorg ervoor dat de payload een JSON-object is
+            const payload = {
+                id: teVerwerkenAccount.id, // Zorg ervoor dat de 'id' een geldige waarde bevat
+            };
+
+            // Verstuur het verzoek met de juiste Content-Type header
+            await axios.request({
+                method: 'DELETE',
+                url: `${baseURL}/RemoveUserFromWagenPark`,
+                data: payload, // JSON object
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json', // Correcte content-type
+                },
             });
 
+            // Voer acties uit na succesvol verzoek
             weigerenAccount(teVerwerkenAccount);
             sluitModal();
         } catch (error) {
             console.error(`Fout bij weigeren of verwijderen van gebruiker:`, error.message);
+            console.error('Volledig error-object:', error);
         }
     };
+
 
     return (
         <div className="achtergrond2">
@@ -160,17 +176,10 @@ const WbAccountsBeheren = () => {
                                             {!account.isGoedgekeurd ? (
                                                 <>
                                                     <Button
-                                                        variant="success"
-                                                        className="me-2"
-                                                        onClick={() => toonModalVoorActie(account, 'goedkeuren')}
-                                                    >
-                                                        Goedkeuren
-                                                    </Button>
-                                                    <Button
                                                         variant="danger"
                                                         onClick={() => toonModalVoorActie(account, 'weigeren')}
                                                     >
-                                                        Weigeren
+                                                        verwijderen
                                                     </Button>
                                                 </>
                                             ) : (
@@ -211,7 +220,7 @@ const WbAccountsBeheren = () => {
                         ? `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt goedkeuren?`
                         : actieType === 'verwijderen'
                             ? `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt verwijderen? Dit kan niet ongedaan gemaakt worden.`
-                            : `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt weigeren? Dit kan niet ongedaan gemaakt worden.`}
+                            : `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt verwijderen? Dit kan niet ongedaan gemaakt worden.`}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={sluitModal}>
