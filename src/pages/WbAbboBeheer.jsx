@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import WbNavbar from "../components/WbNavbar";
 
 const WbAbboBeheer = () => {
-    const [showModal, setShowModal] = useState(false);
+    const [toonModal, setShowModal] = useState(false);
     const [selectedAbonnement, setSelectedAbonnement] = useState(null);
     const [currentAbonnement, setCurrentAbonnement] = useState(null);
     const [abonnementen, setAbonnementen] = useState([]);

@@ -8,7 +8,8 @@ import '../style/universeel.css';
 const Login = () => {
     const [username, setUsername] = useState('');  // Gebruikersnaam state
     const [password, setPassword] = useState('');  // Wachtwoord state
-    const [error, setError] = useState(null);  // Errormelding state
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);  
     const navigate = useNavigate();
 
     // Inlogfunctie die gegevens naar de server verstuurt
@@ -33,11 +34,11 @@ const Login = () => {
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
                 }
-
+               
                 console.log('Login successful:', response.data);
-
+                fetchUserData()
                 // Navigeer naar de Home-pagina
-                navigate('/Home');
+                
             } else {
                 throw new Error('Inloggen mislukt. Controleer uw inloggegevens.');
             }
@@ -49,6 +50,43 @@ const Login = () => {
                 setError('Er is een fout opgetreden tijdens het inloggen.');  // Algemene foutmelding
             }
         }
+    };
+    const fetchUserData = async () => {
+        setLoading(true);
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) return; // Controleer of JWT-token bestaat
+
+        
+        try {
+            const response = await axios.get('https://localhost:7281/api/account/getUserData', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            console.log('API response:', response.data);
+
+            if (response.data.role == "particuliereKlant") {
+                navigate("/Home");
+            }
+
+            if (response.data.role == "wagenparkBeheerder") {
+                navigate("/wbAccountsBeheren");
+            }
+
+            if (response.data.role == "bedrijfsKlant") {
+                navigate("/Home");
+            }
+
+            if (response.data.role == "backendWorker") {
+                navigate("/BoWagenparkBeheer");
+            }
+            if (response.data.role == "frontendWorker") {
+                navigate("/BowagenparkBeheer");
+            }
+        } catch (error) {
+            console.error('Fout bij ophalen gegevens:', error.response?.data || error.message);
+        } finally {
+            setLoading(false); // Zorg ervoor dat dit altijd wordt uitgevoerd
+        }
+
     };
 
     // Functie voor navigeren naar andere pagina's
