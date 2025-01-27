@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
-import WbNavbar from "../components/WbNavbar";
+import PartNavbar from "../components/PartNavbar.jsx";
+import axios from 'axios';
 
 const Abbonement = () => {
     const [toonModal, setShowModal] = useState(false);
@@ -12,13 +13,13 @@ const Abbonement = () => {
     useEffect(() => {
         const fetchAbonnementen = async () => {
             try {
-                const response = await axios.get("https://localhost:7281/api/Abonnementen/GetAllAbonnementen");
+                const response = await axios.get("https://localhost:7281/api/Abonnementen/GetUserAbonnementen");
                 if (response.status === 200) {
                     const formattedAbonnementen = response.data.map((abbo) => ({
                         id: abbo.abonnementId,
                         type: abbo.naam,
-                        kosten: `�${abbo.prijs} per maand`,
-                        description: `Abonnement type ${abbo.naam} met een prijs van �${abbo.prijs}.`,
+                        kosten: `€${abbo.prijs} per maand`,
+                        description: `Abonnement type ${abbo.naam} met een prijs van €${abbo.prijs}.`,
                     }));
                     setAbonnementen(formattedAbonnementen);
 
@@ -99,9 +100,9 @@ const Abbonement = () => {
         }
     };
 
-
     return (
         <div className="achtergrond2">
+            <PartNavbar />
             <Container className="py-4">
                 <Row className="my-4">
                     <Col>
@@ -115,17 +116,12 @@ const Abbonement = () => {
                             <Card>
                                 <Card.Body>
                                     <Card.Title>{abbo.type}</Card.Title>
-                                    <Card.Text><strong>Dagelijkse KM limiet:</strong> {abbo.dagelijkseKmLimiet}</Card.Text>
-                                    <Card.Text><strong>Tarief (per kilometer):</strong> {abbo.tariefPerKm}</Card.Text>
-                                    <Card.Text><strong>Starttarief:</strong> {abbo.starttarief}</Card.Text>
-                                    <Card.Text><strong>Korting:</strong> {abbo.korting}</Card.Text>
-                                    <Card.Text><strong>Extra voordelen:</strong> {abbo.extraVoordelen}</Card.Text>
-                                    <Card.Text><strong>Suggestie prijs per maand:</strong> {abbo.suggestiePrijsPerMaand}</Card.Text>
+                                    <Card.Text><strong>Prijs:</strong> {abbo.kosten}</Card.Text>
                                     <Button
                                         className="knop"
                                         onClick={() => {
-                                            setSelectedAbonnement(abbo.type);
-                                            setModal(true);
+                                            setSelectedAbonnement(abbo.id);
+                                            setShowModal(true); // Correcte functie
                                         }}
                                     >
                                         Kies dit abonnement
@@ -140,7 +136,7 @@ const Abbonement = () => {
                     <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
                 </div>
 
-                <Modal show={toonModal} onHide={() => setModal(false)}>
+                <Modal show={toonModal} onHide={() => setShowModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Bevestig abonnement</Modal.Title>
                     </Modal.Header>
@@ -150,7 +146,7 @@ const Abbonement = () => {
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => setModal(false)}>
+                        <Button variant="danger" onClick={() => setShowModal(false)}>
                             Annuleren
                         </Button>
                         <Button variant="success" onClick={handleAbonnementChange}>
@@ -164,4 +160,3 @@ const Abbonement = () => {
 };
 
 export default Abbonement;
-

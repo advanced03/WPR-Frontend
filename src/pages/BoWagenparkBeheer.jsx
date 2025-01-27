@@ -29,7 +29,6 @@ const BOWagenparkBeheer = () => {
     const [toonModal, setModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteIndex, setDeleteIndex] = useState(null);
-    const [statusFilter, setStatusFilter] = useState('Alle');
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
@@ -54,78 +53,47 @@ const BOWagenparkBeheer = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleAddVehicle = async () => {
-        console.log('Voertuig toe te voegen:', form);
-        // Zorg ervoor dat 'aanschafJaar' als getal wordt doorgestuurd
-        const newVehicle = {
-            merk: form.merk,
-            kenteken: form.kenteken,
-            kleur: form.kleur,
-            type: form.type,
-            aanschafJaar: parseInt(form.aanschafJaar), // Zorg ervoor dat dit een getal is
-            soort: form.soort,
-        };
-
-        // Controleer of alle velden zijn ingevuld
-        if (!newVehicle.merk || !newVehicle.kenteken || !newVehicle.kleur || !newVehicle.type || !newVehicle.soort || isNaN(newVehicle.aanschafJaar)) {
-            setError('Alle velden moeten ingevuld zijn met geldige waarden.');
-            return;
-        }
-
+    const handleBlockVehicle = async (vehicleId) => {
         try {
-            // Voertuig toevoegen aan de server
-            const response = await axios.post(
-                'https://localhost:7281/api/BackOfficeMedewerker/AddVoertuig',
-                newVehicle
-            );
+            const opmerking = prompt('Geef een reden voor het blokkeren van dit voertuig:');
+            if (!opmerking) {
+                alert('Blokkeren geannuleerd. Opmerking is verplicht.');
+                return;
+            }
 
-            // Voeg het nieuwe voertuig toe aan de huidige lijst zonder de lijst opnieuw op te halen
-            setVehicles(prevVehicles => [...prevVehicles, response.data]);
-
-            // Reset het formulier na toevoeging
-            setForm({
-                merk: '',
-                type: '',
-                kleur: '',
-                aanschafJaar: '',
-                kenteken: '',
-                soort: '',
+            await axios.put('https://localhost:7281/api/BackOfficeMedewerker/BlokkeerdVoertuig', null, {
+                params: { voertuigId: vehicleId, opmerking },
             });
 
-            // Sluit de modal
-            setModal(false);
+            setVehicles((prevVehicles) =>
+                prevVehicles.map((v) =>
+                    v.voertuigId === vehicleId
+                        ? { ...v, status: 'Niet Beschikbaar' }
+                        : v
+                )
+            );
         } catch (error) {
-            console.error('Error adding voertuig:', error);
-            setError('Er is een fout opgetreden bij het toevoegen van het voertuig.');
+            console.error('Error bij het blokkeren van voertuig:', error);
+            setError('Er is een fout opgetreden bij het blokkeren van het voertuig.');
         }
     };
 
-
-
-    const handleUpdateVehicle = async () => {
+    const handleUnblockVehicle = async (vehicleId) => {
         try {
-            const updatedVehicle = { ...form };
-            await axios.put(
-                `https://localhost:7281/api/BackOfficeMedewerker/WijzigVoertuig`,
-                updatedVehicle
-            );
-            const updatedVehicles = vehicles.map((v, idx) =>
-                idx === currentVehicle ? updatedVehicle : v
-            );
-            setVehicles(updatedVehicles);
-            setForm({
-                merk: '',
-                type: '',
-                kleur: '',
-                aanschafJaar: '',
-                kenteken: '',
-                soort: '',
+            await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
+                params: { voertuigId: vehicleId },
             });
-            setCurrentVehicle(null);
-            setModal(false);
+
+            setVehicles((prevVehicles) =>
+                prevVehicles.map((v) =>
+                    v.voertuigId === vehicleId
+                        ? { ...v, status: 'Beschikbaar' }
+                        : v
+                )
+            );
         } catch (error) {
-            console.error('Error updating voertuig:', error);
-            setError('Er is een fout opgetreden bij het bijwerken van het voertuig.');
+            console.error('Error bij het deblokkeren van voertuig:', error);
+            setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
         }
     };
 
@@ -166,17 +134,13 @@ const BOWagenparkBeheer = () => {
     };
 
     const filteredVehicles = vehicles.filter((vehicle) => {
-        const matchesStatus =
-            statusFilter === 'Alle' ||
-            (statusFilter === 'Actief' && vehicle.status === 'Beschikbaar') ||
-            (statusFilter === 'Geblokkeerd' && vehicle.status === 'Niet Beschikbaar');
         const matchesSearch =
             vehicle.merk.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.kleur.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.kenteken.toLowerCase().includes(searchQuery.toLowerCase());
 
-        return matchesStatus && matchesSearch;
+        return matchesSearch;
     });
 
     if (loading) return <div>Gegevens worden geladen...</div>;
@@ -195,15 +159,6 @@ const BOWagenparkBeheer = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </InputGroup>
-                    <DropdownButton
-                        variant="secondary"
-                        title={statusFilter === 'Alle' ? 'Alle Voertuigen' : statusFilter}
-                        onSelect={(status) => setStatusFilter(status)}
-                    >
-                        <Dropdown.Item eventKey="Alle">Alle Voertuigen</Dropdown.Item>
-                        <Dropdown.Item eventKey="Actief">Alleen Actief</Dropdown.Item>
-                        <Dropdown.Item eventKey="Geblokkeerd">Alleen Geblokkeerd</Dropdown.Item>
-                    </DropdownButton>
                     <Button className="mb-3 knop" onClick={() => setModal(true)}>
                         Voertuig Toevoegen
                     </Button>
@@ -217,7 +172,7 @@ const BOWagenparkBeheer = () => {
                             <th>Kleur</th>
                             <th>Bouwjaar</th>
                             <th>Kenteken</th>
-                            <th>type</th>
+                            <th>Type</th>
                             <th>Acties</th>
                         </tr>
                     </thead>
@@ -255,109 +210,35 @@ const BOWagenparkBeheer = () => {
                                     >
                                         Verwijderen
                                     </Button>
+                                    {vehicle.status === 'Niet Beschikbaar' ? (
+                                        <Button
+                                            variant="success"
+                                            className="mx-1"
+                                            size="sm"
+                                            onClick={() => handleUnblockVehicle(vehicle.voertuigId)}
+                                        >
+                                            Deblokkeren
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="secondary"
+                                            className="mx-1"
+                                            size="sm"
+                                            onClick={() => handleBlockVehicle(vehicle.voertuigId)}
+                                        >
+                                            Blokkeren
+                                        </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
+
+
             </Container>
-
-            {/* Modal for Add/Update Vehicle */}
-            <Modal show={toonModal} onHide={() => setModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{currentVehicle !== null ? 'Wijzig Voertuig' : 'Voertuig Toevoegen'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label>Merk</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="merk"
-                                value={form.merk}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Type</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="type"
-                                value={form.type}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Kleur</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="kleur"
-                                value={form.kleur}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Aanschafjaar</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="aanschafJaar"
-                                value={form.aanschafJaar}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Kenteken</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="kenteken"
-                                value={form.kenteken}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>type</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="soort"
-                                value={form.soort}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setModal(false)}>
-                        Annuleren
-                    </Button>
-                    <Button
-                        variant="primary"
-                        onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
-                    >
-                        {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Modal for Delete Vehicle */}
-            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Bevestig Verwijderen</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Weet je zeker dat je dit voertuig wilt verwijderen?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                        Annuleren
-                    </Button>
-                    <Button variant="danger" onClick={handleDeleteVehicle}>
-                        Verwijderen
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 };
 
 export default BOWagenparkBeheer;
-

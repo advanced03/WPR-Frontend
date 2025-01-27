@@ -12,7 +12,7 @@ const WbAbboBeheer = () => {
     useEffect(() => {
         const fetchAbonnementen = async () => {
             try {
-                const response = await axios.get("https://localhost:7281/api/Abonnementen/GetAllAbonnementen");
+                const response = await axios.get("https://localhost:7281/api/Abonnementen/GetWagenparkBeheerderAbonnementen");
                 if (response.status === 200) {
                     const formattedAbonnementen = response.data.map((abbo) => ({
                         id: abbo.abonnementId,
@@ -78,7 +78,7 @@ const WbAbboBeheer = () => {
             return;
         }
         try {
-            const response = await axios.post("https://localhost:7281/api/Abonnementen/wijzig-abonnement-user", {
+            const response = await axios.post("https://localhost:7281/api/Abonnementen/wijzig-abonnement-wagenpark", {
                 Id: selectedAbonnement,
             }, {
                 headers: {

@@ -46,6 +46,11 @@ function PartNavbar() { // Navigatie methode IPV Html link voor snellere laadtij
                 Huurgeschiedenis
               </Nav.Link>
             )}
+            {location.pathname !== '/Abbonement' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/Abbonement')}>
+                Abbonementen
+              </Nav.Link>
+            )}
           </Nav>
 
 
