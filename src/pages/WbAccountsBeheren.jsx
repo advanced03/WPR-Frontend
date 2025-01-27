@@ -20,7 +20,7 @@ const WbAccountsBeheren = () => {
             }
 
             try {
-                const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllVerzoeken', {
+                const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllWagenParkUsers', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
