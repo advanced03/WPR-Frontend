@@ -234,6 +234,7 @@ const BOWagenparkBeheer = () => {
                                 <td>
                                     <Button
                                         variant="warning"
+                                        className="mx-1"
                                         size="sm"
                                         onClick={() => {
                                             setCurrentVehicle(index);
@@ -245,6 +246,7 @@ const BOWagenparkBeheer = () => {
                                     </Button>
                                     <Button
                                         variant="danger"
+                                        className="mx-1"
                                         size="sm"
                                         onClick={() => {
                                             setDeleteIndex(index);

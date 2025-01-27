@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Container, Table, InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 import BoNavbar from "../components/BoNavbar";
 import axios from 'axios';
 
 const BoSchadeRegister = () => {
     const [schadeMeldingen, setSchadeMeldingen] = useState([]);
-    const [loading, setLoading] = useState(true); // Nieuwe loading state
-    const [error, setError] = useState(null); // Nieuwe error state
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [selectedMelding, setSelectedMelding] = useState(null);
+    const [reparatieOpmerking, setReparatieOpmerking] = useState('');
 
-    // Fetch schade meldingen van backend
     useEffect(() => {
         const fetchSchadeMeldingen = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/BackOfficeMedewerker/GetAllSchadeMeldingen');
-                console.log('Schade Meldingen:', response.data);
-                setSchadeMeldingen(response.data); // Zet de schade meldingen in de state
+                setSchadeMeldingen(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching schade meldingen:', error);
@@ -27,29 +28,62 @@ const BoSchadeRegister = () => {
         fetchSchadeMeldingen();
     }, []);
 
+    const handleOpenModal = (melding) => {
+        setSelectedMelding(melding);
+        setReparatieOpmerking('');
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedMelding(null);
+        setReparatieOpmerking('');
+    };
+
+    const handleBehandelSchade = async () => {
+        if (!selectedMelding) return;
+
+        try {
+            await axios.put('https://localhost:7281/api/BackOfficeMedewerker/BehandelSchadeMelding', {
+                schadeFormulierId: selectedMelding.schadeFormulierID,
+                reparatieOpmerking: reparatieOpmerking || "Geen opmerkingen toegevoegd."
+            });
+
+            alert('Schade is succesvol behandeld!');
+            setShowModal(false);
+
+            // Verwijder de behandelde schade uit de lijst
+            const updatedSchadeMeldingen = schadeMeldingen.filter(
+                (melding) => melding.schadeFormulierID !== selectedMelding.schadeFormulierID
+            );
+            setSchadeMeldingen(updatedSchadeMeldingen);
+
+        } catch (error) {
+            console.error('Error bij het behandelen van schade:', error);
+            alert(`Er is een fout opgetreden: ${error.response?.statusText || error.message}`);
+        }
+    };
+
     const filteredSchadeMeldingen = schadeMeldingen.filter((melding) => {
         return (
             melding.schade.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (melding.reparatieOpmerking && melding.reparatieOpmerking.toLowerCase().includes(searchQuery.toLowerCase()))
+            (melding.reparatieOpmerking && melding.reparatieOpmerking.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            String(melding.voertuigId).toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
+    
+    
 
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;
-
-    const handleBehandelSchade = (voertuigId) => {
-        // Voeg hier de logica toe voor het behandelen van de schade
-        alert(`Schade voor voertuig ID ${voertuigId} wordt behandeld.`);
-    };
 
     return (
         <div className="achtergrond2">
             <BoNavbar />
             <Container>
-                <h1 className="pagina-titel text-center my-4">Schade Register</h1>
-                {/* Zoekbalk */}
-                <div className="d-flex justify-content-between mb-3">
-                    <InputGroup className="w-50">
+                <h1 className="pagina-titel text-center my-5">Schade Register</h1>
+                <div className="zoekbalk mt-5 mb-5">
+                    <InputGroup>
                         <FormControl
                             placeholder="Zoek schade meldingen..."
                             value={searchQuery}
@@ -57,48 +91,85 @@ const BoSchadeRegister = () => {
                         />
                     </InputGroup>
                 </div>
-                {/* Tabel met schade meldingen */}
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Voertuig ID</th>
-                            <th>Schade</th>
-                            <th>Schade Datum</th>
-                            <th>Foto</th>
-                            <th>Behandel Schade</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredSchadeMeldingen.map((melding, index) => (
-                            <tr key={index}>
-                                <td>{melding.voertuigId}</td>
-                                <td>{melding.schade}</td>
-                                <td>{new Date(melding.schadeDatum).toLocaleString()}</td>
-                                <td>
-                                    {melding.foto ? (
-                                        <img
-                                            src={melding.foto}
-                                            alt="Schade foto"
-                                            style={{ width: '100px', height: 'auto', cursor: 'pointer' }}
-                                            onClick={() => window.open(melding.foto, '_blank')}
-                                        />
-                                    ) : (
-                                        'Geen foto'
-                                    )}
-                                </td>
-                                <td>
-                                    <Button
-                                        className="knop"
-                                        onClick={() => handleBehandelSchade(melding.voertuigId)}
-                                    >
-                                        Behandel Schade
-                                    </Button>
-                                </td>
+
+                {schadeMeldingen.length === 0 ? (
+                    <div className="text-center my-4">
+                        <h4>Geen schade meldingen gevonden.</h4>
+                    </div>
+                ) : (
+                    <Table className="schade-tabel" striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>Voertuig ID</th>
+                                <th>Schade</th>
+                                <th>Schade Datum</th>
+                                <th>Foto</th>
+                                <th>Behandel Schade</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {filteredSchadeMeldingen.map((melding, index) => (
+                                <tr key={index}>
+                                    <td>{melding.voertuigId}</td>
+                                    <td>{melding.schade}</td>
+                                    <td>{new Date(melding.schadeDatum).toLocaleString()}</td>
+                                    <td>
+                                        {melding.foto ? (
+                                            <img
+                                                className="schade-foto"
+                                                src={melding.foto}
+                                                alt="Schade foto"
+                                                onClick={() => window.open(melding.foto, '_blank')}
+                                            />
+                                        ) : (
+                                            'Geen foto'
+                                        )}
+                                    </td>
+                                    <td>
+                                        <Button
+                                            className="knop"
+                                            onClick={() => handleOpenModal(melding)}
+                                        >
+                                            Behandel Schade
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                )}
             </Container>
+
+            {/* Modalcode layout */}
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Behandel Schade</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedMelding && (
+                        <div>
+                            <p><strong>Voertuig ID:</strong> {selectedMelding.voertuigId}</p>
+                            <p><strong>Schade:</strong> {selectedMelding.schade}</p>
+                            <InputGroup>
+                                <FormControl
+                                    as="textarea"
+                                    placeholder="Voeg een reparatie opmerking toe..."
+                                    value={reparatieOpmerking}
+                                    onChange={(e) => setReparatieOpmerking(e.target.value)}
+                                />
+                            </InputGroup>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleCloseModal}>
+                        Annuleren
+                    </Button>
+                    <Button variant="success" onClick={handleBehandelSchade}>
+                        Behandel Schade
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
