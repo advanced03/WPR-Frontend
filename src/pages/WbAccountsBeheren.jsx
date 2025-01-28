@@ -23,7 +23,7 @@ const WbAccountsBeheren = () => {
                 }
             });
             const mappedAccounts = response.data.map((item) => ({
-                id: item.wagenparkVerzoekId,
+                id: item.appUserId,
                 naam: `User ${item.username}`,
                 email: `${item.email}`
             }));
@@ -47,13 +47,17 @@ const WbAccountsBeheren = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
+        console.log(accountId)
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
-            await axios.delete(`${baseURL}/DeleteUser/${accountId}`, {
+            const payload = JSON.stringify(accountId); // Converteer accountId naar een JSON-string
+
+            await axios.delete(`${baseURL}/RemoveUserFromWagenPark`, {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                data: payload, // Verstuur het accountId als body van de DELETE-aanroep
             });
 
             // Vernieuw de lijst van accounts na succesvolle verwijdering
@@ -62,6 +66,7 @@ const WbAccountsBeheren = () => {
             console.error(`Fout bij verwijderen van gebruiker met ID ${accountId}:`, error.message);
         }
     };
+
 
     const voegNieuweGebruikerToe = async () => {
         const token = sessionStorage.getItem('jwtToken');

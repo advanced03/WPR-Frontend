@@ -7,16 +7,12 @@ import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbReg = () => {
     // Usestates initializeren
-    const [username, setUsername] = useState('');
+    const [gewensdeUsername, setgewensdeUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setphoneNumber] = useState('');
     const [bedrijfsnaam, setbedrijfsnaam] = useState('');
-    const [bedrijfsString, setbedrijfsString] = useState('');
     const [kvkNummer, setkvkNummer] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
@@ -27,37 +23,25 @@ const WbReg = () => {
         setError(null);
         setSuccess(false);
 
-        // Kijken of ww overeenkomt
-        if (password !== confirmPassword) {
-            setError('Wachtwoorden komen niet overeen.');
-            return;
-        }
-
         try {
             // Payload voor het inloggen
             console.log('Payload:', {
-                username,
-                email,
                 voornaam,
                 achternaam,
-                password,
-                phoneNumber,
+                gewensdeUsername,
+                email,
                 bedrijfsnaam,
-                bedrijfsString,
                 kvkNummer,
             });
 
-            const response = await axios.post(
-                `https://localhost:7281/api/BackOfficeMedewerker/registerWagenparkBeheerder`,
+            const response = await axios.put(
+                `https://localhost:7281/api/Account/NieuwWagenParkVerzoek`,
                 {
-                    username,
-                    email,
                     voornaam,
                     achternaam,
-                    password,
-                    phoneNumber,
+                    gewensdeUsername,
+                    email,
                     bedrijfsnaam,
-                    bedrijfsString,
                     kvkNummer,
                 },
                 {
@@ -76,16 +60,12 @@ const WbReg = () => {
 
                 setSuccess(true);
                 // Reset formuliervelden na succesvolle registratie
-                setUsername('');
+                setgewensdeUsername('');
                 setVoornaam('');
                 setAchternaam('');
                 setEmail('');
                 setbedrijfsnaam('');
-                setbedrijfsString('');
-                setphoneNumber('');
                 setkvkNummer('');
-                setPassword('');
-                setConfirmPassword('');
 
                 // Navigeer naar login
                 setTimeout(() => navigate('/Login'), 2000);
@@ -139,8 +119,8 @@ const WbReg = () => {
                                         required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={gewensdeUsername}
+                                        onChange={(e) => setgewensdeUsername(e.target.value)}
                                     />
                                 </Form.Group>
 
@@ -188,17 +168,6 @@ const WbReg = () => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formBedrijfsString" className="mb-3">
-                                    <Form.Label>🏢 Organisatie</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Voer uw @organisatie in"
-                                        value={bedrijfsString}
-                                        onChange={(e) => setbedrijfsString(e.target.value)}
-                                    />
-                                </Form.Group>
-
                                 <Form.Group controlId="formKvkNummer" className="mb-3">
                                     <Form.Label>🏢 KvK-nummer</Form.Label>
                                     <Form.Control
@@ -206,42 +175,16 @@ const WbReg = () => {
                                         type="text"
                                         placeholder="Voer uw kvknummer in"
                                         value={kvkNummer}
-                                        onChange={(e) => setkvkNummer(e.target.value)}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            if (/^\d{0,9}$/.test(value)) {
+                                                setkvkNummer(value);
+                                            }
+                                        }}
+                                        maxLength={9}
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formPhoneNumber" className="mb-3">
-                                    <Form.Label>📱 Telefoonnummer</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Voer uw telefoonnummer in"
-                                        value={phoneNumber}
-                                        onChange={(e) => setphoneNumber(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="formPassword" className="mb-3">
-                                    <Form.Label>🔐 Wachtwoord</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="password"
-                                        placeholder="Kies een wachtwoord"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="formConfirmPassword" className="mb-3">
-                                    <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="password"
-                                        placeholder="Bevestig uw wachtwoord"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                    />
-                                </Form.Group>
 
                                 <Button type="submit" className="w-100 knop">
                                     Registreren 🔑
