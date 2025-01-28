@@ -44,7 +44,7 @@ const HuurGeschiedenis = () => {
           return;
         }
 
-        const response = await axios.get("https://localhost:7281/api/verhuurVerzoek/GetMyVerzoeken", {
+          const response = await axios.get("https://localhost:7281//api/Reserveringen/ViewHuurGeschiedenis", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

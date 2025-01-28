@@ -6,74 +6,42 @@ import WbNavbar from "../components/WbNavbar.jsx";
 const WbAccountsBeheren = () => {
     const [accounts, setAccounts] = useState([]);
     const [zoekterm, setZoekterm] = useState('');
-    const [toonModal, setModal] = useState(false);
-    const [teVerwerkenAccount, setTeVerwerkenAccount] = useState(null);
-    const [actieType, setActieType] = useState('goedkeuren'); // 'goedkeuren', 'weigeren', of 'verwijderen'
+    const [toonToevoegenModal, setToevoegenModal] = useState(false);
+    const [nieuwEmail, setNieuwEmail] = useState('');
 
-    // Haal de accountgegevens op bij de eerste render
+    const fetchAccounts = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+
+        try {
+            const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllWagenParkUsers', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const mappedAccounts = response.data.map((item) => ({
+                id: item.wagenparkVerzoekId,
+                naam: `User ${item.username}`,
+                email: `${item.email}`
+            }));
+            setAccounts(mappedAccounts);
+        } catch (error) {
+            console.error('Fout bij ophalen van data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchAccounts = async () => {
-            const token = sessionStorage.getItem('jwtToken');
-            if (!token) {
-                console.error('JWT-token ontbreekt in sessionStorage.');
-                return;
-            }
-
-            try {
-                const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllWagenParkUsers', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                // Mapt de gegevens naar een nieuw formaat voor de accs
-                const mappedAccounts = response.data.map((item) => ({
-                    id: item.wagenparkVerzoekId,
-                    naam: `User ${item.username}`,
-                    email: `${item.email}`,
-                    isGoedgekeurd: false
-                }));
-
-                setAccounts(mappedAccounts);
-            } catch (error) {
-                console.error('Fout bij ophalen van data:', error);
-            }
-        };
-
         fetchAccounts();
     }, []);
 
-    // Filter accounts op basis van zoekterm
     const gefilterdeAccounts = accounts.filter((account) =>
         account.naam.toLowerCase().includes(zoekterm.toLowerCase())
     );
 
-    // Functie om account goed te keuren
-    const goedkeurenAccount = (account) => {
-        setAccounts(accounts.map(a =>
-            a.id === account.id ? { ...a, isGoedgekeurd: true } : a
-        ));
-    };
-
-    // Functie om account te weigeren
-    const weigerenAccount = (account) => {
-        setAccounts(accounts.filter(a => a.id !== account.id));
-    };
-
-    // Toon de modal voor de geselecteerde actie
-    const toonModalVoorActie = (account, type) => {
-        setTeVerwerkenAccount(account);
-        setActieType(type);
-        setModal(true);
-    };
-
-    // Sluit de modal zonder actie
-    const sluitModal = () => {
-        setModal(false);
-        setTeVerwerkenAccount(null);
-    };
-
-    // Voer goedkeuren actie uit
-    const voerGoedkeurenUit = async () => {
+    const verwijderAccount = async (accountId) => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
@@ -82,61 +50,44 @@ const WbAccountsBeheren = () => {
 
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
-            const payload = { id: teVerwerkenAccount.id };
-
-            await axios.post(`${baseURL}/AddUserToWagenPark`, payload, {
+            await axios.delete(`${baseURL}/DeleteUser/${accountId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            goedkeurenAccount(teVerwerkenAccount);
-            sluitModal();
+            // Vernieuw de lijst van accounts na succesvolle verwijdering
+            fetchAccounts();
         } catch (error) {
-            console.error(`Fout bij goedkeuren van gebruiker:`, error.message);
+            console.error(`Fout bij verwijderen van gebruiker met ID ${accountId}:`, error.message);
         }
     };
 
-    // Voer weigeren of verwijderen actie uit
-    const voerWeigerenOfVerwijderenUit = async () => {
+    const voegNieuweGebruikerToe = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
 
-        // Log de token om te debuggen
-        console.log("Authorization Header:", `Bearer ${token}`);
-
-
         try {
             const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
+            const payload = { email: nieuwEmail };
 
-            // Zorg ervoor dat de payload een JSON-object is
-            const payload = {
-                id: teVerwerkenAccount.id, // Zorg ervoor dat de 'id' een geldige waarde bevat
-            };
-
-            // Verstuur het verzoek met de juiste Content-Type header
-            await axios.request({
-                method: 'DELETE',
-                url: `${baseURL}/RemoveUserFromWagenPark`,
-                data: payload, // JSON object
+            await axios.put(`${baseURL}/NodigGebruikerUitVoorWagenpark`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json', // Correcte content-type
-                },
+                    'Content-Type': 'application/json'
+                }
             });
 
-            // Voer acties uit na succesvol verzoek
-            weigerenAccount(teVerwerkenAccount);
-            sluitModal();
+            setToevoegenModal(false); // Sluit de modal
+            setNieuwEmail(''); // Reset het e-mailadres
+            fetchAccounts(); // Vernieuw de lijst van accounts
         } catch (error) {
-            console.error(`Fout bij weigeren of verwijderen van gebruiker:`, error.message);
-            console.error('Volledig error-object:', error);
+            console.error('Fout bij toevoegen van nieuwe gebruiker:', error.message);
         }
     };
-
 
     return (
         <div className="achtergrond2">
@@ -144,7 +95,7 @@ const WbAccountsBeheren = () => {
             <Container fluid className="align-items-center w-75">
                 <h1 className="pagina-titel text-center my-5">Zakelijke Huurders Beheren</h1>
 
-                <div className="d-flex justify-content-center mb-3">
+                <div className="d-flex justify-content-between mb-3">
                     <InputGroup>
                         <FormControl
                             placeholder="Zoek medewerkers"
@@ -153,88 +104,63 @@ const WbAccountsBeheren = () => {
                             onChange={(e) => setZoekterm(e.target.value)}
                         />
                     </InputGroup>
+                    <Button variant="primary" onClick={() => setToevoegenModal(true)}>
+                        Gebruiker Toevoegen
+                    </Button>
                 </div>
 
-                <div className="autovinden">
-                    <Table striped bordered hover responsive>
-                        <thead>
-                            <tr>
-                                <th>Naam</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Acties</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {gefilterdeAccounts.length > 0 ? (
-                                gefilterdeAccounts.map((account) => (
-                                    <tr key={account.id}>
-                                        <td>{account.naam}</td>
-                                        <td>{account.email}</td>
-                                        <td>{account.isGoedgekeurd ? 'Goedgekeurd' : 'In afwachting'}</td>
-                                        <td>
-                                            {!account.isGoedgekeurd ? (
-                                                <>
-                                                    <Button
-                                                        variant="danger"
-                                                        onClick={() => toonModalVoorActie(account, 'weigeren')}
-                                                    >
-                                                        verwijderen
-                                                    </Button>
-                                                </>
-                                            ) : (
-                                                <Button
-                                                    variant="danger"
-                                                    onClick={() => toonModalVoorActie(account, 'verwijderen')}
-                                                >
-                                                    Verwijderen
-                                                </Button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="4">
-                                        <em>Geen medewerkers gevonden...</em>
+                <Table striped bordered hover responsive>
+                    <thead>
+                        <tr>
+                            <th>Naam</th>
+                            <th>Email</th>
+                            <th>Acties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {gefilterdeAccounts.length > 0 ? (
+                            gefilterdeAccounts.map((account) => (
+                                <tr key={account.id}>
+                                    <td>{account.naam}</td>
+                                    <td>{account.email}</td>
+                                    <td>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => verwijderAccount(account.id)}
+                                        >
+                                            Verwijderen
+                                        </Button>
                                     </td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3">
+                                    <em>Geen medewerkers gevonden...</em>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </Table>
             </Container>
 
-            <Modal show={toonModal} onHide={sluitModal}>
+            <Modal show={toonToevoegenModal} onHide={() => setToevoegenModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>
-                        {actieType === 'goedkeuren'
-                            ? 'Gebruiker Goedkeuren'
-                            : actieType === 'verwijderen'
-                                ? 'Gebruiker Verwijderen'
-                                : 'Gebruiker Weigeren'}
-                    </Modal.Title>
+                    <Modal.Title>Gebruiker Toevoegen</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {actieType === 'goedkeuren'
-                        ? `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt goedkeuren?`
-                        : actieType === 'verwijderen'
-                            ? `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt verwijderen? Dit kan niet ongedaan gemaakt worden.`
-                            : `Ben je zeker dat je ${teVerwerkenAccount?.naam} wilt verwijderen? Dit kan niet ongedaan gemaakt worden.`}
+                    <FormControl
+                        placeholder="Voer het e-mailadres in"
+                        value={nieuwEmail}
+                        onChange={(e) => setNieuwEmail(e.target.value)}
+                    />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={sluitModal}>
+                    <Button variant="secondary" onClick={() => setToevoegenModal(false)}>
                         Annuleren
                     </Button>
-                    <Button
-                        variant={actieType === 'goedkeuren' ? 'success' : 'danger'}
-                        onClick={
-                            actieType === 'goedkeuren'
-                                ? voerGoedkeurenUit
-                                : voerWeigerenOfVerwijderenUit
-                        }
-                    >
-                        {actieType === 'goedkeuren' ? 'Goedkeuren' : 'Bevestigen'}
+                    <Button variant="success" onClick={voegNieuweGebruikerToe}>
+                        Toevoegen
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -243,3 +169,4 @@ const WbAccountsBeheren = () => {
 };
 
 export default WbAccountsBeheren;
+
