@@ -24,6 +24,7 @@ import Privacy from './pages/Privacy.jsx';
 import Betaal from './pages/Betaal.jsx';
 import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
 import Abbonement from './pages/Abbonement.jsx';
+import BoWagenparkBehandeling from './pages/BoWagenparkBehandeling.jsx';
 
 /* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
                 <Route path="/Privacy" element={<Privacy />} />
                 <Route path="/Betaal" element={<Betaal />} />
                 <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
+                <Route path="/BoWagenparkBehandeling" element={<BoWagenparkBehandeling />} />
                 <Route path="/Abbonement" element={<Abbonement />} />
             </Routes>
         </Router>

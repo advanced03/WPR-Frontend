@@ -3,12 +3,8 @@ import {
     Container,
     Table,
     Button,
-    Modal,
     FormControl,
     InputGroup,
-    DropdownButton,
-    Dropdown,
-    Form,
 } from 'react-bootstrap';
 import BoNavbar from '../components/BoNavbar';
 import axios from 'axios';
@@ -49,9 +45,6 @@ const BOWagenparkBeheer = () => {
         fetchWagens();
     }, []);
 
-    const handleInputChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     const handleBlockVehicle = async (vehicleId) => {
         try {

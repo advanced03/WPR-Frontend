@@ -105,7 +105,7 @@ const WbReg = () => {
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
-                            <h2 className="text-center mb-4">wagenpark accounts registreren</h2>
+                            <h2 className="text-center mb-4">Wagenpark accounts registreren</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">

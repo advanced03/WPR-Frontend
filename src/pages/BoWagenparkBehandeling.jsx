@@ -1,35 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col, Card, Button, Modal } from 'react-bootstrap';
+import { Container, Col, Card, Button, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 import '../style/backoffice.css';
-import BoNavbar from "../components/BoNavbar";
+import BoNavbar from "../components/BoNavbar"
 
 const BoWagenparkBehandeling = () => {
+    // Usestates initializeren
+    const [verzoeken, setVerzoeken] = useState([]);
     const [toonModal, setModal] = useState(false);
     const [selectedVerzoek, setSelectedVerzoek] = useState(null);
-    const [verzoeken, setVerzoeken] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [reden, setReden] = useState(""); // State voor de reden van afwijzing
 
-    const token = sessionStorage.getItem('jwtToken');  // Haal de token uit sessionStorage
+    // Functie om wagenpark verzoeken op te halen
+    const fetchVerzoeken = async () => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+        try {
+            setLoading(true);
+            const response = await axios.get(
+                'https://localhost:7281/api/BackOfficeMedewerker/GetAllNieuwWagenParkVerzoeken',
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            setVerzoeken(response.data);
+            setError(null);
+        } catch (err) {
+            setError('Er is een fout opgetreden bij het ophalen van de wagenpark verzoeken.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    // Fetch all requests
+    // Verzoeken ophalen
     useEffect(() => {
-        const fetchVerzoeken = async () => {
-            try {
-                const response = await axios.get('/api/BackOfficeMedewerker/GetAllNieuwWagenParkVerzoeken', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setVerzoeken(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError("Fout bij het ophalen van verzoeken.");
-                setLoading(false);
-            }
-        };
         fetchVerzoeken();
-    }, [token]);
+    }, []);
 
+    // Methode om verzoeken goed te keuren
+    const postGoedkeuren = async (id) => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+        try {
+            await axios.put(
+                'https://localhost:7281/api/BackOfficeMedewerker/AcceptVerzoek',
+                { id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            console.log(`Verzoek met ID ${id} succesvol goedgekeurd.`);
+            fetchVerzoeken();
+        } catch (err) {
+            console.error(`Er is een fout opgetreden bij het goedkeuren van verzoek met ID ${id}.`, err);
+        }
+    };
+
+    // Methode om verzoeken af te wijzen
+    const postAfwijzen = async (id, reden) => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT-token ontbreekt in sessionStorage.');
+            return;
+        }
+        try {
+            await axios.put(
+                'https://localhost:7281/api/BackOfficeMedewerker/WeigerVerzoek',
+                { id, reden },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            console.log(`Verzoek met ID ${id} succesvol afgewezen.`);
+            fetchVerzoeken();
+        } catch (err) {
+            console.error(`Er is een fout opgetreden bij het afwijzen van verzoek met ID ${id}.`, err);
+        }
+    };
+
+    // Toon of verberg de modal
     const handletoonModal = (verzoek, action) => {
         setSelectedVerzoek({ verzoek, action });
         setModal(true);
@@ -38,24 +102,24 @@ const BoWagenparkBehandeling = () => {
     const handleCloseModal = () => {
         setModal(false);
         setSelectedVerzoek(null);
+        setReden(""); // Reset reden bij het sluiten van de modal
     };
 
-    const handleConfirmAction = async () => {
-        try {
-            await axios.put('/api/BackOfficeMedewerker/AcceptVerzoek', {
-                id: selectedVerzoek.verzoek.wagenparkVerzoekId
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            // Bij succesvolle actie, verzoeken opnieuw ophalen
-            const updatedVerzoeken = verzoeken.filter(
-                (verzoek) => verzoek.wagenparkVerzoekId !== selectedVerzoek.verzoek.wagenparkVerzoekId
-            );
-            setVerzoeken(updatedVerzoeken);
-            handleCloseModal();
-        } catch (err) {
-            setError("Fout bij het verwerken van het verzoek.");
+    // Geef de verzoekid en reden mee als het verzoek wordt goedgekeurd of afgewezen.
+    const handleConfirmAction = () => {
+        if (selectedVerzoek) {
+            const { verzoek, action } = selectedVerzoek;
+            if (action === 'goedgekeuren') {
+                postGoedkeuren(verzoek.wagenparkVerzoekId);
+            } else if (action === 'afwijzen') {
+                if (!reden) {
+                    alert('Vul een reden in om het verzoek af te wijzen.');
+                    return;
+                }
+                postAfwijzen(verzoek.wagenparkVerzoekId, reden); // Voeg de reden toe
+            }
         }
+        handleCloseModal();
     };
 
     const onbehandeldeVerzoeken = verzoeken.filter(
@@ -65,13 +129,13 @@ const BoWagenparkBehandeling = () => {
     return (
         <div className="achtergrond2">
             <BoNavbar />
-            <h1 className="text-center pagina-titel my-3">Openstaande Wagenpark Verzoeken</h1>
+            <h1 className="text-center pagina-titel my-3">Openstaande wagenpark verzoeken</h1>
             <Container fluid className="d-flex justify-content-center align-items-center">
                 <Col md={8}>
                     <Card className="huren-box p-3 mt-5">
                         <Card.Body>
                             {loading ? (
-                                <p className="text-center">Verzoeken worden geladen...</p>
+                                <p className="text-center">Wagenpark verzoeken worden geladen...</p>
                             ) : error ? (
                                 <p className="text-center text-danger">{error}</p>
                             ) : (
@@ -81,7 +145,7 @@ const BoWagenparkBehandeling = () => {
                                             <Card key={verzoek.wagenparkVerzoekId} className="mb-3">
                                                 <Card.Body>
                                                     <Card.Title><strong>Naam:</strong> {verzoek.voornaam} {verzoek.achternaam}</Card.Title>
-                                                    <Card.Text><strong>Bedrijf:</strong> {verzoek.bedrijfsnaam}</Card.Text>
+                                                    <Card.Text><strong>Bedrijfsnaam:</strong> {verzoek.bedrijfsnaam}</Card.Text>
                                                     <Card.Text><strong>Email:</strong> {verzoek.email}</Card.Text>
                                                     <Card.Text><strong>KvK Nummer:</strong> {verzoek.kvkNummer}</Card.Text>
 
@@ -113,6 +177,7 @@ const BoWagenparkBehandeling = () => {
                     </Card>
                 </Col>
             </Container>
+
             {/* Modal layout */}
             <Modal show={toonModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -120,6 +185,19 @@ const BoWagenparkBehandeling = () => {
                 </Modal.Header>
                 <Modal.Body>
                     Weet je zeker dat je dit verzoek wilt {selectedVerzoek ? selectedVerzoek.action : ''}?
+                    {selectedVerzoek?.action === 'afwijzen' && (
+                        <div className="mt-3">
+                            <label htmlFor="reden">Reden voor afwijzing:</label>
+                            <textarea
+                                id="reden"
+                                rows="3"
+                                className="form-control"
+                                value={reden}
+                                onChange={(e) => setReden(e.target.value)}
+                                placeholder="Geef een reden voor de afwijzing"
+                            />
+                        </div>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleCloseModal}>
