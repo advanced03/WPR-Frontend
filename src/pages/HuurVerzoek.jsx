@@ -87,6 +87,10 @@ const HuurVerzoek = () => {
             <Container fluid className="d-flex justify-content-center align-items-center huren-background">
                 <Col md={6}>
                     <Card className='huren-box p-4 mt-5'>
+                        <Card.Img
+                            variant="top"
+                            src={`src/logos/${wagen.merk.toLowerCase()}.png`}
+                            className="car-image" />
                         <Card.Body className="p-3">
                             <Card.Text className="text-center gekozen-auto mb-5 p-2">
                                 <strong>Gekozen Auto:</strong> {wagen.merk} {wagen.type}

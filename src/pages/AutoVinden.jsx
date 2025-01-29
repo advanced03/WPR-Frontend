@@ -59,7 +59,7 @@ const AutoVinden = () => {
             setError('Vul zowel een begin- als einddatum in.');
             return;
         }
-    
+
         setLoading(true);
         try {
             const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
@@ -191,10 +191,13 @@ const AutoVinden = () => {
                             <Col key={wagen.voertuigId} sm={12} md={6} lg={4} className="mb-4">
                                 <Card className="h-100 p-2 mb-3">
                                     <Card.Body>
-                                        <Card.Title>{wagen.merk} {wagen.type}</Card.Title>
+                                        <Card.Img
+                                            variant="top"
+                                            src={`src/logos/${wagen.merk.toLowerCase()}.png`}
+                                            className="car-image h-100" />
+                                        <Card.Title><strong>{wagen.merk} {wagen.type}</strong></Card.Title>
                                         <p>Kleur: {wagen.kleur}</p>
                                         <p>Prijs: ${50}</p>
-                                        <p>Type: {wagen.soort}</p>
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
                                         <Button className="knop mt-3" onClick={() => handleRentClick(wagen)}>
