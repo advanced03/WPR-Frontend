@@ -38,13 +38,13 @@ const HuurGeschiedenis = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("jwtToken");
+        const token = sessionStorage.getItem("jwtToken");
         if (!token) {
           console.error("Geen JWT-token gevonden.");
           return;
         }
 
-          const response = await axios.get("https://localhost:7281//api/Reserveringen/ViewHuurGeschiedenis", {
+          const response = await axios.get("https://localhost:7281/api/Reserveringen/ViewHuurGeschiedenis", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
