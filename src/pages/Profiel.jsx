@@ -149,30 +149,35 @@ function Profiel() {
                                                 onChange={(e) => setGebruiker({ ...gebruiker, email: e.target.value })}
                                             />
                                         </FormGroup>
-                                        <FormGroup controlId="bedrijfsemailtag">
-                                            <FormLabel>Bedrijfs email tag</FormLabel>
-                                            <FormControl
-                                                type="text"
-                                                value={gebruiker.bedrijfsemailtag}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, bedrijfsemailtag: e.target.value })}
-                                            />
-                                        </FormGroup>
-                                        <FormGroup controlId="bedrijfsnaam">
-                                            <FormLabel>Bedrijfsnaam</FormLabel>
-                                            <FormControl
-                                                type="text"
-                                                value={gebruiker.bedrijfsnaam}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, bedrijfsnaam: e.target.value })}
-                                            />
-                                        </FormGroup>
-                                        <FormGroup controlId="telefoonnummer">
-                                            <FormLabel>Telefoonnummer</FormLabel>
-                                            <FormControl
+                                        {gebruiker.bedrijfsnaam && (
+                                            <FormGroup controlId="bedrijfsnaam">
+                                                <FormLabel>Bedrijfsnaam</FormLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    value={gebruiker.bedrijfsnaam}
+                                                    onChange={(e) => setGebruiker({ ...gebruiker, bedrijfsnaam: e.target.value })}
+                                                />
+                                            </FormGroup>
+                                        )}
+                                        <Form.Group controlId="formtelefoonnummer" className="mb-3">
+                                            <Form.Label>📱 Telefoonnummer</Form.Label>
+                                            <Form.Control
                                                 type="tel"
+                                                placeholder="Voer uw telefoonnummer in"
                                                 value={gebruiker.phoneNumber}
-                                                onChange={(e) => setGebruiker({ ...gebruiker, phoneNumber: e.target.value })}
+                                                onChange={(e) => {
+                                                    const digitsOnly = e.target.value.replace(/\D/g, '');
+                                                    if (digitsOnly.length <= 13) {
+                                                        setGebruiker({ ...gebruiker, phoneNumber: digitsOnly });
+                                                    }
+                                                }}
+                                                required
+                                                isInvalid={gebruiker.phoneNumber && !/^\d{10,13}$/.test(gebruiker.phoneNumber)}
                                             />
-                                        </FormGroup>
+                                            <Form.Control.Feedback type="invalid">
+                                                Voer een geldig telefoonnummer in.
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -229,7 +234,7 @@ function Profiel() {
                                                 type="password"
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                                isInvalid={wachtwoord !== bevestigWachtwoord}
+                                                isInvalid={newPassword !== confirmPassword}
                                             />
                                             <Form.Control.Feedback type="invalid">
                                                 Wachtwoorden komen niet overeen.
