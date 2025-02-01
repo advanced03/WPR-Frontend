@@ -217,7 +217,11 @@ function Profiel() {
                                                 type="password"
                                                 value={newPassword}
                                                 onChange={(e) => setNewPassword(e.target.value)}
+                                                minLength={12}
                                             />
+                                            <Form.Control.Feedback type="invalid">
+                                                Uw nieuwe wachtwoord moet minimaal 12 tekens lang zijn.
+                                            </Form.Control.Feedback>
                                         </FormGroup>
                                         <FormGroup controlId="confirmPassword">
                                             <FormLabel>Bevestig Nieuw Wachtwoord</FormLabel>
@@ -225,7 +229,11 @@ function Profiel() {
                                                 type="password"
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                                isInvalid={wachtwoord !== bevestigWachtwoord}
                                             />
+                                            <Form.Control.Feedback type="invalid">
+                                                Wachtwoorden komen niet overeen.
+                                            </Form.Control.Feedback>
                                         </FormGroup>
                                     </Card.Body>
                                 </Card>
