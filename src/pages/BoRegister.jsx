@@ -5,7 +5,7 @@ import '../style/register.css';
 import axios from 'axios';
 import BoNavbar from "../components/BoNavbar"
 
-const WbRegister = () => {
+const BoRegister = () => {
     // Usestates initializeren
     const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
@@ -188,4 +188,4 @@ const WbRegister = () => {
     );
 };
 
-export default WbRegister;
+export default BoRegister;
