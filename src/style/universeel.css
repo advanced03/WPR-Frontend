@@ -53,3 +53,7 @@
 .bg-custom {
   background-color: #600339;
 }
+
+.alert {
+ white-space: pre-wrap;
+}
