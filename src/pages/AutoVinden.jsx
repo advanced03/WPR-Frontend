@@ -197,7 +197,7 @@ const AutoVinden = () => {
                                             className="car-image h-100" />
                                         <Card.Title><strong>{wagen.merk} {wagen.type}</strong></Card.Title>
                                         <p>Kleur: {wagen.kleur}</p>
-                                        <p>Prijs: ${50}</p>
+                                        <p>Prijs: {50}€</p>
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
                                         <Button className="knop mt-3" onClick={() => handleRentClick(wagen)}>
