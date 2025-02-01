@@ -6,19 +6,19 @@ import axios from 'axios';
 
 const PartRegister = () => {
     //States voor invoervelden en eventuele erorrs of bevestigingsberichten.
-    const [username, setUsername] = useState('');
+    const [gebruikersnaam, setgebruikersnaam] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [telefoonnummer, setTelefoonnummer] = useState('');
+    const [wachtwoord, setwachtwoord] = useState('');
+    const [bevestigWachtwoord, setBevestigWachtwoord] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
     const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    const navigeren = useNavigate();
 
     //Methode om registratie af te handelen.
-    const handleRegistration = async (e) => {
+    const registreren = async (e) => {
         e.preventDefault();
         setErrorMessage(null);
         setSuccess(false);
@@ -26,12 +26,12 @@ const PartRegister = () => {
         try {
             //Stuur deze payload naar de backend
             const payload = {
-                username: username,
+                username: gebruikersnaam,
                 email: email,
-                password: password,
+                password: wachtwoord,
                 voornaam: voornaam,
                 achternaam: achternaam,
-                phoneNumber: phoneNumber,
+                phoneNumber: telefoonnummer,
             };
             //Endpoint die verantwoordelijk is voor het registreren.
             const response = await axios.post(
@@ -39,6 +39,7 @@ const PartRegister = () => {
                 payload,
                 { headers: { 'Content-Type': 'application/json' } }
             );
+
             //Als registeren succesvol is
             if (response.status === 200) {
                 const token = response.data.token;
@@ -48,7 +49,7 @@ const PartRegister = () => {
 
                 // Bericht tonen en vervolgens navigeren naar de loginpagina na 3 seconden
                 setTimeout(() => {
-                    navigate('/Login');
+                    navigatie('/Login');
                 }, 3000);
             } else {
                 setErrorMessage('Registratie mislukt. Probeer het later opnieuw.');
@@ -74,8 +75,8 @@ const PartRegister = () => {
         }
     };
     // Navigatiemethdoe
-    const handleNavigation = (path) => {
-        navigate(path);
+    const navigatie = (pad) => {
+        navigeren(pad);
     };
 
     //Frontend code
@@ -90,31 +91,30 @@ const PartRegister = () => {
                             {errorMessage && <Alert variant="danger" className="alert">{errorMessage}</Alert>}
                             {success && (
                                 <Alert variant="success">
-                                    Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
+                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
                                 </Alert>
                             )}
-                            <Form onSubmit={handleRegistration}>
-                                <Form.Group controlId="formUsername" className="mb-3">
+                            <Form onSubmit={registreren}>
+                                <Form.Group controlId="formgebruikersnaam" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={gebruikersnaam}
+                                        onChange={(e) => setgebruikersnaam(e.target.value)}
                                         required
                                     />
                                 </Form.Group>
 
                                 <Form.Group controlId="formEmail" className="mb-3">
                                     <Form.Label>📧 E-mail</Form.Label>
-                                    {/*Validatie van email*/}
                                     <Form.Control
                                         type="email"
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        isInvalid={!/\S+@\S+\.\S+/.test(email)}
+                                        isInvalid={email && !/\S+@\S+\.\S+/.test(email)}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         Voer een geldig e-mailadres in.
@@ -142,51 +142,51 @@ const PartRegister = () => {
                                         required
                                     />
                                 </Form.Group>
-                                {/*Validatie van telefoon nummer & alleen cijfers.*/}
-                                <Form.Group controlId="formPhoneNumber" className="mb-3">
+
+                                <Form.Group controlId="formtelefoonnummer" className="mb-3">
                                     <Form.Label>📱 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
-                                        value={phoneNumber}
+                                        value={telefoonnummer}
                                         onChange={(e) => {
                                             const digitsOnly = e.target.value.replace(/\D/g, '');
                                             if (digitsOnly.length <= 13) {
-                                                setPhoneNumber(digitsOnly);
+                                                setTelefoonnummer(digitsOnly);
                                             }
                                         }}
                                         required
-                                        isInvalid={!/^\d{10,13}$/.test(phoneNumber)}
+                                        isInvalid={telefoonnummer && !/^\d{10,13}$/.test(telefoonnummer)}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         Voer een geldig telefoonnummer in.
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                <Form.Group controlId="formPassword" className="mb-3">
+                                <Form.Group controlId="formwachtwoord" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Kies een wachtwoord"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={wachtwoord}
+                                        onChange={(e) => setwachtwoord(e.target.value)}
                                         required
-                                        minLength={8}
+                                        minLength={12}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Wachtwoord moet minimaal 8 tekens lang zijn.
+                                        Wachtwoord moet minimaal 12 tekens lang zijn.
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                <Form.Group controlId="formConfirmPassword" className="mb-3">
+                                <Form.Group controlId="formbevestigWachtwoord" className="mb-3">
                                     <Form.Label>🔐 Bevestig Wachtwoord</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        value={bevestigWachtwoord}
+                                        onChange={(e) => setBevestigWachtwoord(e.target.value)}
                                         required
-                                        isInvalid={password !== confirmPassword}
+                                        isInvalid={wachtwoord !== bevestigWachtwoord}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         Wachtwoorden komen niet overeen.
@@ -202,10 +202,36 @@ const PartRegister = () => {
                                     Heeft u al een{' '}
                                     <button
                                         type="button"
-                                        onClick={() => handleNavigation('/login')}
+                                        onClick={() => navigatie('/login')}
                                         className="Link"
                                     >
                                         account
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Wilt u een {' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => navigatie('/WbRegister')}
+                                        className="Link"
+                                    >
+                                        wagenpark
+                                    </button>
+                                    ?
+                                </span>
+                            </div>
+                            <div className="mt-3 text-center">
+                                <span>
+                                    Wilt u zich registreren als een{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => navigatie('/regZakelijk')}
+                                        className="Link"
+                                    >
+                                        zakelijke klant
                                     </button>
                                     ?
                                 </span>

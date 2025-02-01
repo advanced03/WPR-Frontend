@@ -5,42 +5,42 @@ import '../style/register.css';
 import axios from 'axios';
 
 const RegZak = () => {
-    const [gebruikersnaam, setGebruikersnaam] = useState('');
+    const [username, setUsername] = useState('');
     const [voornaam, setVoornaam] = useState('');
     const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
-    const [telefoonnummer, setTelefoonnummer] = useState('');
-    const [wachtwoord, setWachtwoord] = useState('');
-    const [bevestigWachtwoord, setBevestigWachtwoord] = useState('');
-    const [foutmelding, setFoutmelding] = useState(null);
-    const [succes, setSucces] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [success, setSuccess] = useState(false);
     const navigeren = useNavigate();
 
     const registreren = async (e) => {
         e.preventDefault();
-        setFoutmelding(null);
-        setSucces(false);
+        setErrorMessage(null);
+        setSuccess(false);
 
         // Controleer of wachtwoorden overeenkomen
-        if (wachtwoord !== bevestigWachtwoord) {
-            setFoutmelding('Wachtwoorden komen niet overeen.');
+        if (password !== confirmPassword) {
+            setErrorMessage('Wachtwoorden komen niet overeen.');
             return;
         }
 
         // Controleer op lege velden
-        if (!gebruikersnaam || !voornaam || !achternaam || !email || !telefoonnummer || !wachtwoord) {
-            setFoutmelding('Alle velden zijn verplicht.');
+        if (!username || !voornaam || !achternaam || !email || !phoneNumber || !password) {
+            setErrorMessage('Alle velden zijn verplicht.');
             return;
         }
 
         try {
             const gegevens = {
-                username: gebruikersnaam,
+                username,
                 voornaam,
                 achternaam,
                 email,
-                phoneNumber: telefoonnummer,
-                password: wachtwoord,
+                phoneNumber,
+                password,
             };
 
             const antwoord = await axios.post(
@@ -52,29 +52,29 @@ const RegZak = () => {
             );
 
             if (antwoord.status === 200) {
-                setSucces(true);
-                setGebruikersnaam('');
+                setSuccess(true);
+                setUsername('');
                 setVoornaam('');
                 setAchternaam('');
                 setEmail('');
-                setTelefoonnummer('');
-                setWachtwoord('');
-                setBevestigWachtwoord('');
+                setPhoneNumber('');
+                setPassword('');
+                setConfirmPassword('');
                 setTimeout(() => navigeren('/Login'), 2000);
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                setFoutmelding(error.response.data.Message || 'Er is een fout opgetreden.');
+                setErrorMessage(error.response.data.Message || 'Er is een fout opgetreden.');
             } else {
-                setFoutmelding('Kan geen verbinding maken met de server. Probeer later opnieuw.');
+                setErrorMessage('Kan geen verbinding maken met de server. Probeer later opnieuw.');
             }
         }
     };
 
-    const filterTelefoonnummer = (waarde) => {
+    const filterPhoneNumber = (waarde) => {
         const alleenCijfers = waarde.replace(/\D/g, ''); // Verwijder niet-cijferkarakters
         if (alleenCijfers.length <= 13) { // Controleer of het maximaal 13 cijfers bevat
-            setTelefoonnummer(alleenCijfers);
+            setPhoneNumber(alleenCijfers);
         }
     };    
 
@@ -89,21 +89,21 @@ const RegZak = () => {
                     <Col>
                         <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Zakelijk account registreren</h2>
-                            {foutmelding && <Alert variant="danger">{foutmelding}</Alert>}
-                            {succes && (
+                            {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                            {success && (
                                 <Alert variant="success">
                                     Registratie succesvol! U wordt doorgestuurd naar de login-pagina.
                                 </Alert>
                             )}
                             <Form onSubmit={registreren}>
-                                <Form.Group controlId="formGebruikersnaam" className="mb-3">
+                                <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
                                         placeholder="Kies een gebruikersnaam"
-                                        value={gebruikersnaam}
-                                        onChange={(e) => setGebruikersnaam(e.target.value)}
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
 
@@ -140,36 +140,36 @@ const RegZak = () => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formTelefoonnummer" className="mb-3">
+                                <Form.Group controlId="formPhoneNumber" className="mb-3">
                                     <Form.Label>📱 Telefoonnummer</Form.Label>
                                     <Form.Control
                                         required
                                         type="tel"
                                         placeholder="Voer uw telefoonnummer in"
-                                        value={telefoonnummer}
-                                        onChange={(e) => filterTelefoonnummer(e.target.value)}
+                                        value={phoneNumber}
+                                        onChange={(e) => filterPhoneNumber(e.target.value)}
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formWachtwoord" className="mb-3">
+                                <Form.Group controlId="formPassword" className="mb-3">
                                     <Form.Label>🔐 Wachtwoord</Form.Label>
                                     <Form.Control
                                         required
                                         type="password"
                                         placeholder="Kies een wachtwoord"
-                                        value={wachtwoord}
-                                        onChange={(e) => setWachtwoord(e.target.value)}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formBevestigWachtwoord" className="mb-3">
+                                <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
                                     <Form.Control
                                         required
                                         type="password"
                                         placeholder="Bevestig uw wachtwoord"
-                                        value={bevestigWachtwoord}
-                                        onChange={(e) => setBevestigWachtwoord(e.target.value)}
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </Form.Group>
 
