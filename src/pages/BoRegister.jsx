@@ -150,7 +150,11 @@ const BoRegister = () => {
                                         placeholder="Kies een wachtwoord"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
+                                        minLength={12}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Wachtwoord moet minimaal 12 tekens lang zijn.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group controlId="formConfirmPassword" className="mb-3">
                                     <Form.Label>🔐 Bevestig wachtwoord</Form.Label>
@@ -160,6 +164,7 @@ const BoRegister = () => {
                                         placeholder="Bevestig uw wachtwoord"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                        isInvalid={password !== confirmPassword}
                                     />
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop">

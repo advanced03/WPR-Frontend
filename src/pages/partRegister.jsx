@@ -74,6 +74,7 @@ const PartRegister = () => {
             }
         }
     };
+    
     // Navigatiemethdoe
     const navigatie = (pad) => {
         navigeren(pad);
@@ -212,13 +213,13 @@ const PartRegister = () => {
                             </div>
                             <div className="mt-3 text-center">
                                 <span>
-                                    Wilt u een {' '}
+                                    Wilt u zich registreren als {' '}
                                     <button
                                         type="button"
                                         onClick={() => navigatie('/WbRegister')}
                                         className="Link"
                                     >
-                                        wagenpark
+                                        wagenpark beheerder
                                     </button>
                                     ?
                                 </span>

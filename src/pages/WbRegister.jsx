@@ -23,16 +23,7 @@ const WbRegister = () => {
         setSuccess(false);
 
         try {
-            // Payload voor het inloggen
-            console.log('Payload:', {
-                voornaam,
-                achternaam,
-                gewensdeUsername,
-                email,
-                bedrijfsnaam,
-                kvkNummer,
-            });
-
+            //Endpoint die verantwoordelijk is voor het registreren.
             const response = await axios.put(
                 `https://localhost:7281/api/Account/NieuwWagenParkVerzoek`,
                 {
@@ -51,43 +42,38 @@ const WbRegister = () => {
             );
 
             // Als registratie succesvol is, sla het JWT-token op en navigeer naar login
-            if (response.status === 201) {
+            if (response.status === 200) {
                 const token = response.data.token;
                 if (token) {
                     sessionStorage.setItem('jwtToken', token);
                 }
 
                 setSuccess(true);
-                // Reset formuliervelden na succesvolle registratie
-                setgewensdeUsername('');
-                setVoornaam('');
-                setAchternaam('');
-                setEmail('');
-                setbedrijfsnaam('');
-                setkvkNummer('');
 
-                // Navigeer naar login
-                setTimeout(() => navigate('/Login'), 2000);
+                // Bericht tonen en vervolgens navigeren naar de loginpagina na 3 seconden
+                setTimeout(() => {
+                    navigate('/Login');
+                }, 3000);
             } else {
-                setTimeout(() => navigate('/Login'), 2000);
+                setError('Registratie mislukt. Probeer het later opnieuw.');
             }
-        } catch (error) {
-            // Error handling mislukte register
-            console.error('Error during registration:', error);
+            // Bij een gefaalde registratie actie laat de volgende berichten zien:
+        } catch (err) {
+            if (err.response) {
+                const serverError = err.response.data.Errors
+                    ? err.response.data.Errors.join('\n')
+                    : err.response.data.Message ||
+                    '❗ Er is een probleem opgetreden bij uw registratie. Controleer alstublieft het volgende:\n' +
+                    '🔑 Uw wachtwoord is minimaal 12 tekens lang.\n' +
+                    '🔠 Uw wachtwoord bevat minimaal één hoofdletter (A-Z).\n' +
+                    '🔢 Uw wachtwoord bevat minimaal één cijfer (0-9).\n' +
+                    '🔒 Uw wachtwoord bevat minimaal één speciaal teken.';
 
-            if (error.response) {
-                // Backendfoutmelding tonen
-                if (error.response.data && error.response.data.Errors) {
-                    setError(error.response.data.Errors.join(' '));
-                } else if (error.response.data && error.response.data.Message) {
-                    setError(error.response.data.Message);
-                } else {
-                    setError('Er is een fout opgetreden tijdens registratie.');
-                }
-            } else if (error.request) {
-                setError('Geen antwoord van de server. Probeer het later opnieuw.');
+                    setError(serverError);
+            } else if (err.request) {
+                setError('Er is geen verbinding met de server mogelijk. Controleer uw internetverbinding.');
             } else {
-                setError(error.message);
+                setError('Er is een onverwachte fout opgetreden. Probeer het later opnieuw.');
             }
         }
     };
@@ -104,10 +90,11 @@ const WbRegister = () => {
                     <Col>
                         <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Wagenpark accounts registreren</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {/* Danger als het een error is success als het geen error is*/}
+                            {error && <Alert variant="danger" className="alert">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
-                                    Registratie succesvol! U wordt doorgestuurd naar de login-pagina.
+                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
                                 </Alert>
                             )}
                             <Form onSubmit={handleRegister}>
@@ -130,7 +117,11 @@ const WbRegister = () => {
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        isInvalid={email && !/\S+@\S+\.\S+/.test(email)}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Voer een geldig e-mailadres in.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group controlId="formVoornaam" className="mb-3">
