@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
+import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbRegister = () => {
     // Usestates initializeren
@@ -53,7 +54,7 @@ const WbRegister = () => {
                 // Bericht tonen en vervolgens navigeren naar de loginpagina na 3 seconden
                 setTimeout(() => {
                     navigate('/Login');
-                }, 3000);
+                }, 10000);
             } else {
                 setError('Registratie mislukt. Probeer het later opnieuw.');
             }
@@ -69,7 +70,7 @@ const WbRegister = () => {
                     '🔢 Uw wachtwoord bevat minimaal één cijfer (0-9).\n' +
                     '🔒 Uw wachtwoord bevat minimaal één speciaal teken.';
 
-                    setError(serverError);
+                setError(serverError);
             } else if (err.request) {
                 setError('Er is geen verbinding met de server mogelijk. Controleer uw internetverbinding.');
             } else {
@@ -85,6 +86,7 @@ const WbRegister = () => {
 
     return (
         <div className="achtergrond1">
+            <WbNavbar />
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>
@@ -94,8 +96,11 @@ const WbRegister = () => {
                             {error && <Alert variant="danger" className="alert">{error}</Alert>}
                             {success && (
                                 <Alert variant="success">
-                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
+                                    👍 Uw verzoek voor het aanmaken van een nieuw wagenparkbeheerder-account is succesvol verstuurd!
+                                    Een CarAndAll backoffice-medewerker zal dit zo snel mogelijk beoordelen.
+                                    U wordt binnen 10 seconden teruggestuurd naar de loginpagina...
                                 </Alert>
+
                             )}
                             <Form onSubmit={handleRegister}>
                                 <Form.Group controlId="formUsername" className="mb-3">

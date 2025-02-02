@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, FormControl, Table, InputGroup, Modal, Container } from 'react-bootstrap';
+import { Button, FormControl, Table, InputGroup, Modal, Container, Alert } from 'react-bootstrap';
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbAccountsBeheren = () => {
@@ -8,6 +8,7 @@ const WbAccountsBeheren = () => {
     const [zoekterm, setZoekterm] = useState('');
     const [toonToevoegenModal, setToevoegenModal] = useState(false);
     const [nieuwEmail, setNieuwEmail] = useState('');
+    const [succesBericht, setSuccesBericht] = useState(null); // Nieuw: Succesbericht
 
     const fetchAccounts = async () => {
         const token = sessionStorage.getItem('jwtToken');
@@ -18,9 +19,7 @@ const WbAccountsBeheren = () => {
 
         try {
             const response = await axios.get('https://localhost:7281/api/WagenParkBeheer/GetAllWagenParkUsers', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const mappedAccounts = response.data.map((item) => ({
                 id: item.appUserId,
@@ -47,26 +46,18 @@ const WbAccountsBeheren = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-        console.log(accountId)
-        try {
-            const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
-            const payload = JSON.stringify(accountId); // Converteer accountId naar een JSON-string
 
-            await axios.delete(`${baseURL}/RemoveUserFromWagenPark`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                data: payload, // Verstuur het accountId als body van de DELETE-aanroep
+        try {
+            await axios.delete(`https://localhost:7281/api/WagenParkBeheer/RemoveUserFromWagenPark`, {
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                data: JSON.stringify(accountId),
             });
 
-            // Vernieuw de lijst van accounts na succesvolle verwijdering
-            fetchAccounts();
+            fetchAccounts(); // Vernieuw de lijst na verwijderen
         } catch (error) {
             console.error(`Fout bij verwijderen van gebruiker met ID ${accountId}:`, error.message);
         }
     };
-
 
     const voegNieuweGebruikerToe = async () => {
         const token = sessionStorage.getItem('jwtToken');
@@ -76,19 +67,17 @@ const WbAccountsBeheren = () => {
         }
 
         try {
-            const baseURL = 'https://localhost:7281/api/WagenParkBeheer';
-            const payload = { email: nieuwEmail };
+            await axios.put(
+                'https://localhost:7281/api/WagenParkBeheer/NodigGebruikerUitVoorWagenpark',
+                { email: nieuwEmail },
+                { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+            );
 
-            await axios.put(`${baseURL}/NodigGebruikerUitVoorWagenpark`, payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            setToevoegenModal(false); // Sluit de modal
-            setNieuwEmail(''); // Reset het e-mailadres
-            fetchAccounts(); // Vernieuw de lijst van accounts
+            setSuccesBericht(`Gebruiker met e-mail ${nieuwEmail} is succesvol toegevoegd!`); // Succesbericht tonen
+            setTimeout(() => setSuccesBericht(null), 3000); // Verdwijn na 3 seconden
+            setToevoegenModal(false);
+            setNieuwEmail('');
+            fetchAccounts();
         } catch (error) {
             console.error('Fout bij toevoegen van nieuwe gebruiker:', error.message);
         }
@@ -100,6 +89,8 @@ const WbAccountsBeheren = () => {
             <Container fluid className="align-items-center w-75">
                 <h1 className="pagina-titel text-center my-5">Zakelijke Huurders Beheren</h1>
 
+                {succesBericht && <Alert variant="success">{succesBericht}</Alert>} {/* Succesmelding */}
+
                 <div className="d-flex justify-content-between mb-3">
                     <InputGroup>
                         <FormControl
@@ -109,7 +100,7 @@ const WbAccountsBeheren = () => {
                             onChange={(e) => setZoekterm(e.target.value)}
                         />
                     </InputGroup>
-                    <Button variant="primary" onClick={() => setToevoegenModal(true)}>
+                    <Button className="knop" onClick={() => setToevoegenModal(true)}>
                         Gebruiker Toevoegen
                     </Button>
                 </div>
@@ -129,10 +120,7 @@ const WbAccountsBeheren = () => {
                                     <td>{account.naam}</td>
                                     <td>{account.email}</td>
                                     <td>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => verwijderAccount(account.id)}
-                                        >
+                                        <Button variant="danger" onClick={() => verwijderAccount(account.id)}>
                                             Verwijderen
                                         </Button>
                                     </td>
@@ -161,11 +149,11 @@ const WbAccountsBeheren = () => {
                     />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setToevoegenModal(false)}>
-                        Annuleren
-                    </Button>
                     <Button variant="success" onClick={voegNieuweGebruikerToe}>
                         Toevoegen
+                    </Button>
+                    <Button variant="danger" onClick={() => setToevoegenModal(false)}>
+                        Annuleren
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -174,4 +162,3 @@ const WbAccountsBeheren = () => {
 };
 
 export default WbAccountsBeheren;
-

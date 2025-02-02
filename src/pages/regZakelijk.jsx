@@ -87,7 +87,7 @@ const RegZak = () => {
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
-                            <h2 className="text-center mb-4">Registreren</h2>
+                            <h2 className="text-center mb-4">Zakelijk Registreren</h2>
                             {/* Danger als het een error is success als het geen error is*/}
                             {errorMessage && <Alert variant="danger" className="alert">{errorMessage}</Alert>}
                             {success && (
@@ -207,32 +207,6 @@ const RegZak = () => {
                                         className="Link"
                                     >
                                         account
-                                    </button>
-                                    ?
-                                </span>
-                            </div>
-                            <div className="mt-3 text-center">
-                                <span>
-                                    Wilt u zich registreren als {' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => navigatie('/WbRegister')}
-                                        className="Link"
-                                    >
-                                        wagenpark beheerder
-                                    </button>
-                                    ?
-                                </span>
-                            </div>
-                            <div className="mt-3 text-center">
-                                <span>
-                                    Wilt u zich registreren als een{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => navigatie('/regZakelijk')}
-                                        className="Link"
-                                    >
-                                        zakelijke klant
                                     </button>
                                     ?
                                 </span>

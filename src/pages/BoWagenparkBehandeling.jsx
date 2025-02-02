@@ -33,7 +33,7 @@ const BoWagenparkBehandeling = () => {
             setVerzoeken(response.data);
             setError(null);
         } catch (err) {
-            setError('Er is een fout opgetreden bij het ophalen van de wagenpark verzoeken. Wellicht zijn er nog geen verzoeken ingediend?');
+            setError('Er is een fout opgetreden bij het ophalen van de wagenparkverzoeken. Mogelijk zijn er nog geen verzoeken ingediend, of u heeft ze al allemaal behandeld. 👍👍👍');
             console.error(err);
         } finally {
             setLoading(false);
@@ -137,7 +137,7 @@ const BoWagenparkBehandeling = () => {
                             {loading ? (
                                 <p className="text-center">Wagenpark verzoeken worden geladen...</p>
                             ) : error ? (
-                                <p className="text-center text-danger">{error}</p>
+                                <p className="text-center">{error}</p>
                             ) : (
                                 <div className="tabel-container">
                                     {onbehandeldeVerzoeken.length > 0 ? (
@@ -200,11 +200,11 @@ const BoWagenparkBehandeling = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
+                <Button variant="success" onClick={handleConfirmAction}>
+                        Bevestigen
+                    </Button>
                     <Button variant="danger" onClick={handleCloseModal}>
                         Annuleren
-                    </Button>
-                    <Button variant="success" onClick={handleConfirmAction}>
-                        Bevestigen
                     </Button>
                 </Modal.Footer>
             </Modal>
