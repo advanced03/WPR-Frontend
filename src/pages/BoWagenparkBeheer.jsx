@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Container,
-    Table,
-    Button,
-    FormControl,
-    InputGroup,
-} from 'react-bootstrap';
+import { Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
 import BoNavbar from '../components/BoNavbar';
 import axios from 'axios';
 
@@ -45,6 +39,9 @@ const BOWagenparkBeheer = () => {
         fetchWagens();
     }, []);
 
+    const handleInputChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
     const handleBlockVehicle = async (vehicleId) => {
         try {
@@ -89,6 +86,78 @@ const BOWagenparkBeheer = () => {
             setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
         }
     };
+    const handleAddVehicle = async () => {
+        console.log('Voertuig toe te voegen:', form);
+        // Zorg ervoor dat 'aanschafJaar' als getal wordt doorgestuurd
+        const newVehicle = {
+            merk: form.merk,
+            kenteken: form.kenteken,
+            kleur: form.kleur,
+            type: form.type,
+            aanschafJaar: parseInt(form.aanschafJaar), // Zorg ervoor dat dit een getal is
+            soort: form.soort,
+        };
+
+        // Controleer of alle velden zijn ingevuld
+        if (!newVehicle.merk || !newVehicle.kenteken || !newVehicle.kleur || !newVehicle.type || !newVehicle.soort || isNaN(newVehicle.aanschafJaar)) {
+            setError('Alle velden moeten ingevuld zijn met geldige waarden.');
+            return;
+        }
+
+        try {
+            // Voertuig toevoegen aan de server
+            const response = await axios.post(
+                'https://localhost:7281/api/BackOfficeMedewerker/AddVoertuig',
+                newVehicle
+            );
+
+            // Voeg het nieuwe voertuig toe aan de huidige lijst zonder de lijst opnieuw op te halen
+            setVehicles(prevVehicles => [...prevVehicles, response.data]);
+
+            // Reset het formulier na toevoeging
+            setForm({
+                merk: '',
+                type: '',
+                kleur: '',
+                aanschafJaar: '',
+                kenteken: '',
+                soort: '',
+            });
+
+            // Sluit de modal
+            setModal(false);
+        } catch (error) {
+            console.error('Error adding voertuig:', error);
+            setError('Er is een fout opgetreden bij het toevoegen van het voertuig.');
+        }
+    };
+
+    const handleUpdateVehicle = async () => {
+        try {
+            const updatedVehicle = { ...form };
+            await axios.put(
+                `https://localhost:7281/api/BackOfficeMedewerker/WijzigVoertuig`,
+                updatedVehicle
+            );
+            const updatedVehicles = vehicles.map((v, idx) =>
+                idx === currentVehicle ? updatedVehicle : v
+            );
+            setVehicles(updatedVehicles);
+            setForm({
+                merk: '',
+                type: '',
+                kleur: '',
+                aanschafJaar: '',
+                kenteken: '',
+                soort: '',
+            });
+            setCurrentVehicle(null);
+            setModal(false);
+        } catch (error) {
+            console.error('Error updating voertuig:', error);
+            setError('Er is een fout opgetreden bij het bijwerken van het voertuig.');
+        }
+    };
 
     const handleDeleteVehicle = async () => {
         try {
@@ -125,6 +194,7 @@ const BOWagenparkBeheer = () => {
             setError('Er is een fout opgetreden bij het verwijderen van het voertuig.');
         }
     };
+
 
     const filteredVehicles = vehicles.filter((vehicle) => {
         const matchesSearch =
@@ -233,6 +303,98 @@ const BOWagenparkBeheer = () => {
 
 
             </Container>
+            <Modal show={toonModal} onHide={() => setModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{currentVehicle !== null ? 'Wijzig Voertuig' : 'Voertuig Toevoegen'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Merk</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="merk"
+                                value={form.merk}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Type</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="type"
+                                value={form.type}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Kleur</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="kleur"
+                                value={form.kleur}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Aanschafjaar</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="aanschafJaar"
+                                value={form.aanschafJaar}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Kenteken</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="kenteken"
+                                value={form.kenteken}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>type</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="soort"
+                                value={form.soort}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setModal(false)}>
+                        Annuleren
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
+                    >
+                        {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal for Delete Vehicle */}
+            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bevestig Verwijderen</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Weet je zeker dat je dit voertuig wilt verwijderen?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                        Annuleren
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteVehicle}>
+                        Verwijderen
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
