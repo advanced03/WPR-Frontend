@@ -54,6 +54,7 @@ const AutoVinden = () => {
         fetchUserRole();
     }, []);
 
+    //Controleer of de start en einddatum zijn ingevuld.
     const handleFetchByDate = async () => {
         if (!startDate || !endDate) {
             setError('Vul zowel een begin- als einddatum in.');
@@ -76,19 +77,21 @@ const AutoVinden = () => {
 
     const handleSelect = (type) => setSelectedType(type);
 
+    // Sla de geselecteerde wagen op en navigeer naar de huurverzoek pagina.
     const handleRentClick = (wagen) => {
         sessionStorage.setItem('selectedWagen', JSON.stringify(wagen));
         const storedWagen = JSON.parse(sessionStorage.getItem('selectedWagen'));
         console.log(storedWagen);
         navigate('/Huurverzoek');
     };
-
+    // Zoekbalk code
     const filteredWagens = wagens.filter(wagen =>
         wagen.soort === selectedType &&
         (wagen.merk.toLowerCase().includes(searchTerm.toLowerCase()) ||
             wagen.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
+    //Juiste navbar laten zien op basis van de rol.
     const renderNavbar = () => {
         switch (userRole) {
             case 'backendWorker':
@@ -107,6 +110,7 @@ const AutoVinden = () => {
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
 
+    // Simpele tekst returnen als alles nog laadt.
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -114,6 +118,7 @@ const AutoVinden = () => {
         return <div>{error}</div>;
     }
 
+    //Code van layout
     return (
         <div className="achtergrond2">
             {renderNavbar()} {/* Dynamisch de juiste navbar renderen */}
@@ -137,15 +142,15 @@ const AutoVinden = () => {
                         <Button
                             variant={selectedType === 'caravan' ? 'secondary' : 'outline-light'}
                             onClick={() => handleSelect('caravan')}
-                            disabled={userRole === 'bedrijfsKlant'} // Schakel de caravan-knop uit voor bedrijfsKlant
-                        >
+                            disabled={userRole === 'bedrijfsKlant'}
+                        > {/*Schakel de caravan-knop uit voor bedrijfsKlant*/}
                             Caravan ⛺
                         </Button>
                         <Button
                             variant={selectedType === 'camper' ? 'secondary' : 'outline-light'}
                             onClick={() => handleSelect('camper')}
-                            disabled={userRole === 'bedrijfsKlant'} // Schakel de camper-knop uit voor bedrijfsKlant
-                        >
+                            disabled={userRole === 'bedrijfsKlant'}
+                        > {/*Schakel de camper-knop uit voor bedrijfsKlant*/}
                             Camper 🚐
                         </Button>
                     </ButtonGroup>
@@ -176,8 +181,9 @@ const AutoVinden = () => {
                         <Button
                             className="knop"
                             onClick={handleFetchByDate}
+                            
                             disabled={!startDate || !endDate || startDate.trim() === '' || endDate.trim() === ''}
-                        >
+                        > {/*Knop uitschakelen als niet alles is ingevuld*/}
                             Zoek voertuigen op datum
                         </Button>
                     </div>
