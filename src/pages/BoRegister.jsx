@@ -14,7 +14,7 @@ const BoRegister = () => {
     const [typeAccount, settypeAccount] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [errorMessage, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
@@ -52,47 +52,39 @@ const BoRegister = () => {
                 }
             );
 
-            // JWT-token opslaan in sessionStorage
-            if (response.status === 201) {
+            //Als registeren succesvol is
+            if (response.status === 200) {
                 const token = response.data.token;
-                if (token) {
-                    sessionStorage.setItem('jwtToken', token);
-                }
+                if (token) sessionStorage.setItem('jwtToken', token);
 
                 setSuccess(true);
-                setUsername('');
-                settypeAccount('');
-                setEmail('');
-                setPassword('');
-                setConfirmPassword('');
 
-                // Navigeren naar de login-pagina
-                setTimeout(() => navigate('/Login'), 2000);
+                // Bericht tonen en vervolgens navigeren naar de loginpagina na 3 seconden
+                setTimeout(() => {
+                    navigate('/BoWagenparkBeheer');
+                }, 3000);                
             } else {
-                setTimeout(() => navigate('/Login'), 2000);
+                setError('Registratie mislukt. Probeer het later opnieuw.');
             }
-        } catch (error) {
-            console.error('Error during registration:', error);
+            // Bij een gefaalde registratie actie laat de volgende berichten zien:
+        } catch (err) {
+            if (err.response) {
+                const serverError = err.response.data.Errors
+                    ? err.response.data.Errors.join('\n')
+                    : err.response.data.Message ||
+                    '❗ Er is een probleem opgetreden bij uw registratie. Controleer alstublieft het volgende:\n' +
+                    '🔑 Uw wachtwoord is minimaal 12 tekens lang.\n' +
+                    '🔠 Uw wachtwoord bevat minimaal één hoofdletter (A-Z).\n' +
+                    '🔢 Uw wachtwoord bevat minimaal één cijfer (0-9).\n' +
+                    '🔒 Uw wachtwoord bevat minimaal één speciaal teken.';
 
-            // Foutmelding van de backend weergeven
-            if (error.response) {
-                if (error.response.data && error.response.data.Errors) {
-                    setError(error.response.data.Errors.join(' '));
-                } else if (error.response.data && error.response.data.Message) {
-                    setError(error.response.data.Message);
-                } else {
-                    setError('Er is een fout opgetreden tijdens registratie.');
-                }
-            } else if (error.request) {
-                setError('Geen antwoord van de server. Probeer het later opnieuw.');
+                setError(serverError);
+            } else if (err.request) {
+                setError('Er is geen verbinding met de server mogelijk. Controleer uw internetverbinding.');
             } else {
-                setError(error.message);
+                setError('Er is een onverwachte fout opgetreden. Probeer het later opnieuw.');
             }
         }
-    };
-    // Kleine methode om te navigeren.
-    const handleNavigation = (path) => {
-        navigate(path);
     };
 
     return (
@@ -103,10 +95,11 @@ const BoRegister = () => {
                     <Col>
                         <div className="RegistratieKaart p-4">
                             <h2 className="text-center mb-4">Front/Backoffice Account Registratie</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {/* Danger als het een error is success als het geen error is*/}
+                            {errorMessage && <Alert variant="danger" className="alert">{errorMessage}</Alert>}
                             {success && (
                                 <Alert variant="success">
-                                    Registratie succesvol! U wordt doorgestuurd naar de login-pagina.
+                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
                                 </Alert>
                             )}
                             <Form onSubmit={handleRegister}>
