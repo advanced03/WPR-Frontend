@@ -94,7 +94,7 @@ const BoRegister = () => {
                 <Row>
                     <Col>
                         <div className="RegistratieKaart p-4">
-                            <h2 className="text-center mb-4">Front/Backoffice Account Registratie</h2>
+                            <h2 className="text-center mb-4">Nieuwe Front/Back office accounts Registreren</h2>
                             {/* Danger als het een error is success als het geen error is*/}
                             {errorMessage && <Alert variant="danger" className="alert">{errorMessage}</Alert>}
                             {success && (
