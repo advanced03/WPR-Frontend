@@ -32,7 +32,7 @@ function BoNavbar() {
             )}
             {location.pathname !== '/BoHuurVerzoekBehandeling' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/BoHuurVerzoekBehandeling')}>
-                Huurverzoeken behandelen
+                Openstaande huurverzoeken
               </Nav.Link>
             )}
             {location.pathname !== '/BoRegister' && (
@@ -47,7 +47,7 @@ function BoNavbar() {
             )}
             {location.pathname !== '/BoWagenparkBehandeling' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/BoWagenparkBehandeling')}>
-                Wagenparkverzoek behandelen
+                Openstaande wagenparkverzoeken
               </Nav.Link>
             )}
             {location.pathname !== '/BoSchadeRegister' && (
