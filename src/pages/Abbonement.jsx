@@ -101,17 +101,17 @@ const Abbonement = () => {
         <div className="achtergrond2">
             <PartNavbar />
             <Container className="py-4">
+                <Row className="my-4">
+                    <Col>
+                        <h1 className="pagina-titel text-center mb-5">Abonnementenbeheer</h1>
+                    </Col>
+                </Row>
                 {/* Alert */}
                 {showAlert && (
                     <Alert variant="success" className="text-center">
                         Uw abonnement is succesvol gewijzigd! 🎉
                     </Alert>
                 )}
-                <Row className="my-4">
-                    <Col>
-                        <h1 className="pagina-titel text-center mb-5">Abonnementenbeheer</h1>
-                    </Col>
-                </Row>
                 <Row>
                     {abonnementen.map((abbo, index) => (
                         <Col md={6} key={index} className="mb-4">
@@ -138,19 +138,19 @@ const Abbonement = () => {
                 </div>
                 <Modal show={toonModal} onHide={() => setShowModal(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Bevestig abonnement</Modal.Title>
+                        <Modal.Title>Bevestig keuze</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            Weet u zeker dat u wilt overschakelen naar het <strong>{selectedAbonnement}</strong>-abonnement?
+                            Weet u zeker dat u wilt overschakelen naar dit abonnement?
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => setShowModal(false)}>
-                            Annuleren
-                        </Button>
                         <Button variant="success" onClick={handleAbonnementChange}>
                             Bevestigen
+                        </Button>
+                        <Button variant="danger" onClick={() => setShowModal(false)}>
+                            Annuleren
                         </Button>
                     </Modal.Footer>
                 </Modal>
