@@ -12,6 +12,16 @@ const BoHuurVerzoekBehandeling = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Functie om datums op de juiste wijze te tonen
+    const formatDatum = (datum) => {
+        const date = new Date(datum);
+        return date.toLocaleDateString('nl-NL', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
     // Functie om huurverzoeken op te halen
     const fetchVerzoeken = async () => {
         const token = sessionStorage.getItem('jwtToken');
@@ -39,10 +49,12 @@ const BoHuurVerzoekBehandeling = () => {
             setLoading(false);
         }
     };
+
     // Verzoeken ophalen
     useEffect(() => {
         fetchVerzoeken();
     }, []);
+
     // Methode om huurverzoeken goed te keuren
     const postGoedkeuren = async () => {
         const token = sessionStorage.getItem('jwtToken');
@@ -153,8 +165,8 @@ const BoHuurVerzoekBehandeling = () => {
                                                 <Card.Body>
                                                     <Card.Title><strong>Naam:</strong> {verzoek.volledigeNaam}</Card.Title>
                                                     <Card.Text><strong>Voertuig:</strong> {`${verzoek.voertuigMerk} ${verzoek.voertuigType}`}</Card.Text>
-                                                    <Card.Text><strong>Startdatum:</strong> {verzoek.startDatum}</Card.Text>
-                                                    <Card.Text><strong>Einddatum:</strong> {verzoek.eindDatum}</Card.Text>
+                                                    <Card.Text><strong>Startdatum:</strong> {formatDatum(verzoek.startDatum)}</Card.Text>
+                                                    <Card.Text><strong>Einddatum:</strong> {formatDatum(verzoek.eindDatum)}</Card.Text>
                                                     <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardReis}</Card.Text>
                                                     <Card.Text><strong>Verste bestemming:</strong> {verzoek.bestemming}</Card.Text>
                                                     <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachtteKM}</Card.Text>
@@ -193,14 +205,14 @@ const BoHuurVerzoekBehandeling = () => {
                     <Modal.Title>Bevestiging</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Weet je zeker dat je dit verzoek wilt {selectedVerzoek ? selectedVerzoek.action : ''}?
+                    Weet je zeker dat u dit verzoek wilt {selectedVerzoek ? selectedVerzoek.action : ''}?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleCloseModal}>
-                        Annuleren
-                    </Button>
                     <Button variant="success" onClick={handleConfirmAction}>
                         Bevestigen
+                    </Button>
+                    <Button variant="danger" onClick={handleCloseModal}>
+                        Annuleren
                     </Button>
                 </Modal.Footer>
             </Modal>

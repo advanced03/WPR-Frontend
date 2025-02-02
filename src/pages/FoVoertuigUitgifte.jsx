@@ -126,13 +126,13 @@ const FoVoertuigUitgifte = () => {
                                     <td>{auto.status}</td>
                                     <td>
                                         <Button
-                                            className="knop"
+                                            className="knop ms-2 my-2"
                                             onClick={() => registreerUitgifte(auto)}
                                         >
                                             ✅
                                         </Button>
                                         <Button
-                                            className="knop ms-2"
+                                            className="knop ms-2 my-2"
                                             variant="danger"
                                             onClick={() => verwijderUitgifte(auto.reserveringId)}
                                         >
