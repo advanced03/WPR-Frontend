@@ -11,7 +11,6 @@ function Profiel() {
     const [gebruiker, setGebruiker] = useState({
         username: '',
         email: '',
-        bedrijfsemailtag: '',
         bedrijfsnaam: '',
         voornaam: '',
         achternaam: '',
@@ -266,22 +265,22 @@ function Profiel() {
                                         <h3 className="mb-0">Welkom, {gebruiker.username}</h3>
                                     </Card.Header>
                                     <Card.Body>
-                                        <p className="mb-0">Email: {gebruiker.email}</p>
+                                        <p className="mb-0">📧 Email: {gebruiker.email}</p>
                                         {gebruiker.bedrijfsnaam && <p className="mb-0">Bedrijfsnaam: {gebruiker.bedrijfsnaam}</p>}
-                                        {gebruiker.bedrijfsemailtag && <p className="mb-0">Bedrijfs email tag: {gebruiker.bedrijfsemailtag}</p>}
-                                        <p className="mb-0">Telefoonnummer: {gebruiker.phoneNumber || 'N.v.t.'}</p>
-                                        <p className="mb-0">Voornaam: {gebruiker.voornaam || 'N.v.t.'}</p>
-                                        <p className="mb-0">Achternaam: {gebruiker.achternaam || 'N.v.t.'}</p>
+                                        <p className="mb-0">📞 Telefoonnummer: {gebruiker.phoneNumber || 'N.v.t.'}</p>
+                                        <p className="mb-0">📛 Voornaam: {gebruiker.voornaam || 'N.v.t.'}</p>
+                                        <p className="mb-0">🪪 Achternaam: {gebruiker.achternaam || 'N.v.t.'}</p>
                                     </Card.Body>
+
                                 </Card>
                             </Col>
                         </Row>
                         <div className="d-flex justify-content-center mt-5">
                             <Button className="knop mx-3" size="lg" onClick={() => setEditModus(true)}>
-                                Wijzig profielgegevens
+                                Wijzig profielgegevens 🖊️
                             </Button>
                             <Button className="knop mx-3" size="lg" onClick={() => setPasswordModus(true)}>
-                                Wijzig wachtwoord
+                                Wijzig wachtwoord 🔑
                             </Button>
                         </div>
                     </>
