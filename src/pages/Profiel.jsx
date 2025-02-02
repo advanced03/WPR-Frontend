@@ -8,8 +8,6 @@ import PartNavbar from "../components/PartNavbar.jsx";
 import WbNavbar from '../components/WbNavbar';
 
 function Profiel() {
-    const navigate = useNavigate();
-
     const [gebruiker, setGebruiker] = useState({
         username: '',
         email: '',
@@ -103,6 +101,7 @@ function Profiel() {
         return <div>Laden...</div>;
     }
 
+    // Juiste navigatie balk laten zien op basis van de gebruikersrol 
     const renderNavbar = () => {
         switch (role) {
             case 'backendWorker':
@@ -264,7 +263,7 @@ function Profiel() {
                             <Col md={8}>
                                 <Card className="border-0 shadow rounded-lg mt-5">
                                     <Card.Header className="bg-custom text-white border-bottom">
-                                        <h3 className="mb-0">{gebruiker.username}</h3>
+                                        <h3 className="mb-0">Welkom, {gebruiker.username}</h3>
                                     </Card.Header>
                                     <Card.Body>
                                         <p className="mb-0">Email: {gebruiker.email}</p>

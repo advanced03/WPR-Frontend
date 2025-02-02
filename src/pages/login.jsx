@@ -6,90 +6,70 @@ import '../style/login.css';
 import '../style/universeel.css';
 
 const Login = () => {
-    //States initialiseren
-    const [username, setUsername] = useState('');  
-    const [password, setPassword] = useState(''); 
+    // States initialiseren
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);  
+    const [error, setError] = useState(null);
+    const [succes, setSucces] = useState(null);
     const navigate = useNavigate();
 
     // Inlogfunctie die gegevens naar de server verstuurt
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(null);  // Reset foutmelding
+        setError(null);
+        setSucces(null); // Reset vorige success message
 
         try {
             const response = await axios.post(
                 'https://localhost:7281/api/account/Login',
                 { username, password },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
+                { headers: { 'Content-Type': 'application/json' } }
             );
 
-            if (response.status === 200) {
-                // Sla het JWT-token op in sessionStorage
-                const token = response.data.token;
-                if (token) {
-                    sessionStorage.setItem('jwtToken', token);
-                }
-               
-                console.log('Login successful:', response.data);
-                fetchUserData()
-                // Navigeer naar de Home-pagina
-                
-            } else {
-                throw new Error('Inloggen mislukt. Controleer uw inloggegevens.');
-            }
+            setSucces("Succesvol ingelogd! 🎉 Je wordt doorgestuurd...");
+            sessionStorage.setItem('jwtToken', response.data.token);
+            fetchUserData();
+
         } catch (error) {
             console.error('Error logging in:', error);
-            if (error.response && error.response.data.message) {
-                setError(error.response.data.message);  // Toon foutmelding van de server
-            } else {
-                setError('Er is een fout opgetreden tijdens het inloggen.');  // Algemene foutmelding
-            }
+            setError('Inloggen mislukt. Controleer uw gegevens.');
         }
     };
+
+
     const fetchUserData = async () => {
         setLoading(true);
         const token = sessionStorage.getItem('jwtToken');
         if (!token) return; // Controleer of JWT-token bestaat
-
-        
+    
         try {
             const response = await axios.get('https://localhost:7281/api/account/getUserData', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log('API response:', response.data);
-
-            if (response.data.role == "particuliereKlant") {
-                navigate("/Home");
-            }
-
-            if (response.data.role == "wagenparkBeheerder") {
-                navigate("/wbAccountsBeheren");
-            }
-
-            if (response.data.role == "bedrijfsKlant") {
-                navigate("/Home");
-            }
-
-            if (response.data.role == "backendWorker") {
-                navigate("/BoWagenparkBeheer");
-            }
-            if (response.data.role == "frontendWorker") {
-                navigate("/BowagenparkBeheer");
-            }
+    
+            setTimeout(() => {
+                if (response.data.role === "particuliereKlant") {
+                    navigate("/Home");
+                } else if (response.data.role === "wagenparkBeheerder") {
+                    navigate("/wbAccountsBeheren");
+                } else if (response.data.role === "bedrijfsKlant") {
+                    navigate("/Home");
+                } else if (response.data.role === "backendWorker") {
+                    navigate("/BoWagenparkBeheer");
+                } else if (response.data.role === "frontendWorker") {
+                    navigate("/BowagenparkBeheer");
+                }
+            }, 1000); // Vertraging van 1 seconde zodat het successbericht te zien is.
+    
         } catch (error) {
             console.error('Fout bij ophalen gegevens:', error.response?.data || error.message);
         } finally {
             setLoading(false); // Zorg ervoor dat dit altijd wordt uitgevoerd
         }
-
     };
-
+    
     // Functie voor navigeren naar andere pagina's
     const handleNavigation = (path) => {
         navigate(path);
@@ -101,8 +81,15 @@ const Login = () => {
                 <Row className="justify-content-center">
                     <Col>
                         <div className="LoginKaart">
+                            {/* Alert voor zowel succes als error */}
+                            {(succes || error) && (
+                                <Alert variant={succes ? "success" : "danger"}>
+                                    {succes || error}
+                                </Alert>
+                            )}
+
                             <h2 className="text-center mb-4">Inloggen</h2>
-                            {error && <Alert variant="danger">{error}</Alert>}  {/*Toon foutmelding als er is*/}
+
                             <Form onSubmit={handleLogin}>
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>
@@ -110,7 +97,7 @@ const Login = () => {
                                         type="text"
                                         placeholder="Voer uw gebruikersnaam in"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)}  // Update gebruikersnaam
+                                        onChange={(e) => setUsername(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mb-3">
@@ -119,13 +106,14 @@ const Login = () => {
                                         type="password"
                                         placeholder="Voer uw wachtwoord in"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}  // Update wachtwoord
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Button type="submit" className="w-100 knop" disabled={!username || !password}>
                                     Inloggen 🔓
                                 </Button>
                             </Form>
+
                             <div className="mt-3 text-center">
                                 <span>
                                     Heeft u nog geen{' '}

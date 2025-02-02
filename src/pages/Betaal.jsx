@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 
 const Betalen = () => {
+  // States initialiseren
   const [bedrag, setBedrag] = useState('');
   const [kaartNummer, setKaartNummer] = useState('');
   const [vervalDatum, setVervalDatum] = useState('');

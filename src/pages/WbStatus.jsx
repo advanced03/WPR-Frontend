@@ -3,10 +3,10 @@ import { Container, Table, Dropdown, DropdownButton, InputGroup, FormControl } f
 import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbStatus = () => {
-  const [vehicles, setVehicles] = useState([]); // Lege lijst van voertuigen
-
-  const [statusFilter, setStatusFilter] = useState('Alle'); // Filterstatus
-  const [searchQuery, setSearchQuery] = useState(''); // Zoekopdracht
+  // States initialiseren voor voertuigen filter status zoekopdracht etc.
+  const [vehicles, setVehicles] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('Alle');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Verandert het filter op basis van de geselecteerde status
   const handleFilterChange = (status) => {
