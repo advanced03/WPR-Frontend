@@ -33,7 +33,7 @@ const BoHuurVerzoekBehandeling = () => {
             setVerzoeken(response.data);
             setError(null);
         } catch (err) {
-            setError('Er is een fout opgetreden bij het ophalen van de huurverzoeken. ❌ Wellicht heeft u alle verzoeken al behandeld? 🤔');
+            setError('Er zijn geen huurverzoeken gevonden ❌ Wellicht heeft u alle verzoeken al behandeld? 🤔');
             console.error(err);
         } finally {
             setLoading(false);
@@ -144,7 +144,7 @@ const BoHuurVerzoekBehandeling = () => {
                             {loading ? (
                                 <p className="text-center">Huurverzoeken worden geladen...</p>
                             ) : error ? (
-                                <p className="text-center text-danger">{error}</p>
+                                <p className="text-center">{error}</p>
                             ) : (
                                 <div className="tabel-container">
                                     {onbehandeldeVerzoeken.length > 0 ? (
