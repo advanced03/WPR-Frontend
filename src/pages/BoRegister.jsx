@@ -99,7 +99,7 @@ const BoRegister = () => {
                             {errorMessage && <Alert variant="danger" className="alert">{errorMessage}</Alert>}
                             {success && (
                                 <Alert variant="success">
-                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de loginpagina.
+                                    👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de wagenparkbeheer pagina.
                                 </Alert>
                             )}
                             <Form onSubmit={handleRegister}>
