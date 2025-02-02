@@ -53,9 +53,10 @@ const Home = () => {
           <Col xs={12} md={6}>
             <h3>Waarom kiezen voor Car And All? 🤔</h3>
             <ul className="list-unstyled">
-              <li>✔ Groot aanbod aan voertuigen</li>
+              <li>✔ Groot aanbod aan verschillende type voertuigen</li>
               <li>✔ Flexibele en transparante voorwaarden</li>
               <li>✔ Altijd hulp van onze vriendelijke klantenservice</li>
+              <li>✔ Scherpe tarieven</li>
             </ul>
           </Col>
         </Row>

@@ -207,7 +207,7 @@ const AutoVinden = () => {
                                         <p>Kenteken: {wagen.kenteken}</p>
                                         <p>Aanschafjaar: {wagen.aanschafJaar}</p>
                                         <Button className="knop mt-3" onClick={() => handleRentClick(wagen)}>
-                                            Huren 🚗
+                                            Huur dit voertuig 🚗
                                         </Button>
                                     </Card.Body>
                                 </Card>

@@ -116,13 +116,13 @@ const HuurVerzoek = () => {
                             className="car-image" />
                         <Card.Body className="p-3">
                             <Card.Text className="text-center gekozen-auto mb-5 p-2">
-                                <strong>Gekozen Auto:</strong> {wagen.merk} {wagen.type}
+                                U heeft de <strong> {wagen.merk} {wagen.type} </strong>gekozen!
                             </Card.Text>
 
                             <Card.Title className="mb-3 p-2"><strong>Uw persoonlijke informatie</strong></Card.Title>
                             <Form className="p-2" onSubmit={handleSubmit}>
                                 <Form.Group controlId="formstartDatum" className="p-2">
-                                    <Form.Label>Uw startdatum:</Form.Label>
+                                    <Form.Label>📅 Vanaf:</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="startDatum"
@@ -131,7 +131,7 @@ const HuurVerzoek = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formEinddatum" className="p-2">
-                                    <Form.Label>Uw einddatum</Form.Label>
+                                    <Form.Label>📅 Tot:</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="eindDatum"
@@ -158,7 +158,7 @@ const HuurVerzoek = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formKilometers" className="p-2">
-                                    <Form.Label>📏 Verwachting aantal afgelegde KM</Form.Label>
+                                    <Form.Label>📏 Verwachting aantal afgelegde kilometers</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="verwachtteKM"
@@ -168,7 +168,7 @@ const HuurVerzoek = () => {
                                     />
                                 </Form.Group>
                                 <div className="d-flex justify-content-center p-2">
-                                    <Button className='knop' type="submit">👍 Huurverzoek indienen</Button>
+                                    <Button className='knop' type="submit">👍 Huurverzoek afronden</Button>
                                 </div>
                             </Form>
                         </Card.Body>

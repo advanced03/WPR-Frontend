@@ -64,7 +64,7 @@ const Abbonement = () => {
         }
     };
 
-        // Methode om de abbonement te kunnen wijzigen, met behulp van de JWT token van de gebruiker.
+    // Methode om de abbonement te kunnen wijzigen, met behulp van de JWT token van de gebruiker.
     const handleAbonnementChange = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -126,14 +126,14 @@ const Abbonement = () => {
                                             setShowModal(true);
                                         }}
                                     >
-                                        Kies dit abonnement
+                                        Kies dit abonnement 💸
                                     </Button>
                                 </Card.Body>
                             </Card>
                         </Col>
                     ))}
                 </Row>
-                <div className="text-center my-4 p-4 huren-box">
+                <div className="text-center my-5 p-4 huren-box">
                     <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
                 </div>
                 <Modal show={toonModal} onHide={() => setShowModal(false)}>
@@ -155,6 +155,28 @@ const Abbonement = () => {
                     </Modal.Footer>
                 </Modal>
             </Container>
+
+            <Container className="home-inhoud text-center p-5 my-3">
+                <Row>
+                    <Col xs={12} md={6}>
+                        <h3>Waarom kiezen voor een abonnement bij Car And All? 🤔</h3>
+                        <p>
+                            Bij Car And All bieden we flexibele abonnementsopties die perfect aansluiten op jouw behoeften. Kies voor een abonnement en geniet van het gemak van een vast bedrag per maand, zodat je je geen zorgen hoeft te maken over onverwachte kosten.
+                            We bieden momenteel vier opties aan, dus er is altijd een keuze die bij je past!
+                        </p>
+                    </Col>
+
+                    <Col xs={12} md={6}>
+                        <h4>Waarom een abonnement handiger is:</h4>
+                        <ul className="list-unstyled">
+                            <li>✔ Vaste maandprijs zonder verrassingen</li>
+                            <li>✔ Flexibele keuze tussen verschillende pakketten</li>
+                            <li>✔ Altijd toegang tot het nieuwste wagenpark van CarAndAll</li>
+                        </ul>
+                    </Col>
+                </Row>
+            </Container>
+
         </div>
     );
 };
