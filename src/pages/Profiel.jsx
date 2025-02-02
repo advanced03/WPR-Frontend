@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, FormGroup, FormControl, FormLabel, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import BoNavbar from '../components/BoNavbar';
 import FoNavbar from '../components/FoNavbar';
@@ -19,13 +19,15 @@ function Profiel() {
     });
 
     const [editModus, setEditModus] = useState(false);
-    const [passwordModus, setPasswordModus] = useState(false); // Nieuw: voor wachtwoord wijziging
+    const [passwordModus, setPasswordModus] = useState(false);
     const [loading, setLoading] = useState(true);
     const [role, setRole] = useState('');
 
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const [alert, setAlert] = useState({ show: false, message: '', variant: '' });
 
     const fetchUserData = async () => {
         const token = sessionStorage.getItem('jwtToken');
@@ -48,6 +50,13 @@ function Profiel() {
         fetchUserData();
     }, []);
 
+    const showAlert = (message, variant) => {
+        setAlert({ show: true, message, variant });
+        setTimeout(() => {
+            setAlert({ show: false, message: '', variant: '' });
+        }, 3000);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = sessionStorage.getItem('jwtToken');
@@ -65,16 +74,17 @@ function Profiel() {
             setGebruiker(response.data);
             setEditModus(false);
             fetchUserData();
+            showAlert('Profielgegevens succesvol bijgewerkt!', 'success');
         } catch (error) {
             console.error('Fout bij opslaan gegevens:', error);
+            showAlert('Er is een fout opgetreden bij het opslaan.', 'danger');
         }
     };
 
-    // Functie om het wachtwoord te wijzigen
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {
-            alert("Nieuwe wachtwoorden komen niet overeen.");
+            showAlert('Nieuwe wachtwoorden komen niet overeen.', 'warning');
             return;
         }
 
@@ -89,10 +99,11 @@ function Profiel() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            setPasswordModus(false); // Sluit de wachtwoordwijzigingsmodus af
-            alert("Wachtwoord gewijzigd!");
+            setPasswordModus(false);
+            showAlert('Wachtwoord succesvol gewijzigd!', 'success');
         } catch (error) {
             console.error('Fout bij het wijzigen van het wachtwoord:', error);
+            showAlert('Er is een fout opgetreden bij het wijzigen van het wachtwoord.', 'danger');
         }
     };
 
@@ -100,7 +111,6 @@ function Profiel() {
         return <div>Laden...</div>;
     }
 
-    // Juiste navigatie balk laten zien op basis van de gebruikersrol 
     const renderNavbar = () => {
         switch (role) {
             case 'backendWorker':
@@ -122,6 +132,7 @@ function Profiel() {
             {renderNavbar()}
             <h1 className="pagina-titel text-center mt-5">Mijn profiel</h1>
             <Container className="py-5">
+                {alert.show && <Alert variant={alert.variant} className="text-center">{alert.message}</Alert>}
                 {editModus ? (
                     <Form onSubmit={handleSubmit}>
                         <Row className="justify-content-center">
@@ -271,7 +282,6 @@ function Profiel() {
                                         <p className="mb-0">📛 Voornaam: {gebruiker.voornaam || 'N.v.t.'}</p>
                                         <p className="mb-0">🪪 Achternaam: {gebruiker.achternaam || 'N.v.t.'}</p>
                                     </Card.Body>
-
                                 </Card>
                             </Col>
                         </Row>
