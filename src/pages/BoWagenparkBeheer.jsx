@@ -131,10 +131,13 @@ const BOWagenparkBeheer = () => {
             vehicle.merk.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.kleur.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            vehicle.kenteken.toLowerCase().includes(searchQuery.toLowerCase());
-
+            vehicle.kenteken.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            vehicle.aanschafJaar.toString().includes(searchQuery) ||
+            vehicle.soort.toString().includes(searchQuery);
+    
         return matchesSearch;
     });
+    
 
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;

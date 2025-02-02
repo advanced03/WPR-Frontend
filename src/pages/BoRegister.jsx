@@ -172,19 +172,6 @@ const BoRegister = () => {
                                 </Button>
 
                             </Form>
-                            <div className="mt-3 text-center">
-                                <span>
-                                    Heeft u al een{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => handleNavigation('/login')}
-                                        className="Link"
-                                    >
-                                        account
-                                    </button>
-                                    ?
-                                </span>
-                            </div>
                         </div>
                     </Col>
                 </Row>

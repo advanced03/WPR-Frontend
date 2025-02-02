@@ -42,7 +42,12 @@ function BoNavbar() {
             )}
             {location.pathname !== '/BoWagenparkbeheer' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/BoWagenparkbeheer')}>
-                Wagenpark Beheren
+                Eigen Wagenpark Beheren
+              </Nav.Link>
+            )}
+            {location.pathname !== '/BoWagenparkBehandeling' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/BoWagenparkBehandeling')}>
+                Wagenparkverzoek behandelen
               </Nav.Link>
             )}
             {location.pathname !== '/BoSchadeRegister' && (

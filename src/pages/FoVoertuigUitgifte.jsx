@@ -4,7 +4,6 @@ import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootst
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigUitgifte = () => {
-    // State voor auto's, zoekterm, geselecteerde auto, modaal, opmerkingen en foutmeldingen
     const [autos, zetAutos] = useState([]);
     const [zoekTerm, zetZoekTerm] = useState("");
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
@@ -12,14 +11,11 @@ const FoVoertuigUitgifte = () => {
     const [opmerking, zetOpmerking] = useState("");
     const [laadFout, zetLaadFout] = useState(null);
 
-    // Haal reserveringen op bij laden van de component
     const haalReserveringenOp = async () => {
         try {
-            const respons = await axios.get(
-                "https://localhost:7281/api/Reserveringen/GetAllReserveringen"
-            );
+            const respons = await axios.get("https://localhost:7281/api/Reserveringen/GetAllReserveringen");
             zetAutos(respons.data);
-            zetLaadFout(null); // Reset foutmelding
+            zetLaadFout(null); 
         } catch (error) {
             zetLaadFout("Kon de reserveringen niet ophalen. Controleer de API.");
             console.error(error);
@@ -30,13 +26,11 @@ const FoVoertuigUitgifte = () => {
         haalReserveringenOp();
     }, []);
 
-    // Open het modaal om een uitgifte te registreren
     const registreerUitgifte = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
 
-    // Registreer de uitgifte van een auto en werk de lijst bij
     const opslaanUitgifte = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -50,7 +44,7 @@ const FoVoertuigUitgifte = () => {
                 { id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            haalReserveringenOp(); // Ververs de data
+            haalReserveringenOp(); 
         } catch (error) {
             console.error("Fout bij het registreren van de uitgifte:", error);
         } finally {
@@ -60,34 +54,35 @@ const FoVoertuigUitgifte = () => {
         }
     };
 
-    // Annuleer de uitgifte van een auto
     const verwijderUitgifte = async (reserveringId) => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
-
         try {
             await axios.delete(
                 `https://localhost:7281/api/Reserveringen/VerwijderReservering/${reserveringId}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
-            haalReserveringenOp(); // Ververs de data
+            haalReserveringenOp(); 
         } catch (error) {
             console.error("Fout bij het verwijderen van de uitgifte:", error);
         }
     };
 
-    // Filter de auto's op zoekterm
-    const gefilterdeAutos = autos.filter((auto) =>
-        Object.values(auto)
-            .join(" ")
-            .toLowerCase()
-            .includes(zoekTerm.toLowerCase())
-    );
+    const gefilterdeAutos = autos.filter((auto) => {
+        const normalizedSearchQuery = zoekTerm.trim().toLowerCase();
+        const matchesSearch =
+            auto.fullname.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.bestemming.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.aardReis.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.status.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.reserveringId.toString().includes(normalizedSearchQuery) ||
+            auto.verwachtteKM.toString().includes(normalizedSearchQuery);
+
+        return matchesSearch;
+    });
 
     return (
         <div className='achtergrond2'>
@@ -95,7 +90,6 @@ const FoVoertuigUitgifte = () => {
             <Container fluid>
                 <h1 className="pagina-titel text-center my-5">Beschikbare Auto's voor Uitgifte</h1>
 
-                {/* Zoekbalk */}
                 <FormControl
                     type="text"
                     placeholder="Zoek op naam, bestemming of andere velden..."
@@ -151,7 +145,6 @@ const FoVoertuigUitgifte = () => {
                     </Table>
                 </div>
 
-                {/* Modal layout ui*/}
                 <Modal show={toonModal} onHide={() => setModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Registreer Uitgifte</Modal.Title>

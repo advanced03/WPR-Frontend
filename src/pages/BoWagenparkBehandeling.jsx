@@ -33,7 +33,7 @@ const BoWagenparkBehandeling = () => {
             setVerzoeken(response.data);
             setError(null);
         } catch (err) {
-            setError('Er is een fout opgetreden bij het ophalen van de wagenpark verzoeken.');
+            setError('Er is een fout opgetreden bij het ophalen van de wagenpark verzoeken. Wellicht zijn er nog geen verzoeken ingediend?');
             console.error(err);
         } finally {
             setLoading(false);
@@ -129,7 +129,7 @@ const BoWagenparkBehandeling = () => {
     return (
         <div className="achtergrond2">
             <BoNavbar />
-            <h1 className="text-center pagina-titel my-3">Openstaande wagenpark verzoeken</h1>
+            <h1 className="text-center pagina-titel mt-5 mb-3">Openstaande wagenpark verzoeken</h1>
             <Container fluid className="d-flex justify-content-center align-items-center">
                 <Col md={8}>
                     <Card className="huren-box p-3 mt-5">

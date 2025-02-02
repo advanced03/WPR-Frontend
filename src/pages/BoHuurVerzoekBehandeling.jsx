@@ -33,7 +33,7 @@ const BoHuurVerzoekBehandeling = () => {
             setVerzoeken(response.data);
             setError(null);
         } catch (err) {
-            setError('Er is een fout opgetreden bij het ophalen van de huurverzoeken.');
+            setError('Er is een fout opgetreden bij het ophalen van de huurverzoeken. ❌ Wellicht heeft u alle verzoeken al behandeld? 🤔');
             console.error(err);
         } finally {
             setLoading(false);

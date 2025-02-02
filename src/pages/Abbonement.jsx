@@ -176,7 +176,6 @@ const Abbonement = () => {
                     </Col>
                 </Row>
             </Container>
-
         </div>
     );
 };

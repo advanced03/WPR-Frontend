@@ -4,6 +4,7 @@ import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootst
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigInname = () => {
+    // Status initialiseren
     const [autos, zetAutos] = useState([]);
     const [zoekTerm, zetZoekTerm] = useState('');
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
@@ -93,12 +94,19 @@ const FoVoertuigInname = () => {
         }
     };
 
-    const gefilterdeAutos = autos.filter((auto) =>
-        Object.values(auto)
-            .join(' ')
-            .toLowerCase()
-            .includes(zoekTerm.toLowerCase())
-    );
+    const gefilterdeAutos = autos.filter((auto) => {
+        const normalizedSearchQuery = zoekTerm.trim().toLowerCase(); // Verwijder spaties en zet om naar lowercase
+
+        const matchesSearch =
+            auto.fullname.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.bestemming.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.aardReis.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.status.toLowerCase().includes(normalizedSearchQuery) ||
+            auto.reserveringId.toString().includes(normalizedSearchQuery) ||  // Zoek ook op reservering ID
+            auto.verwachtteKM.toString().includes(normalizedSearchQuery); // Zoek ook op verwachte kilometers
+
+        return matchesSearch;
+    });
 
     return (
         <div className='achtergrond2'>

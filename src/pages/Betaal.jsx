@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import BoNavbar from '../components/BoNavbar';
+import FoNavbar from '../components/FoNavbar';
+import PartNavbar from "../components/PartNavbar.jsx";
+import WbNavbar from '../components/WbNavbar';
 
 const Betalen = () => {
   // States initialiseren
+  const [role, setRole] = useState('');
   const [bedrag, setBedrag] = useState('');
   const [kaartNummer, setKaartNummer] = useState('');
   const [vervalDatum, setVervalDatum] = useState('');
@@ -22,13 +27,32 @@ const Betalen = () => {
     alert('Betaling verzonden!');
   };
 
+
+  // Juiste navigatie balk laten zien op basis van de gebruikersrol 
+  const renderNavbar = () => {
+    switch (role) {
+      case 'backendWorker':
+        return <BoNavbar />;
+      case 'wagenparkBeheerder':
+        return <WbNavbar />;
+      case 'particuliereKlant':
+      case 'bedrijfsKlant':
+        return <PartNavbar />;
+      case 'frontendWorker':
+        return <FoNavbar />;
+      default:
+        return <PartNavbar />;
+    }
+  };
+
   return (
-    <div className="achtergrond2" style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Container>
-        <Row className="justify-content-center">
+    <div className="achtergrond2">
+      {renderNavbar()}
+      <Container className="min-vh-100">
+        <Row className="justify-content-center d-flex align-items-center" style={{ minHeight: '100vh' }}>
           <Col md={6}>
-            <Card>
-              <Card.Header className="text-center">
+            <Card className="text-center">
+              <Card.Header className="bg-custom text-white border-bottom">
                 <h4>Betalingspagina (Kredietkaart)</h4>
               </Card.Header>
               <Card.Body>
@@ -105,6 +129,7 @@ const Betalen = () => {
           </Row>
         )}
       </Container>
+
     </div>
   );
 };
