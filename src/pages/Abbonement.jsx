@@ -1,16 +1,20 @@
+//Import statements
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Modal, Alert } from "react-bootstrap";
 import PartNavbar from "../components/PartNavbar.jsx";
 import axios from 'axios';
 
+//Abbonement klasse
 const Abbonement = () => {
+    //States initialiseren.
     const [toonModal, setShowModal] = useState(false);
     const [selectedAbonnement, setSelectedAbonnement] = useState(null);
     const [currentAbonnement, setCurrentAbonnement] = useState(null);
     const [abonnementen, setAbonnementen] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
 
-    // Haal alle abonnementen op bij component-mount
     useEffect(() => {
+        // Beschikbare abbonementen ophalen via de juiste endpoint, als er een error is zal deze in de console getoond worden.
         const fetchAbonnementen = async () => {
             try {
                 const response = await axios.get("https://localhost:7281/api/Abonnementen/GetUserAbonnementen");
@@ -22,8 +26,6 @@ const Abbonement = () => {
                         description: `Abonnement type ${abbo.naam} met een prijs van €${abbo.prijs}.`,
                     }));
                     setAbonnementen(formattedAbonnementen);
-
-                    // Zorg ervoor dat het huidige abonnement wordt opgehaald na het laden van de lijst
                     getCurrentAbonnement(formattedAbonnementen);
                 } else {
                     console.error("Er is iets misgegaan bij het ophalen van de abonnementen.");
@@ -32,10 +34,10 @@ const Abbonement = () => {
                 console.error("Fout bij het ophalen van de abonnementen:", error);
             }
         };
-
         fetchAbonnementen();
     }, []);
 
+    // Haal het huidige abbonement van de gebruiker op. Toon error als deze niet is gevoenden.
     const getCurrentAbonnement = async (loadedAbonnementen) => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -44,26 +46,16 @@ const Abbonement = () => {
         }
 
         try {
-            const response = await axios.get(
-                "https://localhost:7281/api/Abonnementen/GetCurrentAbonnement",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-
+            const response = await axios.get("https://localhost:7281/api/Abonnementen/GetCurrentAbonnement", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
             if (response.status === 200) {
-                const currentAbboId = response.data.abonnementId; // Het huidige abonnement-ID dat wordt geretourneerd
+                const currentAbboId = response.data.abonnementId;
                 const selected = loadedAbonnementen.find((abbo) => abbo.id === currentAbboId);
-
-                if (selected) {
-                    setCurrentAbonnement(selected.type); // Stel de abonnementsnaam in
-                } else {
-                    console.warn("Geen overeenkomstig abonnement gevonden.");
-                    setCurrentAbonnement("Onbekend abonnement");
-                }
+                setCurrentAbonnement(selected ? selected.type : "Onbekend abonnement");
             } else {
                 console.error("Er is iets misgegaan bij het ophalen van het huidige abonnement.");
             }
@@ -72,6 +64,7 @@ const Abbonement = () => {
         }
     };
 
+        // Methode om de abbonement te kunnen wijzigen, met behulp van de JWT token van de gebruiker.
     const handleAbonnementChange = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -88,10 +81,13 @@ const Abbonement = () => {
                 },
             });
 
+            //Verberg modal en toon alert als het succesvol is gewijzigd.
             if (response.status === 200) {
                 const selected = abonnementen.find((abbo) => abbo.id === selectedAbonnement);
                 setCurrentAbonnement(selected.type);
                 setShowModal(false);
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
             } else {
                 console.error("Er is iets misgegaan bij het wijzigen van het abonnement.");
             }
@@ -100,16 +96,22 @@ const Abbonement = () => {
         }
     };
 
+    // Code voor layout etc.
     return (
         <div className="achtergrond2">
             <PartNavbar />
             <Container className="py-4">
+                {/* Alert */}
+                {showAlert && (
+                    <Alert variant="success" className="text-center">
+                        Uw abonnement is succesvol gewijzigd! 🎉
+                    </Alert>
+                )}
                 <Row className="my-4">
                     <Col>
                         <h1 className="pagina-titel text-center mb-5">Abonnementenbeheer</h1>
                     </Col>
                 </Row>
-
                 <Row>
                     {abonnementen.map((abbo, index) => (
                         <Col md={6} key={index} className="mb-4">
@@ -121,7 +123,7 @@ const Abbonement = () => {
                                         className="knop"
                                         onClick={() => {
                                             setSelectedAbonnement(abbo.id);
-                                            setShowModal(true); // Correcte functie
+                                            setShowModal(true);
                                         }}
                                     >
                                         Kies dit abonnement
@@ -131,11 +133,9 @@ const Abbonement = () => {
                         </Col>
                     ))}
                 </Row>
-
                 <div className="text-center my-4 p-4 huren-box">
                     <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
                 </div>
-
                 <Modal show={toonModal} onHide={() => setShowModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Bevestig abonnement</Modal.Title>

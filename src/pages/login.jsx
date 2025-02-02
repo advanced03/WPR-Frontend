@@ -6,8 +6,9 @@ import '../style/login.css';
 import '../style/universeel.css';
 
 const Login = () => {
-    const [username, setUsername] = useState('');  // Gebruikersnaam state
-    const [password, setPassword] = useState('');  // Wachtwoord state
+    //States initialiseren
+    const [username, setUsername] = useState('');  
+    const [password, setPassword] = useState(''); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);  
     const navigate = useNavigate();
