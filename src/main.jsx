@@ -25,6 +25,7 @@ import Betaal from './pages/Betaal.jsx';
 import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
 import Abbonement from './pages/Abbonement.jsx';
 import BoWagenparkBehandeling from './pages/BoWagenparkBehandeling.jsx';
+import PendingVerzoek from './pages/PendingVerzoek.jsx';
 
 /* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
                 <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
                 <Route path="/BoWagenparkBehandeling" element={<BoWagenparkBehandeling />} />
                 <Route path="/Abbonement" element={<Abbonement />} />
+                <Route path="/PendingVerzoek" element={<PendingVerzoek />} />
             </Routes>
         </Router>
     );

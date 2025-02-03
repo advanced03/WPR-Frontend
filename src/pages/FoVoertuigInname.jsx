@@ -26,24 +26,6 @@ const FoVoertuigInname = () => {
         }
     };
 
-    const verwijderUitgifte = async (verzoekId) => {
-        const token = sessionStorage.getItem('jwtToken');
-        if (!token) {
-            console.error('JWT-token ontbreekt in sessionStorage.');
-            return;
-        }
-        try {
-            await axios.put(
-                'https://localhost:7281/api/FrontOfficeMedewerker/NeemIn',
-                { id: verzoekId },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            haalReserveringenOp(); // Ververs de data
-        } catch (error) {
-            console.error("Fout bij het innemen van het voertuig:", error);
-        }
-    };
-
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
