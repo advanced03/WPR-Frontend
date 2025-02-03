@@ -19,18 +19,22 @@ const Login = () => {
         e.preventDefault();
         setError(null);
         setSucces(null); // Reset vorige success message
-
+    
         try {
             const response = await axios.post(
                 'https://localhost:7281/api/account/Login',
                 { username, password },
                 { headers: { 'Content-Type': 'application/json' } }
             );
-
+    
             setSucces("Succesvol ingelogd! 🎉 Je wordt doorgestuurd...");
             sessionStorage.setItem('jwtToken', response.data.token);
+    
+            // Print de JWT-token in de console
+            console.log("JWT Token:", response.data.token);
+    
             fetchUserData();
-
+    
         } catch (error) {
             console.error('Error logging in:', error);
             setError('Inloggen mislukt. Controleer uw gegevens.');

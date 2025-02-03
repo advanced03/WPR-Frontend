@@ -84,54 +84,54 @@ const HuurVerzoek = () => {
     const handleGoBack = () => {
         navigate(-1);
     };
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    console.log('FormData die verstuurd wordt:', formData);
 
-        console.log('FormData die verstuurd wordt:', formData);
+    const { startDatum, eindDatum, aardReis, bestemming, verwachtteKM, geselecteerdeVerzekering, geselecteerdeAccessoire } = formData;
 
-        const { startDatum, eindDatum, aardReis, bestemming, verwachtteKM, geselecteerdeVerzekering, geselecteerdeAccessoire } = formData;
-
-        // Filter onnodige velden zoals 'beginDatum' (die niet in de API wordt verzonden)
-        const filteredFormData = {
-            startDatum,
-            eindDatum,
-            aardReis,
-            bestemming,
-            verwachtteKM,
-            geselecteerdeVerzekering,
-            geselecteerdeAccessoire: geselecteerdeAccessoire.length > 0 ? geselecteerdeAccessoire : null // Zorg dat lege arrays goed worden behandeld
-        };
-
-        const token = sessionStorage.getItem('jwtToken');
-        if (!token) {
-            console.error('JWT-token ontbreekt in sessionStorage.');
-            return;
-        }
-
-        try {
-            const response = await axios.post(
-                'https://localhost:7281/api/verhuurVerzoek/VerhuurVerzoekRequest',
-                filteredFormData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-            console.log('Formulier succesvol ingediend:', response.data);
-            setShowAlert(true);
-
-            // Herleiding na 3 seconden
-            setTimeout(() => {
-                navigate('/Home');
-            }, 3000);
-
-        } catch (error) {
-            console.error('Fout bij het indienen van het formulier:', error);
-        }
+    // Filter onnodige velden zoals 'beginDatum' (die niet in de API wordt verzonden)
+    const filteredFormData = {
+        startDatum,
+        eindDatum,
+        aardReis,
+        bestemming,
+        verwachtteKM,
+        geselecteerdeVerzekering,  // Dit is al de VerzekeringId, geen verdere aanpassing nodig
+        geselecteerdeAccessoire: geselecteerdeAccessoire.length > 0 ? geselecteerdeAccessoire : null // Zorg dat lege arrays goed worden behandeld
     };
+
+    const token = sessionStorage.getItem('jwtToken');
+    if (!token) {
+        console.error('JWT-token ontbreekt in sessionStorage.');
+        return;
+    }
+
+    try {
+        const response = await axios.post(
+            'https://localhost:7281/api/verhuurVerzoek/VerhuurVerzoekRequest',
+            filteredFormData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        console.log('Formulier succesvol ingediend:', response.data);
+        setShowAlert(true);
+
+        // Herleiding na 3 seconden
+        setTimeout(() => {
+            navigate('/Home');
+        }, 3000);
+
+    } catch (error) {
+        console.error('Fout bij het indienen van het formulier:', error);
+    }
+};
+
 
     if (!wagen) {
         return <div>Loading wagen info...</div>;
@@ -235,10 +235,10 @@ const HuurVerzoek = () => {
                                     <Form.Label>🛠️ Kies een accessoire:</Form.Label>
                                     {accessoires.map((accessoire) => (
                                         <Form.Check
-                                            key={accessoire.AccessoireId}
+                                            key={accessoire.accessoiresId}
                                             type="checkbox"
                                             label={accessoire.naam}
-                                            value={accessoire.AccessoireId}
+                                            value={accessoire.accessoiresId}
                                             onChange={handleCheckboxChange}
                                             name="geselecteerdeAccessoire"
                                         />
