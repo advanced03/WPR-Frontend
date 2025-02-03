@@ -104,7 +104,7 @@ const PendingVerzoek = () => {
     <div className="achtergrond2">
       <PartNavbar />
       <Container className="mt-4">
-        <h2 className="pagina-titel text-center my-4">Pending Verhuurverzoeken</h2>
+        <h2 className="pagina-titel text-center my-4">Openstaande Verhuurverzoeken</h2>
         
         {/* React Bootstrap Alert */}
         {showAlert && (
