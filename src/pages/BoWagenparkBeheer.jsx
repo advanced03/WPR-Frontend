@@ -1,18 +1,16 @@
-// Import statements
 import React, { useState, useEffect } from 'react';
 import { Alert, Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
 import BoNavbar from '../components/BoNavbar';
 import axios from 'axios';
 
 const BOWagenparkBeheer = () => {
-    //Usestates initialiseren voor de functies en methoden bineen de pagina.
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentVehicle, setCurrentVehicle] = useState(null);
     const [toonModal, setModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [deleteIndex, setDeleteIndex] = useState(null);
+    const [deleteVehicleId, setDeleteVehicleId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
@@ -22,15 +20,16 @@ const BOWagenparkBeheer = () => {
         kleur: '',
         aanschafJaar: '',
         kenteken: '',
+        soort: '',
     });
 
-    //Methoden om alle voertuigen op te halen.
     useEffect(() => {
         const fetchWagens = async () => {
             try {
                 const response = await axios.get(
                     'https://localhost:7281/api/voertuigen/AllVoertuigen'
                 );
+                console.log('API Response:', response.data);
                 setVehicles(response.data);
                 setLoading(false);
             } catch (error) {
@@ -47,7 +46,6 @@ const BOWagenparkBeheer = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    //Methode om voertuigen te kunnen blokkereno.
     const handleBlockVehicle = async (vehicleId) => {
         try {
             const opmerking = prompt('Geef een reden voor het blokkeren van dit voertuig:');
@@ -73,7 +71,6 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-        //Deblokkeer methode
     const handleUnblockVehicle = async (vehicleId) => {
         try {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
@@ -93,36 +90,33 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-    //Methode om voertuigen toe te voegen.
     const handleAddVehicle = async () => {
         console.log('Voertuig toe te voegen:', form);
-        // Zorg ervoor dat 'aanschafJaar' als getal wordt doorgestuurd
+
         const newVehicle = {
             merk: form.merk,
-            kenteken: form.kenteken,
-            kleur: form.kleur,
             type: form.type,
-            aanschafJaar: parseInt(form.aanschafJaar), // Zorg ervoor dat dit een getal is
+            kleur: form.kleur,
+            aanschafJaar: parseInt(form.aanschafJaar),
+            kenteken: form.kenteken,
             soort: form.soort,
         };
 
-        // Controleer of alle velden zijn ingevuld
-        if (!newVehicle.merk || !newVehicle.kenteken || !newVehicle.kleur || !newVehicle.type || !newVehicle.soort || isNaN(newVehicle.aanschafJaar)) {
+        if (!newVehicle.merk || !newVehicle.type || !newVehicle.kleur || !newVehicle.kenteken || !newVehicle.soort || isNaN(newVehicle.aanschafJaar)) {
             setError('Alle velden moeten ingevuld zijn met geldige waarden.');
             return;
         }
 
         try {
-            // Voertuig toevoegen aan de server
             const response = await axios.post(
                 'https://localhost:7281/api/BackOfficeMedewerker/AddVoertuig',
                 newVehicle
             );
 
-            // Voeg het nieuwe voertuig toe aan de huidige lijst zonder de lijst opnieuw op te halen
+            console.log('Added Vehicle Response:', response.data);
+
             setVehicles(prevVehicles => [...prevVehicles, response.data]);
 
-            // Reset het formulier na toevoeging
             setForm({
                 merk: '',
                 type: '',
@@ -132,15 +126,21 @@ const BOWagenparkBeheer = () => {
                 soort: '',
             });
 
-            // Sluit de modal
             setModal(false);
+
+            setSuccessMessage('Voertuig succesvol toegevoegd!');
+            setShowSuccess(true);
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+
         } catch (error) {
             console.error('Error adding voertuig:', error);
             setError('Er is een fout opgetreden bij het toevoegen van het voertuig.');
         }
     };
 
-    //Methode om de informatie van de voertuigen bij te werken.
     const handleUpdateVehicle = async () => {
         try {
             const updatedVehicle = { ...form };
@@ -171,20 +171,13 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-    //Als er geen id is gevonden geef een error.
-    const handleDeleteVehicle = async () => {
+    const handleDeleteVehicle = async (vehicleId) => {
         try {
-            const vehicleId = vehicles[deleteIndex]?.voertuigId;
-
             if (!vehicleId) {
                 console.error('Geen voertuig ID gevonden');
                 setError('Voertuig ID ontbreekt.');
                 return;
             }
-
-            const payload = {
-                id: vehicleId,
-            };
 
             const response = await axios({
                 method: 'delete',
@@ -192,12 +185,11 @@ const BOWagenparkBeheer = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                data: payload,
+                data: { id: vehicleId },
             });
 
             if (response.status === 200 || response.status === 204) {
-                setVehicles(vehicles.filter((_, idx) => idx !== deleteIndex));
-                setDeleteIndex(null);
+                setVehicles(vehicles.filter((vehicle) => vehicle.voertuigId !== vehicleId));
                 setShowDeleteModal(false);
 
                 setSuccessMessage('Voertuig succesvol verwijderd!');
@@ -211,20 +203,18 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-    //Zoekbalk code, je kunt filteren op merk, type, kleur, kenteken. aanschafjaar en soort.
     const filteredVehicles = vehicles.filter((vehicle) => {
         const matchesSearch =
-            vehicle.merk.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            vehicle.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            vehicle.kleur.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            vehicle.kenteken.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            vehicle.aanschafJaar.toString().includes(searchQuery) ||
-            vehicle.soort.toString().includes(searchQuery);
+            (vehicle.merk || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (vehicle.type || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (vehicle.kleur || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (vehicle.kenteken || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (vehicle.aanschafJaar || '').toString().includes(searchQuery) ||
+            (vehicle.soort || '').toString().includes(searchQuery);
 
         return matchesSearch;
     });
 
-    //Simpele tekst om te laten zien als het nog aan het laden is.
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;
 
@@ -267,12 +257,12 @@ const BOWagenparkBeheer = () => {
                         {filteredVehicles.map((vehicle, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{vehicle.merk}</td>
-                                <td>{vehicle.type}</td>
-                                <td>{vehicle.kleur}</td>
-                                <td>{vehicle.aanschafJaar}</td>
-                                <td>{vehicle.kenteken}</td>
-                                <td>{vehicle.soort}</td>
+                                <td>{vehicle.merk || 'N/A'}</td>
+                                <td>{vehicle.type || 'N/A'}</td>
+                                <td>{vehicle.kleur || 'N/A'}</td>
+                                <td>{vehicle.aanschafJaar || 'N/A'}</td>
+                                <td>{vehicle.kenteken || 'N/A'}</td>
+                                <td>{vehicle.soort || 'N/A'}</td>
                                 <td>
                                     <Button
                                         variant="warning"
@@ -291,7 +281,7 @@ const BOWagenparkBeheer = () => {
                                         className="mx-1"
                                         size="sm"
                                         onClick={() => {
-                                            setDeleteIndex(index);
+                                            setDeleteVehicleId(vehicle.voertuigId);
                                             setShowDeleteModal(true);
                                         }}
                                     >
@@ -322,100 +312,106 @@ const BOWagenparkBeheer = () => {
                     </tbody>
                 </Table>
 
-        {/*Layout van de modal, die getoond wordt als je een actie uitvoert*/}
-            </Container>
-            <Modal show={toonModal} onHide={() => setModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{currentVehicle !== null ? 'Wijzig Voertuig' : 'Voertuig Toevoegen'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label>Merk</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="merk"
-                                value={form.merk}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Type</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="type"
-                                value={form.type}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Kleur</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="kleur"
-                                value={form.kleur}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Aanschafjaar</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="aanschafJaar"
-                                value={form.aanschafJaar}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Kenteken</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="kenteken"
-                                value={form.kenteken}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>type</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="soort"
-                                value={form.soort}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="success"
-                        onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
-                    >
-                        {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
-                    </Button>
-                    <Button variant="danger" onClick={() => setModal(false)}>
-                        Annuleren
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                {/* Modal voor toevoegen/wijzigen van voertuigen */}
+                <Modal show={toonModal} onHide={() => setModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{currentVehicle !== null ? 'Voertuig Wijzigen' : 'Voertuig Toevoegen'}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Merk</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="merk"
+                                    value={form.merk}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Type</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="type"
+                                    value={form.type}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Kleur</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="kleur"
+                                    value={form.kleur}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Aanschafjaar</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="aanschafJaar"
+                                    value={form.aanschafJaar}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Kenteken</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="kenteken"
+                                    value={form.kenteken}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Soort</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="soort"
+                                    value={form.soort}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="primary"
+                            onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
+                        >
+                            {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
+                        </Button>
+                        <Button variant="secondary" onClick={() => setModal(false)}>
+                            Annuleren
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
-            {/* Modal for Delete Vehicle */}
-            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Bevestig Verwijderen</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Weet je zeker dat je dit voertuig wilt verwijderen?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleDeleteVehicle}>
-                        Verwijderen
-                    </Button>
-                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                        Annuleren
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                {/* Modal voor verwijderen van voertuig */}
+                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Bevestig Verwijderen</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        Weet je zeker dat je dit voertuig wilt verwijderen?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={() => handleDeleteVehicle(deleteVehicleId)}>
+                            Verwijderen
+                        </Button>
+                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                            Annuleren
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </Container>
         </div>
     );
 };
