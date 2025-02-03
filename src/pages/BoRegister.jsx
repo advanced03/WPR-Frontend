@@ -132,7 +132,7 @@ const BoRegister = () => {
                                         onChange={(e) => settypeAccount(e.target.value)}
                                     >
                                         <option value="">kies een type account</option>
-                                        <option value="BackendWorker">Backoffice Medewerker</option>
+                                        <option value="backendWorker">Backoffice Medewerker</option>
                                         <option value="FrontendWorker">Frontoffice Medewerker</option>
                                     </Form.Control>
                                 </Form.Group>

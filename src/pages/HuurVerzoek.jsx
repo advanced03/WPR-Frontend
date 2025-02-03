@@ -17,8 +17,12 @@ const HuurVerzoek = () => {
         aardReis: '',
         bestemming: '',
         verwachtteKM: '',
+        geselecteerdeAccessoire: [],
+        geselecteerdeVerzekering: ''
     });
 
+    const [accessoires, setAccessoires] = useState([]);
+    const [verzekeringen, setVerzekeringen] = useState([]);
     const [wagen, setWagen] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
@@ -28,6 +32,27 @@ const HuurVerzoek = () => {
         if (storedWagen) {
             setWagen(storedWagen);
         }
+
+        const fetchAccessoires = async () => {
+            try {
+                const response = await axios.get('https://localhost:7281/api/verhuurVerzoek/GetAllAccessoires');
+                setAccessoires([{ id: 'none', naam: 'Geen accessoire' }, ...response.data]);
+            } catch (error) {
+                console.error('Fout bij het ophalen van accessoires:', error);
+            }
+        };
+
+        const fetchVerzekeringen = async () => {
+            try {
+                const response = await axios.get('https://localhost:7281/api/verhuurVerzoek/GetAllVerzekeringen');
+                setVerzekeringen(response.data);
+            } catch (error) {
+                console.error('Fout bij het ophalen van verzekeringen:', error);
+            }
+        };
+
+        fetchAccessoires();
+        fetchVerzekeringen();
     }, []);
 
     const handleChange = (e) => {
@@ -38,15 +63,45 @@ const HuurVerzoek = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const handleCheckboxChange = (event) => {
+        const { value, checked } = event.target;
+        let updatedAccessories = [...formData.geselecteerdeAccessoire];  // Kopieer de huidige array
+
+        if (checked) {
+            if (!updatedAccessories.includes(value)) {
+                updatedAccessories.push(value);  // Voeg toe als het nog niet bestaat
+            }
+        } else {
+            updatedAccessories = updatedAccessories.filter(accessoire => accessoire !== value); // Verwijder het geselecteerde accessoire
+        }
+
+        setFormData({
+            ...formData,
+            geselecteerdeAccessoire: updatedAccessories
+        });
+    };
+
     const handleGoBack = () => {
         navigate(-1);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         console.log('FormData die verstuurd wordt:', formData);
 
-        const { beginDatum, ...filteredFormData } = formData;
+        const { startDatum, eindDatum, aardReis, bestemming, verwachtteKM, geselecteerdeVerzekering, geselecteerdeAccessoire } = formData;
+
+        // Filter onnodige velden zoals 'beginDatum' (die niet in de API wordt verzonden)
+        const filteredFormData = {
+            startDatum,
+            eindDatum,
+            aardReis,
+            bestemming,
+            verwachtteKM,
+            geselecteerdeVerzekering,
+            geselecteerdeAccessoire: geselecteerdeAccessoire.length > 0 ? geselecteerdeAccessoire : null // Zorg dat lege arrays goed worden behandeld
+        };
 
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -104,11 +159,11 @@ const HuurVerzoek = () => {
             <h1 className="pagina-titel text-center"><br />Uw Keuze:</h1>
             <Container fluid className="d-flex justify-content-center align-items-center huren-background">
                 <Col md={6}>
-                {showAlert && (
-                    <Alert variant="success" className="text-center mt-3">
-                        Uw huurverzoek is succesvol ingediend! U zult over 3 seconden herleid worden.
-                    </Alert>
-                )}
+                    {showAlert && (
+                        <Alert variant="success" className="text-center mt-3">
+                            Uw huurverzoek is succesvol ingediend! U zult over 3 seconden herleid worden.
+                        </Alert>
+                    )}
                     <Card className='huren-box p-4 mt-5'>
                         <Card.Img
                             variant="top"
@@ -167,6 +222,29 @@ const HuurVerzoek = () => {
                                         maxLength={5}
                                     />
                                 </Form.Group>
+                                <Form.Group controlId="formVerzekering" className="p-2">
+                                    <Form.Label>🔒 Kies een verzekering:</Form.Label>
+                                    <Form.Control as="select" name="geselecteerdeVerzekering" value={formData.geselecteerdeVerzekering} onChange={handleChange}>
+                                        <option value="">Selecteer een verzekering</option>
+                                        {verzekeringen.map((verzekering) => (
+                                            <option key={verzekering.id} value={verzekering.VerzekeringId}>{verzekering.verzekeringNaam}</option>
+                                        ))}
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="formAccessoire" className="p-2">
+                                    <Form.Label>🛠️ Kies een accessoire:</Form.Label>
+                                    {accessoires.map((accessoire) => (
+                                        <Form.Check
+                                            key={accessoire.AccessoireId}
+                                            type="checkbox"
+                                            label={accessoire.naam}
+                                            value={accessoire.AccessoireId}
+                                            onChange={handleCheckboxChange}
+                                            name="geselecteerdeAccessoire"
+                                        />
+                                    ))}
+                                </Form.Group>
+
                                 <div className="d-flex justify-content-center p-2">
                                     <Button className='knop' type="submit">👍 Huurverzoek afronden</Button>
                                 </div>
