@@ -16,17 +16,23 @@ const BoSchadeRegister = () => {
         const fetchSchadeMeldingen = async () => {
             try {
                 const response = await axios.get('https://localhost:7281/api/BackOfficeMedewerker/GetAllSchadeMeldingen');
-                setSchadeMeldingen(response.data);
-                setLoading(false);
+                setSchadeMeldingen(response.data); // Vul de lijst met data
             } catch (error) {
                 console.error('Error fetching schade meldingen:', error);
-                setError('Er is een fout opgetreden bij het ophalen van de schade meldingen.');
+
+                if (error.response && error.response.status === 404) {
+                    setSchadeMeldingen([]); // Voorkomt dat de pagina wit blijft bij een 404
+                } else {
+                    setError('Er is een fout opgetreden bij het ophalen van de schade meldingen.');
+                }
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchSchadeMeldingen();
     }, []);
+
 
     const handleOpenModal = (melding) => {
         setSelectedMelding(melding);
