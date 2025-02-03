@@ -59,7 +59,7 @@ const Login = () => {
                 } else if (response.data.role === "backendWorker") {
                     navigate("/BoWagenparkBeheer");
                 } else if (response.data.role === "frontendWorker") {
-                    navigate("/BowagenparkBeheer");
+                    navigate("/FoVoertuigInname");
                 }
             }, 1000); // Vertraging van 1 seconde zodat het successbericht te zien is.
     

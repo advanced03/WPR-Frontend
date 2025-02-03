@@ -3,7 +3,6 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 import axios from 'axios';
-import WbNavbar from "../components/WbNavbar.jsx";
 
 const WbRegister = () => {
     // Usestates initializeren
@@ -86,7 +85,6 @@ const WbRegister = () => {
 
     return (
         <div className="achtergrond1">
-            <WbNavbar />
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
                 <Row>
                     <Col>
