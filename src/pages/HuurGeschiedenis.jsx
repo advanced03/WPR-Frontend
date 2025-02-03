@@ -7,13 +7,7 @@ import PartNavbar from "../components/PartNavbar.jsx";
 const HuurGeschiedenis = () => {
   // State voor huurdata
   const [huurData, setHuurData] = useState([]);
-
-  // Kleurcodes voor verschillende huurstatussen
-  const statusKleur = {
-    Goedgekeurd: "green",
-    Afgekeurd: "red",
-  };
-
+  
   // Sorteer huurdata op einddatum (aflopend)
   const sortedHuurData = [...huurData].sort(
     (a, b) => new Date(b.eindDatum) - new Date(a.eindDatum)
@@ -66,7 +60,6 @@ const HuurGeschiedenis = () => {
               <th>Verwachte KM</th>
               <th>Startdatum</th>
               <th>Einddatum</th>
-              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -79,9 +72,6 @@ const HuurGeschiedenis = () => {
                   <td>{item.verwachtteKM}</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
-                  <td style={{ color: statusKleur[item.status] }}>
-                    {item.status}
-                  </td>
                 </tr>
               ))
             ) : (
