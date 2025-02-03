@@ -41,14 +41,14 @@ function PartNavbar() { // Navigatie methode IPV Html link voor snellere laadtij
                 Profiel
               </Nav.Link>
             )}
-            {location.pathname !== '/Geschiedenis' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/Geschiedenis')}>
-                Huurgeschiedenis
-              </Nav.Link>
-            )}
             {location.pathname !== '/Abbonement' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/Abbonement')}>
                 Abbonementen
+              </Nav.Link>
+            )}
+            {location.pathname !== '/Geschiedenis' && (
+              <Nav.Link className="hover" onClick={() => handleNavigation('/Geschiedenis')}>
+                Huurgeschiedenis
               </Nav.Link>
             )}
             {location.pathname !== '/PendingVerzoek' && (
