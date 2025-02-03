@@ -33,7 +33,7 @@ const BoWagenparkBehandeling = () => {
             setVerzoeken(response.data);
             setError(null);
         } catch (err) {
-            setError('Er is een fout opgetreden bij het ophalen van de wagenparkverzoeken. Mogelijk zijn er nog geen verzoeken ingediend, of u heeft ze al allemaal behandeld. 👍👍👍');
+            setError('Er zijn geen nieuwe verzoeken gevonden. Mogelijk zijn er nog geen verzoeken ingediend, of u heeft ze al allemaal behandeld. 👍👍👍');
             console.error(err);
         } finally {
             setLoading(false);

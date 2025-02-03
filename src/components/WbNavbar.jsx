@@ -36,11 +36,6 @@ function WbNavbar() { // Navigatie methode IPV Html link voor snellere laadtijde
                 Accounts beheren
               </Nav.Link>
             )}
-            {location.pathname !== '/WbRegister' && (
-              <Nav.Link className="hover" onClick={() => handleNavigation('/WbRegister')}>
-                Zakelijke gebruikers registreren
-              </Nav.Link>
-            )}
             {location.pathname !== '/WbStatus' && (
               <Nav.Link className="hover" onClick={() => handleNavigation('/WbStatus')}>
                 Overzicht voertuigen

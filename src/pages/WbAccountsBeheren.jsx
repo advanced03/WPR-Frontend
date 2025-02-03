@@ -23,7 +23,7 @@ const WbAccountsBeheren = () => {
             });
             const mappedAccounts = response.data.map((item) => ({
                 id: item.appUserId,
-                naam: `User ${item.username}`,
+                naam: `${item.username}`,
                 email: `${item.email}`
             }));
             setAccounts(mappedAccounts);
@@ -110,7 +110,7 @@ const WbAccountsBeheren = () => {
                         <tr>
                             <th>Naam</th>
                             <th>Email</th>
-                            <th>Acties</th>
+                            <th>Verwijderen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,8 +120,8 @@ const WbAccountsBeheren = () => {
                                     <td>{account.naam}</td>
                                     <td>{account.email}</td>
                                     <td>
-                                        <Button variant="danger" onClick={() => verwijderAccount(account.id)}>
-                                            Verwijderen
+                                        <Button variant="danger"onClick={() => verwijderAccount(account.id)}>
+                                        🗑️
                                         </Button>
                                     </td>
                                 </tr>
