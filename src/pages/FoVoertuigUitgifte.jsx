@@ -15,7 +15,7 @@ const FoVoertuigUitgifte = () => {
         try {
             const respons = await axios.get("https://localhost:7281/api/Reserveringen/GetAllReserveringen");
             zetAutos(respons.data);
-            zetLaadFout(null); 
+            zetLaadFout(null);
         } catch (error) {
             zetLaadFout("Kon de reserveringen niet ophalen. Controleer de API.");
             console.error(error);
@@ -44,7 +44,7 @@ const FoVoertuigUitgifte = () => {
                 { id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            haalReserveringenOp(); 
+            haalReserveringenOp();
         } catch (error) {
             console.error("Fout bij het registreren van de uitgifte:", error);
         } finally {
@@ -65,7 +65,7 @@ const FoVoertuigUitgifte = () => {
                 `https://localhost:7281/api/Reserveringen/VerwijderReservering/${reserveringId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            haalReserveringenOp(); 
+            haalReserveringenOp();
         } catch (error) {
             console.error("Fout bij het verwijderen van de uitgifte:", error);
         }
@@ -104,44 +104,51 @@ const FoVoertuigUitgifte = () => {
                             <tr>
                                 <th>Reservering ID</th>
                                 <th>Naam</th>
-                                <th>Startdatum</th>
-                                <th>Einddatum</th>
-                                <th>Aard van reis</th>
+                                <th>Van</th>
+                                <th>Tot</th>
+                                <th>Aard van de reis</th>
                                 <th>Bestemming</th>
-                                <th>Verwachtte KM</th>
+                                <th>Verwachte aantal KM</th>
                                 <th>Status</th>
                                 <th>Acties</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {gefilterdeAutos.map((auto) => (
-                                <tr key={auto.reserveringId}>
-                                    <td>{auto.reserveringId}</td>
-                                    <td>{auto.fullname}</td>
-                                    <td>{new Date(auto.startDatum).toLocaleDateString()}</td>
-                                    <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
-                                    <td>{auto.aardReis}</td>
-                                    <td>{auto.bestemming}</td>
-                                    <td>{auto.verwachtteKM}</td>
-                                    <td>{auto.status}</td>
-                                    <td>
-                                        <Button
-                                            className="knop ms-2 my-2"
-                                            onClick={() => registreerUitgifte(auto)}
-                                        >
-                                            ✅
-                                        </Button>
-                                        <Button
-                                            className="knop ms-2 my-2"
-                                            variant="danger"
-                                            onClick={() => verwijderUitgifte(auto.reserveringId)}
-                                        >
-                                            ❌
-                                        </Button>
-                                    </td>
+                            {gefilterdeAutos.length === 0 ? (
+                                <tr>
+                                    <td colSpan="9" className="text-center">Geen voertuigen gevonden voor uitgifte</td>
                                 </tr>
-                            ))}
+                            ) : (
+                                gefilterdeAutos.map((auto) => (
+                                    <tr key={auto.reserveringId}>
+                                        <td>{auto.reserveringId}</td>
+                                        <td>{auto.fullname}</td>
+                                        <td>{new Date(auto.startDatum).toLocaleDateString()}</td>
+                                        <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
+                                        <td>{auto.aardReis}</td>
+                                        <td>{auto.bestemming}</td>
+                                        <td>{auto.verwachtteKM}</td>
+                                        <td>{auto.status}</td>
+                                        <td>
+                                            <Button
+                                                className="knop ms-2 my-2"
+                                                onClick={() => registreerUitgifte(auto)}
+                                            >
+                                                ✅
+                                            </Button>
+                                            <Button
+                                                className="knop ms-2 my-2"
+                                                variant="danger"
+                                                onClick={() => verwijderUitgifte(auto.reserveringId)}
+                                            >
+                                                ❌
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
+
                     </Table>
                 </div>
 
