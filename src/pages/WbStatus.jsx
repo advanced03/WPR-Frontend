@@ -71,16 +71,22 @@ const WbStatus = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredVehicles.map((vehicle, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{vehicle.merk}</td>
-                <td>{vehicle.type}</td>
-                <td>{vehicle.huurder}</td>
-                <td>{vehicle.huurDatum}</td>
-                <td>{vehicle.status}</td>
+            {filteredVehicles.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="text-center">Geen voertuigen gevonden in uw wagenpark</td>
               </tr>
-            ))}
+            ) : (
+              filteredVehicles.map((vehicle, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{vehicle.merk}</td>
+                  <td>{vehicle.type}</td>
+                  <td>{vehicle.huurder}</td>
+                  <td>{vehicle.huurDatum}</td>
+                  <td>{vehicle.status}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </Table>
       </Container>

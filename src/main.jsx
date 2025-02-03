@@ -19,7 +19,6 @@ import WbAccountsBeheren from './pages/WbAccountsBeheren.jsx';
 import WbStatus from './pages/WbStatus.jsx';
 import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 import RegZak from './pages/regZakelijk.jsx';
-import Wbaccbeheer from './pages/wbAccbeheer.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Betaal from './pages/Betaal.jsx';
 import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
@@ -34,7 +33,6 @@ const App = () => {
             <Routes> 
                 <Route path="/" element={<Login />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/WbAccBeheer" element={<Wbaccbeheer />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/PartRegister" element={<PartRegister />} />

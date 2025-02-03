@@ -110,32 +110,39 @@ const FoVoertuigInname = () => {
                             <tr>
                                 <th>Reservering ID</th>
                                 <th>Naam</th>
-                                <th>Startdatum</th>
-                                <th>Einddatum</th>
+                                <th>Van</th>
+                                <th>Tot</th>
                                 <th>Aard van reis</th>
                                 <th>Bestemming</th>
-                                <th>Verwachte KM</th>
+                                <th>Verwachte aantal KM</th>
                                 <th>Status</th>
-                                <th>Registreer inname</th>
+                                <th>Inname registreren</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {gefilterdeAutos.map((auto) => (
-                                <tr key={auto.reserveringId}>
-                                    <td>{auto.reserveringId}</td>
-                                    <td>{auto.fullname}</td>
-                                    <td>{new Date(auto.startDatum).toLocaleDateString()}</td>
-                                    <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
-                                    <td>{auto.aardReis}</td>
-                                    <td>{auto.bestemming}</td>
-                                    <td>{auto.verwachtteKM}</td>
-                                    <td>{auto.status}</td>
-                                    <td>
-                                        <Button className="knop" onClick={() => registreerInname(auto)}>⚙️</Button>
-                                    </td>
+                            {gefilterdeAutos.length === 0 ? (
+                                <tr>
+                                    <td colSpan="9" className="text-center">Geen openstaande huurverzoeken gevonden</td>
                                 </tr>
-                            ))}
+                            ) : (
+                                gefilterdeAutos.map((auto) => (
+                                    <tr key={auto.reserveringId}>
+                                        <td>{auto.reserveringId}</td>
+                                        <td>{auto.fullname}</td>
+                                        <td>{new Date(auto.startDatum).toLocaleDateString()}</td>
+                                        <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
+                                        <td>{auto.aardReis}</td>
+                                        <td>{auto.bestemming}</td>
+                                        <td>{auto.verwachtteKM}</td>
+                                        <td>{auto.status}</td>
+                                        <td>
+                                            <Button className="knop" onClick={() => registreerInname(auto)}>⚙️</Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
+
                     </Table>
                 </div>
 

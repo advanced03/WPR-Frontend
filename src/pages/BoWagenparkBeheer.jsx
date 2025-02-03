@@ -1,12 +1,21 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
+import { Alert, Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
 import BoNavbar from '../components/BoNavbar';
 import axios from 'axios';
 
 const BOWagenparkBeheer = () => {
+    //Usestates initialiseren voor de functies en methoden bineen de pagina.
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentVehicle, setCurrentVehicle] = useState(null);
+    const [toonModal, setModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteIndex, setDeleteIndex] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
     const [form, setForm] = useState({
         merk: '',
         type: '',
@@ -15,12 +24,7 @@ const BOWagenparkBeheer = () => {
         kenteken: '',
     });
 
-    const [currentVehicle, setCurrentVehicle] = useState(null);
-    const [toonModal, setModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [deleteIndex, setDeleteIndex] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
-
+    //Methoden om alle voertuigen op te halen.
     useEffect(() => {
         const fetchWagens = async () => {
             try {
@@ -43,6 +47,7 @@ const BOWagenparkBeheer = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    //Methode om voertuigen te kunnen blokkereno.
     const handleBlockVehicle = async (vehicleId) => {
         try {
             const opmerking = prompt('Geef een reden voor het blokkeren van dit voertuig:');
@@ -68,6 +73,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+        //Deblokkeer methode
     const handleUnblockVehicle = async (vehicleId) => {
         try {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
@@ -86,6 +92,8 @@ const BOWagenparkBeheer = () => {
             setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
         }
     };
+
+    //Methode om voertuigen toe te voegen.
     const handleAddVehicle = async () => {
         console.log('Voertuig toe te voegen:', form);
         // Zorg ervoor dat 'aanschafJaar' als getal wordt doorgestuurd
@@ -132,6 +140,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+    //Methode om de informatie van de voertuigen bij te werken.
     const handleUpdateVehicle = async () => {
         try {
             const updatedVehicle = { ...form };
@@ -153,12 +162,16 @@ const BOWagenparkBeheer = () => {
             });
             setCurrentVehicle(null);
             setModal(false);
+
+            setSuccessMessage('Voertuig succesvol bijgewerkt!');
+            setShowSuccess(true);
         } catch (error) {
             console.error('Error updating voertuig:', error);
             setError('Er is een fout opgetreden bij het bijwerken van het voertuig.');
         }
     };
 
+    //Als er geen id is gevonden geef een error.
     const handleDeleteVehicle = async () => {
         try {
             const vehicleId = vehicles[deleteIndex]?.voertuigId;
@@ -186,6 +199,9 @@ const BOWagenparkBeheer = () => {
                 setVehicles(vehicles.filter((_, idx) => idx !== deleteIndex));
                 setDeleteIndex(null);
                 setShowDeleteModal(false);
+
+                setSuccessMessage('Voertuig succesvol verwijderd!');
+                setShowSuccess(true);
             } else {
                 throw new Error(`Onverwachte statuscode: ${response.status}`);
             }
@@ -195,7 +211,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-
+    //Zoekbalk code, je kunt filteren op merk, type, kleur, kenteken. aanschafjaar en soort.
     const filteredVehicles = vehicles.filter((vehicle) => {
         const matchesSearch =
             vehicle.merk.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -204,11 +220,11 @@ const BOWagenparkBeheer = () => {
             vehicle.kenteken.toLowerCase().includes(searchQuery.toLowerCase()) ||
             vehicle.aanschafJaar.toString().includes(searchQuery) ||
             vehicle.soort.toString().includes(searchQuery);
-    
+
         return matchesSearch;
     });
-    
 
+    //Simpele tekst om te laten zien als het nog aan het laden is.
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;
 
@@ -217,6 +233,11 @@ const BOWagenparkBeheer = () => {
             <BoNavbar />
             <Container>
                 <h1 className="pagina-titel text-center my-4">Wagenparkbeheer</h1>
+                {showSuccess && (
+                    <Alert variant="success" onClose={() => setShowSuccess(false)} dismissible>
+                        {successMessage}
+                    </Alert>
+                )}
                 <div className="d-flex justify-content-between mb-3">
                     <InputGroup className="w-50">
                         <FormControl
@@ -301,7 +322,7 @@ const BOWagenparkBeheer = () => {
                     </tbody>
                 </Table>
 
-
+        {/*Layout van de modal, die getoond wordt als je een actie uitvoert*/}
             </Container>
             <Modal show={toonModal} onHide={() => setModal(false)}>
                 <Modal.Header closeButton>
@@ -366,14 +387,14 @@ const BOWagenparkBeheer = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setModal(false)}>
-                        Annuleren
-                    </Button>
                     <Button
-                        variant="primary"
+                        variant="success"
                         onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
                     >
                         {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
+                    </Button>
+                    <Button variant="danger" onClick={() => setModal(false)}>
+                        Annuleren
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -387,11 +408,11 @@ const BOWagenparkBeheer = () => {
                     Weet je zeker dat je dit voertuig wilt verwijderen?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                        Annuleren
-                    </Button>
                     <Button variant="danger" onClick={handleDeleteVehicle}>
                         Verwijderen
+                    </Button>
+                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                        Annuleren
                     </Button>
                 </Modal.Footer>
             </Modal>

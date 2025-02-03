@@ -8,8 +8,6 @@ import BoNavbar from "../components/BoNavbar"
 const BoRegister = () => {
     // Usestates initializeren
     const [username, setUsername] = useState('');
-    const [voornaam, setVoornaam] = useState('');
-    const [achternaam, setAchternaam] = useState('');
     const [email, setEmail] = useState('');
     const [typeAccount, settypeAccount] = useState('');
     const [password, setPassword] = useState('');
