@@ -10,7 +10,7 @@ const FoVoertuigUitgifte = () => {
     const [toonModal, setModal] = useState(false);
     const [opmerking, zetOpmerking] = useState("");
     const [melding, zetMelding] = useState(null);
-
+//  Reserveringen ophalen
     const haalReserveringenOp = async () => {
         try {
             const respons = await axios.get("https://localhost:7281/api/Reserveringen/GetAllReserveringen");
@@ -23,17 +23,17 @@ const FoVoertuigUitgifte = () => {
     useEffect(() => {
         haalReserveringenOp();
     }, []);
-
+// Melding tonen
     const toonMelding = (boodschap, variant = "success") => {
         zetMelding({ boodschap, variant });
         setTimeout(() => zetMelding(null), 3000);
     };
-
+// Uitgifte registreren
     const registreerUitgifte = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
-
+// Uitgifte registreren
     const opslaanUitgifte = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
@@ -59,7 +59,9 @@ const FoVoertuigUitgifte = () => {
         }
     };
 
+    // Uitgifte verwijderen
     const verwijderUitgifte = async (reserveringId) => {
+        //  JWT-token ophalen   
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');

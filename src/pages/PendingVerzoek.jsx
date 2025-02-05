@@ -11,11 +11,12 @@ const PendingVerzoek = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVariant, setAlertVariant] = useState("success");
-  
+
   // Variabele voor de kosten
   const [kostenOverzicht, setKostenOverzicht] = useState(null);
 
   useEffect(() => {
+    // Ophalen van de pending verhuurverzoeken
     const fetchData = async () => {
       try {
         const token = sessionStorage.getItem("jwtToken");
@@ -23,14 +24,14 @@ const PendingVerzoek = () => {
           console.error("Geen JWT-token gevonden.");
           return;
         }
-
+        // Ophalen van de pending verhuurverzoeken
         const response = await axios.get(
           "https://localhost:7281/api/verhuurVerzoek/GetAllPendingVerhuurVerzoeken",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
+        //  Als er geen verzoeken zijn, toon een melding
         if (response.status === 404) {
           alert("Er zijn geen pending verhuurverzoeken gevonden");
           setPendingData([]);
@@ -43,10 +44,10 @@ const PendingVerzoek = () => {
         console.error("Error fetching pending data:", error);
       }
     };
-
+    //  Ophalen van de pending verhuurverzoeken
     fetchData();
   }, []);
-
+//  Functie om de modal te openen
   const getKostenOverzicht = async (verhuurverzoekId) => {
     console.log("Opgehaald verhuurverzoekId voor kostenoverzicht:", verhuurverzoekId);
     try {
@@ -63,7 +64,7 @@ const PendingVerzoek = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
+//  Als de status 200 is, toon de kostenoverzicht
       if (response.status === 200) {
         setKostenOverzicht(response.data);
         setShowModal(true);
@@ -72,6 +73,7 @@ const PendingVerzoek = () => {
         setAlertVariant("danger");
         setShowAlert(true);
       }
+      //  Als er een fout optreedt, toon een melding
     } catch (error) {
       console.error("Error fetching kosten overzicht:", error);
       setAlertMessage("Er is een fout opgetreden.");
@@ -79,7 +81,7 @@ const PendingVerzoek = () => {
       setShowAlert(true);
     }
   };
-
+// Functie om de modal te openen
   const handleCloseModal = () => {
     setShowModal(false);
     setKostenOverzicht(null); // Reset de kosten na sluiten van de modal

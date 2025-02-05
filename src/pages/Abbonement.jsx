@@ -46,12 +46,14 @@ const Abbonement = () => {
         }
 
         try {
+            //  Haal het huidige abbonement op. 
             const response = await axios.get("https://localhost:7281/api/Abonnementen/GetCurrentAbonnement", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
+            // Als het abbonement is gevonden, toon deze in de UI.
             if (response.status === 200) {
                 const currentAbboId = response.data.abonnementId;
                 const selected = loadedAbonnementen.find((abbo) => abbo.id === currentAbboId);

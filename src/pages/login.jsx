@@ -41,7 +41,7 @@ const Login = () => {
         }
     };
 
-
+// Gebruikers data ophalen
     const fetchUserData = async () => {
         setLoading(true);
         const token = sessionStorage.getItem('jwtToken');

@@ -22,7 +22,7 @@ const BOWagenparkBeheer = () => {
         kenteken: '',
         soort: '',
     });
-
+ // Fetch wagens
     useEffect(() => {
         const fetchWagens = async () => {
             try {
@@ -46,8 +46,10 @@ const BOWagenparkBeheer = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    //Blokeer voertuigen.
     const handleBlockVehicle = async (vehicleId) => {
         try {
+            //Opmerking is verplicht
             const opmerking = prompt('Geef een reden voor het blokkeren van dit voertuig:');
             if (!opmerking) {
                 alert('Blokkeren geannuleerd. Opmerking is verplicht.');
@@ -73,6 +75,8 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+
+    //Methode om voertuigen te deblokkeren.
     const handleUnblockVehicle = async (vehicleId) => {
         try {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
@@ -94,6 +98,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+    //Methode om voertuigen toe te voegen
     const handleAddVehicle = async () => {
         console.log('Voertuig toe te voegen:', form);
 
@@ -145,6 +150,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+    //Methode om wagens up te daten
     const handleUpdateVehicle = async () => {
         try {
             const updatedVehicle = { ...form };
@@ -176,6 +182,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+     //Methode om wagens te verwijderen
     const handleDeleteVehicle = async (vehicleId) => {
         try {
             if (!vehicleId) {
@@ -208,6 +215,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
+        //Zoekbalk code
     const filteredVehicles = vehicles.filter((vehicle) => {
         const matchesSearch =
             (vehicle.merk || '').toLowerCase().includes(searchQuery.toLowerCase()) ||

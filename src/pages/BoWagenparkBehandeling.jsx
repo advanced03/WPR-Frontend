@@ -121,7 +121,7 @@ const BoWagenparkBehandeling = () => {
         }
         handleCloseModal();
     };
-
+// Filter methode
     const onbehandeldeVerzoeken = verzoeken.filter(
         (verzoek) => !verzoek.goedgekeurd && !verzoek.afgewezen
     );

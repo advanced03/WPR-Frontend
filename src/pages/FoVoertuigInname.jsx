@@ -17,11 +17,12 @@ const FoVoertuigInname = () => {
         haalReserveringenOp();
     }, []);
 
+    //Toon alert melding
     const toonMelding = (boodschap, variant = "success") => {
         zetMelding({ boodschap, variant });
         setTimeout(() => zetMelding(null), 3000);
     };
-
+  // Methode om reserveringen ophalen.
     const haalReserveringenOp = async () => {
         try {
             const respons = await axios.get('https://localhost:7281/api/Reserveringen/GetAllReserveringen');
@@ -30,12 +31,12 @@ const FoVoertuigInname = () => {
             console.error('Fout bij het ophalen van reserveringen:', error);
         }
     };
-
+ // Inname registreren
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
-
+// Inname opslaan
     const opslaanInname = async () => {
         if (heeftSchade && schadeInfo.trim() === '') {
             zetFoutmeldingen({ schadeInfo: true });
