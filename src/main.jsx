@@ -26,7 +26,7 @@ import Abbonement from './pages/Abbonement.jsx';
 import BoWagenparkBehandeling from './pages/BoWagenparkBehandeling.jsx';
 import PendingVerzoek from './pages/PendingVerzoek.jsx';
 
-/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden*/
+/* Dit is de navigatie methode, dit zorgt ervoor dat de pagina's correct ingeladen worden en hoe het eruit ziet in de searchbar*/
 const App = () => {
     return (
         <Router>
