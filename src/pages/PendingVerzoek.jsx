@@ -5,19 +5,16 @@ import "../style/tabel.css";
 import PartNavbar from "../components/PartNavbar.jsx";
 
 const PendingVerzoek = () => {
-  // State voor de pending verhuur verzoeken
   const [pendingData, setPendingData] = useState([]);
-
-  // State voor de modal
   const [showModal, setShowModal] = useState(false);
   const [selectedVerhuurId, setSelectedVerhuurId] = useState(null);
-
-  // State voor de alert
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVariant, setAlertVariant] = useState("success");
+  
+  // Variabele voor de kosten
+  const [kostenOverzicht, setKostenOverzicht] = useState(null);
 
-  // Haal de pending verhuur verzoeken op van de API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,7 +33,7 @@ const PendingVerzoek = () => {
 
         if (response.status === 404) {
           alert("Er zijn geen pending verhuurverzoeken gevonden");
-          setPendingData([]); // Leeg de pendingData array
+          setPendingData([]);
         } else if (Array.isArray(response.data)) {
           setPendingData(response.data);
         } else {
@@ -50,8 +47,8 @@ const PendingVerzoek = () => {
     fetchData();
   }, []);
 
-  // Functie om een verzoek te annuleren
-  const declineVerzoek = async () => {
+  const getKostenOverzicht = async (verhuurverzoekId) => {
+    console.log("Opgehaald verhuurverzoekId voor kostenoverzicht:", verhuurverzoekId);
     try {
       const token = sessionStorage.getItem("jwtToken");
       if (!token) {
@@ -60,44 +57,32 @@ const PendingVerzoek = () => {
       }
 
       const response = await axios.put(
-        `https://localhost:7281/api/verhuurVerzoek/DeclineMyVerzoek/${selectedVerhuurId}`,
-        {},
+        `https://localhost:7281/api/verhuurVerzoek/GetKostenOverzicht`,
+        { id: verhuurverzoekId },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (response.status === 200) {
-        setAlertMessage("Verzoek geannuleerd.");
-        setAlertVariant("success");
-        setShowAlert(true);
-        setPendingData((prevData) =>
-          prevData.filter((item) => item.verhuurverzoekId !== selectedVerhuurId)
-        );
+        setKostenOverzicht(response.data);
+        setShowModal(true);
       } else {
-        setAlertMessage("Fout bij het annuleren van het verzoek.");
+        setAlertMessage("Fout bij het ophalen van het kostenoverzicht.");
         setAlertVariant("danger");
         setShowAlert(true);
       }
-      setShowModal(false); // Sluit de modal na het annuleren
     } catch (error) {
-      console.error("Error declining verhuurverzoek:", error);
+      console.error("Error fetching kosten overzicht:", error);
       setAlertMessage("Er is een fout opgetreden.");
       setAlertVariant("danger");
       setShowAlert(true);
-      setShowModal(false); // Sluit de modal als er een fout is
     }
   };
 
-  // Functie om de modal te tonen en het juiste verzoek te selecteren
-  const handleShowModal = (verhuurverzoekId) => {
-    setSelectedVerhuurId(verhuurverzoekId);
-    setShowModal(true);
-  };
-
-  // Functie om de modal te sluiten
   const handleCloseModal = () => {
     setShowModal(false);
+    setKostenOverzicht(null); // Reset de kosten na sluiten van de modal
   };
 
   return (
@@ -106,7 +91,6 @@ const PendingVerzoek = () => {
       <Container className="mt-4">
         <h2 className="pagina-titel text-center my-4">Openstaande Verhuurverzoeken</h2>
 
-        {/* React Bootstrap Alert */}
         {showAlert && (
           <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
             {alertMessage}
@@ -123,7 +107,9 @@ const PendingVerzoek = () => {
               <th>Soort:</th>
               <th>Van:</th>
               <th>Tot:</th>
-              <th>Annuleren</th>
+              <th>Accessoires:</th>
+              <th>Verzekering:</th>
+              <th>Acties</th>
             </tr>
           </thead>
           <tbody>
@@ -137,19 +123,29 @@ const PendingVerzoek = () => {
                   <td>{item.voertuigSoort}</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
+                  <td>{item.accessoires.join(", ") || "Geen accessoires"}</td>
+                  <td>{item.verzekering}</td>
                   <td>
                     <Button
                       variant="danger"
+                      className="ms-1 my-1"
                       onClick={() => handleShowModal(item.verhuurverzoekId)}
                     >
                       🗑️
+                    </Button>
+                    <Button
+                      variant="success"
+                      className="ms-1 my-1"
+                      onClick={() => getKostenOverzicht(item.verhuurverzoekId)}
+                    >
+                      💰
                     </Button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="9" className="text-center">
+                <td colSpan="10" className="text-center">
                   Geen openstaande verhuurverzoeken gevonden.
                 </td>
               </tr>
@@ -158,23 +154,29 @@ const PendingVerzoek = () => {
         </Table>
       </Container>
 
-      {/* Modal voor bevestiging */}
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Bevestig Annuleren</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Weet je zeker dat je dit verhuurverzoek wilt annuleren?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Annuleren
-          </Button>
-          <Button variant="danger" onClick={declineVerzoek}>
-            Ja, Annuleren
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Modal voor het tonen van het Kosten Overzicht */}
+      {kostenOverzicht && (
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Kosten Overzicht</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h5>Totaal: € {kostenOverzicht.totalePrijs}</h5>
+            <ul>
+              {kostenOverzicht.prijsDetails.map((detail, index) => (
+                <li key={index}>
+                  <strong>{detail.beschrijving}:</strong> € {detail.amount}
+                </li>
+              ))}
+            </ul>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="knop" onClick={handleCloseModal}>
+              Sluiten
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };

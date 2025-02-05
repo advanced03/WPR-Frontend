@@ -389,7 +389,7 @@ const BOWagenparkBeheer = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
-                            variant="primary"
+                            variant="primary    "
                             onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
                         >
                             {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}

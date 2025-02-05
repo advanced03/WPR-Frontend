@@ -78,12 +78,15 @@ const FoVoertuigInname = () => {
     const gefilterdeAutos = autos.filter((auto) => {
         const zoekString = zoekTerm.trim().toLowerCase();
         return (
-            auto.fullname.toLowerCase().includes(zoekString) ||
-            auto.bestemming.toLowerCase().includes(zoekString) ||
-            auto.aardReis.toLowerCase().includes(zoekString) ||
-            auto.status.toLowerCase().includes(zoekString) ||
-            auto.reserveringId.toString().includes(zoekString) ||
-            auto.verwachtteKM.toString().includes(zoekString)
+            auto.status.toLowerCase() === 'uitgegeven' && // Only "Uitgegeven" status
+            (
+                auto.fullname.toLowerCase().includes(zoekString) ||
+                auto.bestemming.toLowerCase().includes(zoekString) ||
+                auto.aardReis.toLowerCase().includes(zoekString) ||
+                auto.status.toLowerCase().includes(zoekString) ||
+                auto.reserveringId.toString().includes(zoekString) ||
+                auto.verwachtteKM.toString().includes(zoekString)
+            )
         );
     });
 
@@ -107,14 +110,14 @@ const FoVoertuigInname = () => {
                     <Table striped bordered hover className="tabel my-5">
                         <thead>
                             <tr>
-                                <th>Reservering ID</th>
-                                <th>Naam</th>
-                                <th>Van</th>
-                                <th>Tot</th>
-                                <th>Aard van reis</th>
-                                <th>Bestemming</th>
-                                <th>Verwachte aantal KM</th>
-                                <th>Status</th>
+                                <th>Reservering ID:</th>
+                                <th>Naam:</th>
+                                <th>Van:</th>
+                                <th>Tot:</th>
+                                <th>Aard van reis:</th>
+                                <th>Bestemming:</th>
+                                <th>Verwachte afstand:</th>
+                                <th>Status:</th>
                                 <th>Inname registreren</th>
                             </tr>
                         </thead>
@@ -132,7 +135,7 @@ const FoVoertuigInname = () => {
                                         <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
                                         <td>{auto.aardReis}</td>
                                         <td>{auto.bestemming}</td>
-                                        <td>{auto.verwachtteKM}</td>
+                                        <td>{auto.verwachtteKM} KM</td>
                                         <td>{auto.status}</td>
                                         <td>
                                             <Button
@@ -143,7 +146,6 @@ const FoVoertuigInname = () => {
                                                 ⚙️
                                             </Button>
                                         </td>
-
                                     </tr>
                                 ))
                             )}

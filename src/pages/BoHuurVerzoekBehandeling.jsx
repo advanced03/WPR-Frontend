@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col, Card, Button, Modal } from 'react-bootstrap';
+import { Container, Col, Card, Button, Modal, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import '../style/backoffice.css';
-import BoNavbar from "../components/BoNavbar"
+import BoNavbar from "../components/BoNavbar";
 
 const BoHuurVerzoekBehandeling = () => {
     // Usestates initializeren
@@ -156,20 +156,23 @@ const BoHuurVerzoekBehandeling = () => {
                             {loading ? (
                                 <p className="text-center">Huurverzoeken worden geladen...</p>
                             ) : error ? (
-                                <p className="text-center">{error}</p>
+                                <Alert variant="danger" className="text-center">{error}</Alert>
                             ) : (
                                 <div className="tabel-container">
                                     {onbehandeldeVerzoeken.length > 0 ? (
                                         onbehandeldeVerzoeken.map((verzoek) => (
-                                            <Card key={verzoek.id} className="mb-3">
+                                            <Card key={verzoek.verhuurverzoekId} className="mb-3">
                                                 <Card.Body>
                                                     <Card.Title><strong>Naam:</strong> {verzoek.volledigeNaam}</Card.Title>
                                                     <Card.Text><strong>Voertuig:</strong> {`${verzoek.voertuigMerk} ${verzoek.voertuigType}`}</Card.Text>
+                                                    <Card.Text><strong>Voertuig Soort:</strong> {verzoek.voertuigSoort}</Card.Text>
+                                                    <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardReis}</Card.Text>
+                                                    <Card.Text><strong>Bestemming:</strong> {verzoek.bestemming}</Card.Text>
+                                                    <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachtteKM}</Card.Text>
                                                     <Card.Text><strong>Startdatum:</strong> {formatDatum(verzoek.startDatum)}</Card.Text>
                                                     <Card.Text><strong>Einddatum:</strong> {formatDatum(verzoek.eindDatum)}</Card.Text>
-                                                    <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardReis}</Card.Text>
-                                                    <Card.Text><strong>Verste bestemming:</strong> {verzoek.bestemming}</Card.Text>
-                                                    <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachtteKM}</Card.Text>
+                                                    <Card.Text><strong>Accessoires:</strong> {verzoek.accessoires.join(", ") || 'Geen'}</Card.Text>
+                                                    <Card.Text><strong>Verzekering:</strong> {verzoek.verzekering}</Card.Text>
 
                                                     <div className="d-flex justify-content-start">
                                                         <Button
