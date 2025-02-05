@@ -105,7 +105,7 @@ const PendingVerzoek = () => {
       <PartNavbar />
       <Container className="mt-4">
         <h2 className="pagina-titel text-center my-4">Openstaande Verhuurverzoeken</h2>
-        
+
         {/* React Bootstrap Alert */}
         {showAlert && (
           <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
@@ -116,10 +116,10 @@ const PendingVerzoek = () => {
         <Table striped bordered hover className="tabel mt-5">
           <thead>
             <tr>
-              <th>Aard reis:</th>
-              <th>Uw bestemming:</th>
+              <th>Aard van de reis:</th>
+              <th>Bestemming:</th>
               <th>Verwachte afstand:</th>
-              <th>Voertuig:</th> {/* Combinerende kolom */}
+              <th>Voertuig:</th>
               <th>Soort:</th>
               <th>Van:</th>
               <th>Tot:</th>
@@ -132,8 +132,8 @@ const PendingVerzoek = () => {
                 <tr key={item.verhuurverzoekId}>
                   <td>{item.aardReis}</td>
                   <td>{item.bestemming}</td>
-                  <td>{item.verwachtteKM}</td>
-                  <td>{`${item.voertuigMerk} ${item.voertuigType}`}</td> {/* Samengevoegde voertuiginformatie */}
+                  <td>{item.verwachtteKM} KM</td>
+                  <td>{`${item.voertuigMerk} ${item.voertuigType}`}</td>
                   <td>{item.voertuigSoort}</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
