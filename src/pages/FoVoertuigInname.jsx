@@ -107,14 +107,14 @@ const FoVoertuigInname = () => {
                     <Table striped bordered hover className="tabel my-5">
                         <thead>
                             <tr>
-                                <th>Reservering ID</th>
-                                <th>Naam</th>
-                                <th>Van</th>
-                                <th>Tot</th>
-                                <th>Aard van reis</th>
-                                <th>Bestemming</th>
-                                <th>Verwachte aantal KM</th>
-                                <th>Status</th>
+                                <th>Reservering ID:</th>
+                                <th>Naam:</th>
+                                <th>Van:</th>
+                                <th>Tot:</th>
+                                <th>Aard van reis:</th>
+                                <th>Bestemming:</th>
+                                <th>Verwachte afstand:</th>
+                                <th>Status:</th>
                                 <th>Inname registreren</th>
                             </tr>
                         </thead>
@@ -132,7 +132,7 @@ const FoVoertuigInname = () => {
                                         <td>{new Date(auto.eindDatum).toLocaleDateString()}</td>
                                         <td>{auto.aardReis}</td>
                                         <td>{auto.bestemming}</td>
-                                        <td>{auto.verwachtteKM}</td>
+                                        <td>{auto.verwachtteKM} KM</td>
                                         <td>{auto.status}</td>
                                         <td>
                                             <Button

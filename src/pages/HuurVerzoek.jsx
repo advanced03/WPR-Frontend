@@ -123,17 +123,17 @@ const HuurVerzoek = () => {
             console.log('Formulier succesvol ingediend:', response.data);
             setShowAlert(true);
     
-            // Herleiding na 3 seconden
+            // Herleiding naar PendingVerzoek na het indienen van het formulier
             setTimeout(() => {
-                navigate('/Home');
+                // Navigeren naar de PendingVerzoek pagina
+                navigate('/PendingVerzoek');  // Dit is de route voor je PendingVerzoek-pagina
             }, 3000);
     
         } catch (error) {
             console.error('Fout bij het indienen van het formulier:', error);
         }
-    };
+    };    
     
-
 
     if (!wagen) {
         return <div>Loading wagen info...</div>;

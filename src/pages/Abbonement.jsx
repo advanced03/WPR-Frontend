@@ -142,7 +142,7 @@ const Abbonement = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            Weet u zeker dat u wilt overschakelen naar dit abonnement?
+                        Bent u zeker dat u wilt overstappen naar dit abonnement? Houd er rekening mee dat u uw abonnement niet kunt wijzigen zolang uw huidige abonnement nog actief is.
                         </p>
                     </Modal.Body>
                     <Modal.Footer>

@@ -78,7 +78,7 @@ const BOWagenparkBeheer = () => {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
                 params: { voertuigId: vehicleId },
             });
-            fetchWagens();
+            window.location.reload();
 
             setVehicles((prevVehicles) =>
                 prevVehicles.map((v) =>
@@ -389,7 +389,7 @@ const BOWagenparkBeheer = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
-                            variant="primary"
+                            variant="primary    "
                             onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}
                         >
                             {currentVehicle !== null ? 'Wijzigen' : 'Toevoegen'}
