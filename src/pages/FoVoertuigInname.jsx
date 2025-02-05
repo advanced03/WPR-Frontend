@@ -78,12 +78,15 @@ const FoVoertuigInname = () => {
     const gefilterdeAutos = autos.filter((auto) => {
         const zoekString = zoekTerm.trim().toLowerCase();
         return (
-            auto.fullname.toLowerCase().includes(zoekString) ||
-            auto.bestemming.toLowerCase().includes(zoekString) ||
-            auto.aardReis.toLowerCase().includes(zoekString) ||
-            auto.status.toLowerCase().includes(zoekString) ||
-            auto.reserveringId.toString().includes(zoekString) ||
-            auto.verwachtteKM.toString().includes(zoekString)
+            auto.status.toLowerCase() === 'uitgegeven' && // Only "Uitgegeven" status
+            (
+                auto.fullname.toLowerCase().includes(zoekString) ||
+                auto.bestemming.toLowerCase().includes(zoekString) ||
+                auto.aardReis.toLowerCase().includes(zoekString) ||
+                auto.status.toLowerCase().includes(zoekString) ||
+                auto.reserveringId.toString().includes(zoekString) ||
+                auto.verwachtteKM.toString().includes(zoekString)
+            )
         );
     });
 
@@ -143,7 +146,6 @@ const FoVoertuigInname = () => {
                                                 ⚙️
                                             </Button>
                                         </td>
-
                                     </tr>
                                 ))
                             )}

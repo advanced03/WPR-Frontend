@@ -78,6 +78,9 @@ const FoVoertuigUitgifte = () => {
         }
     };
 
+    // Filter out "Uitgegeven" vehicles
+    const gefilterdeAutos = autos.filter((auto) => auto.status !== 'Uitgegeven');
+
     return (
         <div className='achtergrond2'>
             <FoNavbar />
@@ -98,7 +101,7 @@ const FoVoertuigUitgifte = () => {
                     <Table striped bordered hover className="tabel my-5">
                         <thead>
                             <tr>
-                            <th>Reservering ID:</th>
+                                <th>Reservering ID:</th>
                                 <th>Naam:</th>
                                 <th>Van:</th>
                                 <th>Tot:</th>
@@ -110,12 +113,12 @@ const FoVoertuigUitgifte = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {autos.length === 0 ? (
+                            {gefilterdeAutos.length === 0 ? (
                                 <tr>
                                     <td colSpan="9" className="text-center">Geen voertuigen gevonden voor uitgifte</td>
                                 </tr>
                             ) : (
-                                autos.map((auto) => (
+                                gefilterdeAutos.map((auto) => (
                                     <tr key={auto.reserveringId}>
                                         <td>{auto.reserveringId}</td>
                                         <td>{auto.fullname}</td>

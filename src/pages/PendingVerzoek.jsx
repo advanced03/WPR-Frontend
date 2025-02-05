@@ -56,18 +56,17 @@ const PendingVerzoek = () => {
         return;
       }
 
-      // Zorg ervoor dat we het juiste ID in de request body meesturen
       const response = await axios.put(
         `https://localhost:7281/api/verhuurVerzoek/GetKostenOverzicht`,
-        { id: verhuurverzoekId }, // Stuur het juiste ID in de body
+        { id: verhuurverzoekId },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (response.status === 200) {
-        setKostenOverzicht(response.data); // Sla de kosten op in de state
-        setShowModal(true); // Toon de modal
+        setKostenOverzicht(response.data);
+        setShowModal(true);
       } else {
         setAlertMessage("Fout bij het ophalen van het kostenoverzicht.");
         setAlertVariant("danger");
@@ -108,6 +107,8 @@ const PendingVerzoek = () => {
               <th>Soort:</th>
               <th>Van:</th>
               <th>Tot:</th>
+              <th>Accessoires:</th>
+              <th>Verzekering:</th>
               <th>Acties</th>
             </tr>
           </thead>
@@ -122,6 +123,8 @@ const PendingVerzoek = () => {
                   <td>{item.voertuigSoort}</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
+                  <td>{item.accessoires.join(", ") || "Geen accessoires"}</td>
+                  <td>{item.verzekering}</td>
                   <td>
                     <Button
                       variant="danger"
@@ -142,7 +145,7 @@ const PendingVerzoek = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="9" className="text-center">
+                <td colSpan="10" className="text-center">
                   Geen openstaande verhuurverzoeken gevonden.
                 </td>
               </tr>
