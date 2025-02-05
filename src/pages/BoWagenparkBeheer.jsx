@@ -152,6 +152,7 @@ const BOWagenparkBeheer = () => {
                 `https://localhost:7281/api/BackOfficeMedewerker/WijzigVoertuig`,
                 updatedVehicle
             );
+            window.location.reload();
             const updatedVehicles = vehicles.map((v, idx) =>
                 idx === currentVehicle ? updatedVehicle : v
             );

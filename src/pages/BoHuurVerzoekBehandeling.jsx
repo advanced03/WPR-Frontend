@@ -78,6 +78,7 @@ const BoHuurVerzoekBehandeling = () => {
                         }
                     }
                 );
+                window.location.reload();
                 console.log(`Verzoek met ID ${verzoekId} succesvol goedgekeurd.`);
                 fetchVerzoeken(); // Haal de verzoeken opnieuw op
             } catch (err) {
@@ -108,6 +109,7 @@ const BoHuurVerzoekBehandeling = () => {
                         }
                     }
                 );
+                window.location.reload();
                 console.log(`Verzoek met ID ${verzoekId} succesvol afgewezen.`);
                 // Haal de verzoeken opnieuw op
                 fetchVerzoeken();
