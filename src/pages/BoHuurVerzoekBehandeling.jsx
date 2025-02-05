@@ -141,6 +141,7 @@ const BoHuurVerzoekBehandeling = () => {
         handleCloseModal();
     };
 
+    // Verzoeken filteren zodat we alleen de juiste verzoeken te zien krijgen.
     const onbehandeldeVerzoeken = verzoeken.filter(
         (verzoek) => !verzoek.goedgekeurd && !verzoek.afgewezen
     );

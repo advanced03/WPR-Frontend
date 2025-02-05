@@ -34,7 +34,7 @@ const BoRegister = () => {
                 typeAccount,
                 password,
             });
-
+            // Juiste gegevens opvragen en verzenden.
             const response = await axios.post(
                 `https://localhost:7281/api/BackOfficeMedewerker/registerBackendAndFrontend`,
                 {

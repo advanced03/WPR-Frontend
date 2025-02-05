@@ -34,18 +34,19 @@ const BoSchadeRegister = () => {
     }, []);
 
 
+    // Modal openen en bijhouden
     const handleOpenModal = (melding) => {
         setSelectedMelding(melding);
         setReparatieOpmerking('');
         setShowModal(true);
     };
-
+// Modal sluiten en bijhouden
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedMelding(null);
         setReparatieOpmerking('');
     };
-
+//Behandel schade methode
     const handleBehandelSchade = async () => {
         if (!selectedMelding) return;
 
@@ -69,7 +70,7 @@ const BoSchadeRegister = () => {
             alert(`Er is een fout opgetreden: ${error.response?.statusText || error.message}`);
         }
     };
-
+// Methode om schademeldingen te filteren.
     const filteredSchadeMeldingen = schadeMeldingen.filter((melding) => {
         return (
             melding.schade.toLowerCase().includes(searchQuery.toLowerCase()) ||

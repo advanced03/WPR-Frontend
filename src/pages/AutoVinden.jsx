@@ -75,6 +75,7 @@ const AutoVinden = () => {
         }
     };
 
+    // Geselecteerde bijhouden
     const handleSelect = (type) => setSelectedType(type);
 
     // Sla de geselecteerde wagen op en navigeer naar de huurverzoek pagina.
