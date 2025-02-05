@@ -35,6 +35,7 @@ const WbAbboBeheer = () => {
     fetchAbonnementen();
   }, []);
 
+  //deze methode vraagt de huidige abbonement van de gebruiker op
   const getCurrentAbonnement = async (loadedAbonnementen) => {
     const token = sessionStorage.getItem('jwtToken');
     if (!token) {
@@ -69,8 +70,9 @@ const WbAbboBeheer = () => {
     } catch (error) {
       console.error("Fout bij het ophalen van het huidige abonnement:", error);
     }
-  };
+    };
 
+    //deze methode verandert de abbonement van de huidige gebruiker
   const handleAbonnementChange = async () => {
     const token = sessionStorage.getItem('jwtToken');
     if (!token) {

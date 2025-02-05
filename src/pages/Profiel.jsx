@@ -29,6 +29,7 @@ function Profiel() {
 
     const [alert, setAlert] = useState({ show: false, message: '', variant: '' });
 
+    //deze methode haalt de gebruikersinformatie op van de huidige gebruiker
     const fetchUserData = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) return;
@@ -57,6 +58,7 @@ function Profiel() {
         }, 3000);
     };
 
+    //deze methode is verantwoordelijk voor het wijzigen van informatie van de huidige gebruiker
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = sessionStorage.getItem('jwtToken');
@@ -81,6 +83,7 @@ function Profiel() {
         }
     };
 
+    //deze methode is verantwoordelijk voor het wijzigen van het wachtwoord van de huidige gebruiker
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {

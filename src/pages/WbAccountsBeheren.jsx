@@ -8,8 +8,9 @@ const WbAccountsBeheren = () => {
     const [zoekterm, setZoekterm] = useState('');
     const [toonToevoegenModal, setToevoegenModal] = useState(false);
     const [nieuwEmail, setNieuwEmail] = useState('');
-    const [succesBericht, setSuccesBericht] = useState(null); // Nieuw: Succesbericht
+    const [succesBericht, setSuccesBericht] = useState(null); 
 
+    //dit is een methode om de informatie op te halen van alle gebruikers van een wagenpark
     const fetchAccounts = async () => {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
