@@ -54,30 +54,28 @@ const HuurGeschiedenis = () => {
         <Table striped bordered hover className="tabel mt-5">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Aard Reis</th>
-              <th>Bestemming</th>
-              <th>Verwachte KM</th>
-              <th>Startdatum</th>
-              <th>Einddatum</th>
+              <th>Aard van de reis:</th>
+              <th>Bestemming:</th>
+              <th>Verwachte afstand:</th>
+              <th>Van:</th>
+              <th>Tot:</th>
             </tr>
           </thead>
           <tbody>
             {sortedHuurData.length > 0 ? (
               sortedHuurData.map((item, index) => (
                 <tr key={index}>
-                  <td>{index + 1}</td>
                   <td>{item.aardReis}</td>
                   <td>{item.bestemming}</td>
-                  <td>{item.verwachtteKM}</td>
+                  <td>{item.verwachtteKM} KM</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">
-                  Geen huurverzoeken beschikbaar.
+                <td colSpan="5" className="text-center">
+                  Geen afgeronden huurverzoeken gevonden.
                 </td>
               </tr>
             )}
