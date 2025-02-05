@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
+import { Container, Table, Button, Modal, Form, FormControl, Alert } from 'react-bootstrap';
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigUitgifte = () => {
@@ -9,22 +9,25 @@ const FoVoertuigUitgifte = () => {
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
     const [toonModal, setModal] = useState(false);
     const [opmerking, zetOpmerking] = useState("");
-    const [laadFout, zetLaadFout] = useState(null);
+    const [melding, zetMelding] = useState(null);
 
     const haalReserveringenOp = async () => {
         try {
             const respons = await axios.get("https://localhost:7281/api/Reserveringen/GetAllReserveringen");
             zetAutos(respons.data);
-            zetLaadFout(null);
         } catch (error) {
-            zetLaadFout("Kon de reserveringen niet ophalen. Controleer de API.");
-            console.error(error);
+            console.error("Kon de reserveringen niet ophalen. Controleer de API.", error);
         }
     };
 
     useEffect(() => {
         haalReserveringenOp();
     }, []);
+
+    const toonMelding = (boodschap, variant = "success") => {
+        zetMelding({ boodschap, variant });
+        setTimeout(() => zetMelding(null), 3000);
+    };
 
     const registreerUitgifte = (auto) => {
         zetGeselecteerdeAuto(auto);
@@ -45,8 +48,10 @@ const FoVoertuigUitgifte = () => {
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             haalReserveringenOp();
+            toonMelding("Uitgifte succesvol geregistreerd!", "success");
         } catch (error) {
             console.error("Fout bij het registreren van de uitgifte:", error);
+            toonMelding("Fout bij registreren van de uitgifte!", "danger");
         } finally {
             setModal(false);
             zetGeselecteerdeAuto(null);
@@ -66,29 +71,20 @@ const FoVoertuigUitgifte = () => {
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             haalReserveringenOp();
+            toonMelding("Uitgifte succesvol verwijderd!", "success");
         } catch (error) {
             console.error("Fout bij het verwijderen van de uitgifte:", error);
+            toonMelding("Fout bij verwijderen van de uitgifte!", "danger");
         }
     };
-
-    const gefilterdeAutos = autos.filter((auto) => {
-        const normalizedSearchQuery = zoekTerm.trim().toLowerCase();
-        const matchesSearch =
-            auto.fullname.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.bestemming.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.aardReis.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.status.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.reserveringId.toString().includes(normalizedSearchQuery) ||
-            auto.verwachtteKM.toString().includes(normalizedSearchQuery);
-
-        return matchesSearch;
-    });
 
     return (
         <div className='achtergrond2'>
             <FoNavbar />
             <Container fluid>
-                <h1 className="pagina-titel text-center my-5">Beschikbare Auto's voor Uitgifte</h1>
+                <h1 className="pagina-titel text-center my-5">Voertuig uitgifte registreren</h1>
+
+                {melding && <Alert variant={melding.variant} className="text-center">{melding.boodschap}</Alert>}
 
                 <FormControl
                     type="text"
@@ -114,12 +110,12 @@ const FoVoertuigUitgifte = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {gefilterdeAutos.length === 0 ? (
+                            {autos.length === 0 ? (
                                 <tr>
                                     <td colSpan="9" className="text-center">Geen voertuigen gevonden voor uitgifte</td>
                                 </tr>
                             ) : (
-                                gefilterdeAutos.map((auto) => (
+                                autos.map((auto) => (
                                     <tr key={auto.reserveringId}>
                                         <td>{auto.reserveringId}</td>
                                         <td>{auto.fullname}</td>
@@ -130,25 +126,13 @@ const FoVoertuigUitgifte = () => {
                                         <td>{auto.verwachtteKM}</td>
                                         <td>{auto.status}</td>
                                         <td>
-                                            <Button
-                                                className="knop ms-2 my-2"
-                                                onClick={() => registreerUitgifte(auto)}
-                                            >
-                                                ✅
-                                            </Button>
-                                            <Button
-                                                className="knop ms-2 my-2"
-                                                variant="danger"
-                                                onClick={() => verwijderUitgifte(auto.reserveringId)}
-                                            >
-                                                ❌
-                                            </Button>
+                                            <Button className="knop ms-2 my-2" onClick={() => registreerUitgifte(auto)}>✅</Button>
+                                            <Button className="knop ms-2 my-2" variant="danger" onClick={() => verwijderUitgifte(auto.reserveringId)}>❌</Button>
                                         </td>
                                     </tr>
                                 ))
                             )}
                         </tbody>
-
                     </Table>
                 </div>
 
@@ -170,12 +154,8 @@ const FoVoertuigUitgifte = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => setModal(false)}>
-                            Annuleren
-                        </Button>
-                        <Button variant="success" onClick={opslaanUitgifte}>
-                            Registreren
-                        </Button>
+                        <Button variant="success" onClick={opslaanUitgifte}>Registreren</Button>
+                        <Button variant="danger" onClick={() => setModal(false)}>Annuleren</Button>
                     </Modal.Footer>
                 </Modal>
             </Container>

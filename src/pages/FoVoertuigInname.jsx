@@ -1,10 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Table, Button, Modal, Form, FormControl } from 'react-bootstrap';
+import { Container, Table, Button, Modal, Form, FormControl, Alert } from 'react-bootstrap';
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigInname = () => {
-    // Status initialiseren
     const [autos, zetAutos] = useState([]);
     const [zoekTerm, zetZoekTerm] = useState('');
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
@@ -12,10 +11,16 @@ const FoVoertuigInname = () => {
     const [schadeInfo, zetSchadeInfo] = useState('');
     const [heeftSchade, zetHeeftSchade] = useState(false);
     const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false });
+    const [melding, zetMelding] = useState(null);
 
     useEffect(() => {
         haalReserveringenOp();
     }, []);
+
+    const toonMelding = (boodschap, variant = "success") => {
+        zetMelding({ boodschap, variant });
+        setTimeout(() => zetMelding(null), 3000);
+    };
 
     const haalReserveringenOp = async () => {
         try {
@@ -32,13 +37,11 @@ const FoVoertuigInname = () => {
     };
 
     const opslaanInname = async () => {
-        // Valideer schade-informatie als er schade is
         if (heeftSchade && schadeInfo.trim() === '') {
             zetFoutmeldingen({ schadeInfo: true });
             return;
         }
 
-        // Creëer het data-object
         const data = {
             reserveringId: geselecteerdeAuto.reserveringId,
             isSchade: heeftSchade,
@@ -47,8 +50,6 @@ const FoVoertuigInname = () => {
             beschrijvingFoto: null,
         };
 
-        console.log('Verstuur data:', data);
-
         try {
             const token = sessionStorage.getItem('jwtToken');
             if (!token) {
@@ -56,16 +57,13 @@ const FoVoertuigInname = () => {
                 return;
             }
 
-            // Verander de HTTP-methode naar PUT
-            console.log('Verstuur verzoek naar:', 'https://localhost:7281/api/FrontOfficeMedewerker/NeemIn');
             await axios.put('https://localhost:7281/api/FrontOfficeMedewerker/NeemIn', data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            // Haal de reserveringen opnieuw op
-            haalReserveringenOp(); // Ververs de data (pagina herladen)
+            haalReserveringenOp();
+            toonMelding("Inname succesvol geregistreerd!", "success");
 
-            // Sluit de modal en reset velden
             setModal(false);
             zetGeselecteerdeAuto(null);
             zetSchadeInfo('');
@@ -73,28 +71,29 @@ const FoVoertuigInname = () => {
             zetFoutmeldingen({ schadeInfo: false });
         } catch (error) {
             console.error('Fout bij het registreren van de inname:', error.response?.data || error.message);
+            toonMelding("Fout bij inname registratie!", "danger");
         }
     };
 
     const gefilterdeAutos = autos.filter((auto) => {
-        const normalizedSearchQuery = zoekTerm.trim().toLowerCase(); // Verwijder spaties en zet om naar lowercase
-
-        const matchesSearch =
-            auto.fullname.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.bestemming.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.aardReis.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.status.toLowerCase().includes(normalizedSearchQuery) ||
-            auto.reserveringId.toString().includes(normalizedSearchQuery) ||  // Zoek ook op reservering ID
-            auto.verwachtteKM.toString().includes(normalizedSearchQuery); // Zoek ook op verwachte kilometers
-
-        return matchesSearch;
+        const zoekString = zoekTerm.trim().toLowerCase();
+        return (
+            auto.fullname.toLowerCase().includes(zoekString) ||
+            auto.bestemming.toLowerCase().includes(zoekString) ||
+            auto.aardReis.toLowerCase().includes(zoekString) ||
+            auto.status.toLowerCase().includes(zoekString) ||
+            auto.reserveringId.toString().includes(zoekString) ||
+            auto.verwachtteKM.toString().includes(zoekString)
+        );
     });
 
     return (
         <div className='achtergrond2'>
             <FoNavbar />
             <Container fluid>
-                <h1 className="pagina-titel text-center my-5">Uitgehuurde Auto's</h1>
+                <h1 className="pagina-titel text-center my-5">Voertuig inname registreren</h1>
+
+                {melding && <Alert variant={melding.variant} className="text-center">{melding.boodschap}</Alert>}
 
                 <FormControl
                     type="text"
@@ -136,13 +135,19 @@ const FoVoertuigInname = () => {
                                         <td>{auto.verwachtteKM}</td>
                                         <td>{auto.status}</td>
                                         <td>
-                                            <Button className="knop" onClick={() => registreerInname(auto)}>⚙️</Button>
+                                            <Button
+                                                className="knop"
+                                                onClick={() => registreerInname(auto)}
+                                                disabled={auto.status === "Afgerond"}
+                                            >
+                                                ⚙️
+                                            </Button>
                                         </td>
+
                                     </tr>
                                 ))
                             )}
                         </tbody>
-
                     </Table>
                 </div>
 
@@ -178,12 +183,8 @@ const FoVoertuigInname = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => setModal(false)}>
-                            Annuleren
-                        </Button>
-                        <Button variant="success" onClick={opslaanInname}>
-                            Registreren
-                        </Button>
+                        <Button variant="success" onClick={opslaanInname}>Registreren</Button>
+                        <Button variant="danger" onClick={() => setModal(false)}>Annuleren</Button>
                     </Modal.Footer>
                 </Modal>
             </Container>
