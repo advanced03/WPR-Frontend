@@ -27,7 +27,7 @@ const BOWagenparkBeheer = () => {
         const fetchWagens = async () => {
             try {
                 const response = await axios.get(
-                    'https://localhost:7281/api/voertuigen/AllVoertuigen'
+                    'https://localhost:7281/api/voertuigen/GetAllVoertuigDataEnStatus'
                 );
                 console.log('API Response:', response.data);
                 setVehicles(response.data);
@@ -57,6 +57,7 @@ const BOWagenparkBeheer = () => {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/BlokkeerdVoertuig', null, {
                 params: { voertuigId: vehicleId, opmerking },
             });
+            window.location.reload();
 
             setVehicles((prevVehicles) =>
                 prevVehicles.map((v) =>
@@ -65,6 +66,7 @@ const BOWagenparkBeheer = () => {
                         : v
                 )
             );
+            
         } catch (error) {
             console.error('Error bij het blokkeren van voertuig:', error);
             setError('Er is een fout opgetreden bij het blokkeren van het voertuig.');
@@ -76,6 +78,7 @@ const BOWagenparkBeheer = () => {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/DeblokkeerVoertuig', null, {
                 params: { voertuigId: vehicleId },
             });
+            fetchWagens();
 
             setVehicles((prevVehicles) =>
                 prevVehicles.map((v) =>
@@ -84,6 +87,7 @@ const BOWagenparkBeheer = () => {
                         : v
                 )
             );
+            
         } catch (error) {
             console.error('Error bij het deblokkeren van voertuig:', error);
             setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
@@ -287,7 +291,7 @@ const BOWagenparkBeheer = () => {
                                     >
                                         Verwijderen
                                     </Button>
-                                    {vehicle.status === 'Niet Beschikbaar' ? (
+                                    {vehicle.voertuigData.status.toLowerCase() === 'geblokkeerd' ? (
                                         <Button
                                             variant="success"
                                             className="mx-1"
@@ -306,6 +310,8 @@ const BOWagenparkBeheer = () => {
                                             Blokkeren
                                         </Button>
                                     )}
+
+
                                 </td>
                             </tr>
                         ))}
