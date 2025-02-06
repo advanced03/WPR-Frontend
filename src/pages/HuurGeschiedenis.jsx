@@ -1,3 +1,4 @@
+// State variabelen
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
 import axios from "axios";
@@ -7,7 +8,7 @@ import PartNavbar from "../components/PartNavbar.jsx";
 const HuurGeschiedenis = () => {
   // State voor huurdata
   const [huurData, setHuurData] = useState([]);
-  
+
   // Sorteer huurdata op einddatum (aflopend)
   const sortedHuurData = [...huurData].sort(
     (a, b) => new Date(b.eindDatum) - new Date(a.eindDatum)
@@ -15,6 +16,7 @@ const HuurGeschiedenis = () => {
 
   // Haal de huurdata op van de API
   useEffect(() => {
+    // Functie om data op te halen
     const fetchData = async () => {
       try {
         const token = sessionStorage.getItem("jwtToken");
@@ -29,10 +31,10 @@ const HuurGeschiedenis = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
+        // Als er geen huurverzoeken zijn gevonden, geef een alert en leeg de huurData array
         if (response.status === 404) {
           alert("Er zijn geen huurverzoeken gevonden");
-          setHuurData([]); // Leeg de huurData array
+          setHuurData([]);
         } else if (Array.isArray(response.data)) {
           setHuurData(response.data);
         } else {
@@ -42,7 +44,7 @@ const HuurGeschiedenis = () => {
         console.error("Error fetching huur data:", error);
       }
     };
-
+ // Voer de fetchData functie uit
     fetchData();
   }, []);
 
@@ -64,6 +66,7 @@ const HuurGeschiedenis = () => {
             </tr>
           </thead>
           <tbody>
+            {/* Als er huurdata is, map over de data en geef de data weer in de tabel */}
             {sortedHuurData.length > 0 ? (
               sortedHuurData.map((item, index) => (
                 <tr key={index}>
@@ -76,7 +79,7 @@ const HuurGeschiedenis = () => {
                   <td>{item.accessoires.length > 0 ? item.accessoires.map((acc) => acc.naam).join(", ") : "Geen accessoires"}</td>
                 </tr>
               ))
-            ) : (
+            ) : ( // Als er geen huurdata is, geef een melding in de tabel
               <tr>
                 <td colSpan="5" className="text-center">
                   Geen afgeronden huurverzoeken gevonden.

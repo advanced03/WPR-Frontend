@@ -1,3 +1,4 @@
+// Import statements
 import React, { useEffect, useState } from 'react';
 import { Container, Card, Row, Col, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import PartNavbar from "../components/PartNavbar.jsx";
 import WbNavbar from '../components/WbNavbar';
 
 const Privacy = () => {
+    // State variabelen
     const [role, setRole] = useState('');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -27,6 +29,7 @@ const Privacy = () => {
                 setLoading(false);
             }
         } else {
+            // Geen token aanwezig, stuur de gebruiker naar de loginpagina
             setLoading(false);
             navigate('/login');
         }

@@ -1,8 +1,10 @@
+// Import statements
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import WbNavbar from "../components/WbNavbar";
 
 const WbAbboBeheer = () => {
+  // State variabelen
   const [toonModal, setShowModal] = useState(false);
   const [selectedAbonnement, setSelectedAbonnement] = useState(null);
   const [currentAbonnement, setCurrentAbonnement] = useState(null);
@@ -12,6 +14,7 @@ const WbAbboBeheer = () => {
   useEffect(() => {
     const fetchAbonnementen = async () => {
       try {
+        // Haal de abonnementen op van de API
         const response = await axios.get("https://localhost:7281/api/Abonnementen/GetWagenparkBeheerderAbonnementen");
         if (response.status === 200) {
           const formattedAbonnementen = response.data.map((abbo) => ({
@@ -31,7 +34,7 @@ const WbAbboBeheer = () => {
         console.error("Fout bij het ophalen van de abonnementen:", error);
       }
     };
-
+    // Voer de fetchAbonnementen-functie uit bij het laden van de pagina
     fetchAbonnementen();
   }, []);
 
@@ -42,7 +45,7 @@ const WbAbboBeheer = () => {
       console.error('JWT-token ontbreekt in sessionStorage.');
       return;
     }
-
+    // Haal het huidige abonnement op van de API
     try {
       const response = await axios.get(
         "https://localhost:7281/api/Abonnementen/GetCurrentAbonnement",
@@ -57,7 +60,7 @@ const WbAbboBeheer = () => {
       if (response.status === 200) {
         const currentAbboId = response.data.abonnementId; // Het huidige abonnement-ID dat wordt geretourneerd
         const selected = loadedAbonnementen.find((abbo) => abbo.id === currentAbboId);
-
+        //  Als het huidige abonnement is gevonden, stel het in als het huidige abonnement
         if (selected) {
           setCurrentAbonnement(selected.type); // Stel de abonnementsnaam in
         } else {
@@ -70,15 +73,16 @@ const WbAbboBeheer = () => {
     } catch (error) {
       console.error("Fout bij het ophalen van het huidige abonnement:", error);
     }
-    };
+  };
 
-    //deze methode verandert de abbonement van de huidige gebruiker
+  //deze methode verandert de abbonement van de huidige gebruiker
   const handleAbonnementChange = async () => {
     const token = sessionStorage.getItem('jwtToken');
     if (!token) {
       console.error('JWT-token ontbreekt in sessionStorage.');
       return;
     }
+    // Verander het abonnement van de gebruiker
     try {
       const response = await axios.post("https://localhost:7281/api/Abonnementen/wijzig-abonnement-wagenpark", {
         Id: selectedAbonnement,
@@ -88,7 +92,7 @@ const WbAbboBeheer = () => {
           'Content-Type': 'application/json',
         },
       });
-
+      // Als de status 200 is, is het abonnement gewijzigd
       if (response.status === 200) {
         const selected = abonnementen.find((abbo) => abbo.id === selectedAbonnement);
         setCurrentAbonnement(selected.type);
@@ -113,6 +117,7 @@ const WbAbboBeheer = () => {
         </Row>
 
         <Row>
+          {/* Loop door de abonnementen en maak een kaart voor elk abonnement */}
           {abonnementen.map((abbo, index) => (
             <Col md={6} key={index} className="mb-4">
               <Card>
@@ -138,7 +143,7 @@ const WbAbboBeheer = () => {
             </Col>
           ))}
         </Row>
-
+          {/* Huidig abonnement */}
         <div className="text-center my-4 p-4 huren-box">
           <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
         </div>

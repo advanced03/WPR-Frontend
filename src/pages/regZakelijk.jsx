@@ -1,4 +1,5 @@
-﻿import React, { useState } from 'react';
+﻿// Import statements
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
@@ -57,6 +58,7 @@ const RegZak = () => {
             // Bij een gefaalde registratie actie laat de volgende berichten zien:
         } catch (err) {
             if (err.response) {
+                // Als er een error is, laat de volgende berichten zien:
                 const serverError = err.response.data.Errors
                     ? err.response.data.Errors.join('\n')
                     : err.response.data.Message ||
@@ -187,7 +189,7 @@ const RegZak = () => {
                                         value={bevestigWachtwoord}
                                         onChange={(e) => setBevestigWachtwoord(e.target.value)}
                                         required
-                                        isInvalid={wachtwoord !== bevestigWachtwoord}
+                                        isInvalid={wachtwoord !== bevestigWachtwoord} // Wachtwoorden komen niet overeen? Error
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         Wachtwoorden komen niet overeen.

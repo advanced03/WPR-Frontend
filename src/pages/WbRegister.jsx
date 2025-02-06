@@ -1,4 +1,5 @@
-﻿import React, { useState } from 'react';
+﻿// Import statements
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
@@ -26,7 +27,7 @@ const WbRegister = () => {
             //Endpoint die verantwoordelijk is voor het registreren.
             const response = await axios.put(
                 `https://localhost:7281/api/Account/NieuwWagenParkVerzoek`,
-                {
+                { // De data die wordt meegestuurd naar de server
                     voornaam,
                     achternaam,
                     gewensdeUsername,
@@ -82,7 +83,7 @@ const WbRegister = () => {
     const handleNavigation = (path) => {
         navigate(path);
     };
-
+// De return van de pagina
     return (
         <div className="achtergrond1">
             <Container fluid className="d-flex justify-content-center align-items-center vh-100">
@@ -120,7 +121,7 @@ const WbRegister = () => {
                                         placeholder="Voer uw e-mail in"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        isInvalid={email && !/\S+@\S+\.\S+/.test(email)}
+                                        isInvalid={email && !/\S+@\S+\.\S+/.test(email)} // Als het emailadres niet geldig is, geef een invalid feedback
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         Voer een geldig e-mailadres in.
@@ -167,6 +168,7 @@ const WbRegister = () => {
                                         type="text"
                                         placeholder="Voer uw kvknummer in"
                                         value={kvkNummer}
+                                        // Alleen cijfers toestaan
                                         onChange={(e) => {
                                             const value = e.target.value;
                                             if (/^\d{0,9}$/.test(value)) {

@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Modal, Alert } from "react-bootstrap";
 import axios from "axios";
@@ -5,6 +6,7 @@ import "../style/tabel.css";
 import PartNavbar from "../components/PartNavbar.jsx";
 
 const PendingVerzoek = () => {
+  // State variabelen
   const [pendingData, setPendingData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedVerhuurId, setSelectedVerhuurId] = useState(null);
@@ -115,6 +117,7 @@ const PendingVerzoek = () => {
             </tr>
           </thead>
           <tbody>
+            {/* Als er geen verzoeken zijn, toon een melding */}
             {pendingData.length > 0 ? (
               pendingData.map((item) => (
                 <tr key={item.verhuurverzoekId}>

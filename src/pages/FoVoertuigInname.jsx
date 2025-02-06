@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿// Import statements
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Modal, Form, FormControl, Alert } from 'react-bootstrap';
 import FoNavbar from "../components/FoNavbar";
@@ -12,7 +13,7 @@ const FoVoertuigInname = () => {
     const [heeftSchade, zetHeeftSchade] = useState(false);
     const [foutmeldingen, zetFoutmeldingen] = useState({ schadeInfo: false });
     const [melding, zetMelding] = useState(null);
-
+    // Ophalen van reserveringen bij het laden van de pagina
     useEffect(() => {
         haalReserveringenOp();
     }, []);
@@ -22,7 +23,7 @@ const FoVoertuigInname = () => {
         zetMelding({ boodschap, variant });
         setTimeout(() => zetMelding(null), 3000);
     };
-  // Methode om reserveringen ophalen.
+    // Methode om reserveringen ophalen.
     const haalReserveringenOp = async () => {
         try {
             const respons = await axios.get('https://localhost:7281/api/Reserveringen/GetAllReserveringen');
@@ -31,18 +32,19 @@ const FoVoertuigInname = () => {
             console.error('Fout bij het ophalen van reserveringen:', error);
         }
     };
- // Inname registreren
+    // Inname registreren
     const registreerInname = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
-// Inname opslaan
+    // Inname opslaan
     const opslaanInname = async () => {
         if (heeftSchade && schadeInfo.trim() === '') {
             zetFoutmeldingen({ schadeInfo: true });
             return;
         }
 
+        // API call
         const data = {
             reserveringId: geselecteerdeAuto.reserveringId,
             isSchade: heeftSchade,
@@ -75,10 +77,11 @@ const FoVoertuigInname = () => {
             toonMelding("Fout bij inname registratie!", "danger");
         }
     };
-
+    // Filteren van reserveringen
     const gefilterdeAutos = autos.filter((auto) => {
         const zoekString = zoekTerm.trim().toLowerCase();
         return (
+            // Filteren op basis van zoekterm
             auto.status.toLowerCase() === 'uitgegeven' && // Only "Uitgegeven" status
             (
                 auto.fullname.toLowerCase().includes(zoekString) ||
@@ -123,6 +126,7 @@ const FoVoertuigInname = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {/* Als er geen reserveringen zijn, toon een melding */}
                             {gefilterdeAutos.length === 0 ? (
                                 <tr>
                                     <td colSpan="9" className="text-center">Geen openstaande huurverzoeken gevonden</td>
@@ -167,6 +171,7 @@ const FoVoertuigInname = () => {
                                     checked={heeftSchade}
                                     onChange={(e) => zetHeeftSchade(e.target.checked)}
                                 />
+                                {/* Als er schade is, toon een extra tekstveld */}
                                 {heeftSchade && (
                                     <>
                                         <Form.Control

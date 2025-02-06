@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -19,40 +20,40 @@ const Login = () => {
         e.preventDefault();
         setError(null);
         setSucces(null); // Reset vorige success message
-    
+        // Controleer of gebruikersnaam en wachtwoord zijn ingevuld
         try {
             const response = await axios.post(
                 'https://localhost:7281/api/account/Login',
                 { username, password },
                 { headers: { 'Content-Type': 'application/json' } }
             );
-    
+            // Succesvol ingelogd
             setSucces("Succesvol ingelogd! 🎉 Je wordt doorgestuurd...");
             sessionStorage.setItem('jwtToken', response.data.token);
-    
+
             // Print de JWT-token in de console
             console.log("JWT Token:", response.data.token);
-    
+            // Haal gebruikersdata op
             fetchUserData();
-    
+            // Error afhandeling
         } catch (error) {
             console.error('Error logging in:', error);
             setError('Inloggen mislukt. Controleer uw gegevens.');
         }
     };
 
-// Gebruikers data ophalen
+    // Gebruikers data ophalen
     const fetchUserData = async () => {
         setLoading(true);
         const token = sessionStorage.getItem('jwtToken');
         if (!token) return; // Controleer of JWT-token bestaat
-    
+        // Haal gebruikersdata op
         try {
             const response = await axios.get('https://localhost:7281/api/account/getUserData', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log('API response:', response.data);
-    
+
             setTimeout(() => {
                 if (response.data.role === "particuliereKlant") {
                     navigate("/Home");
@@ -66,14 +67,14 @@ const Login = () => {
                     navigate("/FoVoertuigInname");
                 }
             }, 1000); // Vertraging van 1 seconde zodat het successbericht te zien is.
-    
+
         } catch (error) {
             console.error('Fout bij ophalen gegevens:', error.response?.data || error.message);
         } finally {
             setLoading(false); // Zorg ervoor dat dit altijd wordt uitgevoerd
         }
     };
-    
+
     // Functie voor navigeren naar andere pagina's
     const handleNavigation = (path) => {
         navigate(path);

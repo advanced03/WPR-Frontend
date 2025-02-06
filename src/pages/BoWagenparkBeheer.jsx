@@ -97,7 +97,7 @@ const BOWagenparkBeheer = () => {
                         : v
                 )
             );
-        // Foutmelding tonen
+            // Foutmelding tonen
         } catch (error) {
             console.error('Error bij het deblokkeren van voertuig:', error);
             setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
@@ -168,7 +168,9 @@ const BOWagenparkBeheer = () => {
             const updatedVehicles = vehicles.map((v, idx) =>
                 idx === currentVehicle ? updatedVehicle : v
             );
+            // Voertuigen updaten
             setVehicles(updatedVehicles);
+            // Formulier resetten
             setForm({
                 merk: '',
                 type: '',
@@ -179,7 +181,7 @@ const BOWagenparkBeheer = () => {
             });
             setCurrentVehicle(null);
             setModal(false);
-
+            //  Succesmelding tonen
             setSuccessMessage('Voertuig succesvol bijgewerkt!');
             setShowSuccess(true);
         } catch (error) {
@@ -205,7 +207,7 @@ const BOWagenparkBeheer = () => {
                 },
                 data: { id: vehicleId },
             });
-
+            //  Succesmelding tonen
             if (response.status === 200 || response.status === 204) {
                 setVehicles(vehicles.filter((vehicle) => vehicle.voertuigId !== vehicleId));
                 setShowDeleteModal(false);
@@ -223,6 +225,7 @@ const BOWagenparkBeheer = () => {
 
     //Zoekbalk code
     const filteredVehicles = vehicles.filter((vehicle) => {
+        // Zoekquery (merk, type, kleur, kenteken, aanschafjaar, soort)
         const matchesSearch =
             (vehicle.merk || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
             (vehicle.type || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -230,10 +233,10 @@ const BOWagenparkBeheer = () => {
             (vehicle.kenteken || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
             (vehicle.aanschafJaar || '').toString().includes(searchQuery) ||
             (vehicle.soort || '').toString().includes(searchQuery);
-
         return matchesSearch;
     });
 
+    // Laad scherm tonen
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;
 
@@ -242,6 +245,7 @@ const BOWagenparkBeheer = () => {
             <BoNavbar />
             <Container>
                 <h1 className="pagina-titel text-center my-4">Wagenparkbeheer</h1>
+                {/** Succesmelding tonen */}
                 {showSuccess && (
                     <Alert variant="success" onClose={() => setShowSuccess(false)} dismissible>
                         {successMessage}
@@ -273,6 +277,7 @@ const BOWagenparkBeheer = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {/* Voertuigen tonen */}
                         {filteredVehicles.map((vehicle, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
@@ -306,6 +311,7 @@ const BOWagenparkBeheer = () => {
                                     >
                                         Verwijderen
                                     </Button>
+                                    {/* Voertuig blokkeren/deblokkeren */}
                                     {vehicle.voertuigData.status.toLowerCase() === 'geblokkeerd' ? (
                                         <Button
                                             variant="success"
@@ -403,6 +409,7 @@ const BOWagenparkBeheer = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
+                        {/* Voertuig toevoegen/wijzigen knop */}
                         <Button
                             variant="primary    "
                             onClick={currentVehicle !== null ? handleUpdateVehicle : handleAddVehicle}

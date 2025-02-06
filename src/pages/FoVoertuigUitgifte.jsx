@@ -1,45 +1,50 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Modal, Form, FormControl, Alert } from 'react-bootstrap';
 import FoNavbar from "../components/FoNavbar";
 
 const FoVoertuigUitgifte = () => {
+    // State variabelen
     const [autos, zetAutos] = useState([]);
     const [zoekTerm, zetZoekTerm] = useState("");
     const [geselecteerdeAuto, zetGeselecteerdeAuto] = useState(null);
     const [toonModal, setModal] = useState(false);
     const [opmerking, zetOpmerking] = useState("");
     const [melding, zetMelding] = useState(null);
-//  Reserveringen ophalen
+    //  Reserveringen ophalen
     const haalReserveringenOp = async () => {
         try {
             const respons = await axios.get("https://localhost:7281/api/Reserveringen/GetAllReserveringen");
             zetAutos(respons.data);
         } catch (error) {
+            // Foutmelding tonen
             console.error("Kon de reserveringen niet ophalen. Controleer de API.", error);
         }
     };
-
+    //  Reserveringen ophalen bij het laden van de pagina
     useEffect(() => {
         haalReserveringenOp();
     }, []);
-// Melding tonen
+    // Melding tonen
     const toonMelding = (boodschap, variant = "success") => {
         zetMelding({ boodschap, variant });
         setTimeout(() => zetMelding(null), 3000);
     };
-// Uitgifte registreren
+    // Uitgifte registreren
     const registreerUitgifte = (auto) => {
         zetGeselecteerdeAuto(auto);
         setModal(true);
     };
-// Uitgifte registreren
+    // Uitgifte registreren
     const opslaanUitgifte = async () => {
+        // JWT-token ophalen
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+        // API call
         try {
             const id = geselecteerdeAuto.reserveringId;
             await axios.put(
@@ -47,12 +52,15 @@ const FoVoertuigUitgifte = () => {
                 { id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            // Reserveringen ophalen
             haalReserveringenOp();
             toonMelding("Uitgifte succesvol geregistreerd!", "success");
         } catch (error) {
+            // Foutmelding tonen
             console.error("Fout bij het registreren van de uitgifte:", error);
             toonMelding("Fout bij registreren van de uitgifte!", "danger");
         } finally {
+            // Modal sluiten
             setModal(false);
             zetGeselecteerdeAuto(null);
             zetOpmerking("");
@@ -68,10 +76,12 @@ const FoVoertuigUitgifte = () => {
             return;
         }
         try {
+            // API aanroepen voor een delete actie.
             await axios.delete(
                 `https://localhost:7281/api/Reserveringen/VerwijderReservering/${reserveringId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            // Reserveringen ophalen
             haalReserveringenOp();
             toonMelding("Uitgifte succesvol verwijderd!", "success");
         } catch (error) {
@@ -88,7 +98,7 @@ const FoVoertuigUitgifte = () => {
             <FoNavbar />
             <Container fluid>
                 <h1 className="pagina-titel text-center my-5">Voertuig uitgifte registreren</h1>
-
+            {/* Melding tonen */}
                 {melding && <Alert variant={melding.variant} className="text-center">{melding.boodschap}</Alert>}
 
                 <FormControl
@@ -115,6 +125,7 @@ const FoVoertuigUitgifte = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {/* Geen voertuigen gevonden melding */}
                             {gefilterdeAutos.length === 0 ? (
                                 <tr>
                                     <td colSpan="9" className="text-center">Geen voertuigen gevonden voor uitgifte</td>
