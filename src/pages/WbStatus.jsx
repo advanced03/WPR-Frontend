@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState } from 'react';
 import { Container, Table, Dropdown, DropdownButton, InputGroup, FormControl } from 'react-bootstrap';
 import WbNavbar from "../components/WbNavbar.jsx";
@@ -76,6 +77,7 @@ const WbStatus = () => {
                 <td colSpan="6" className="text-center">Geen voertuigen gevonden in uw wagenpark</td>
               </tr>
             ) : (
+              // Gefilterde voertuigen mappen en weergeven in de tabel
               filteredVehicles.map((vehicle, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
