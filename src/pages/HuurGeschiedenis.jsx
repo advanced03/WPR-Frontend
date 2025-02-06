@@ -73,7 +73,7 @@ const HuurGeschiedenis = () => {
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
                   <td>{item.verzekering}</td>
-                  <td>{item.accessoires}</td>
+                  <td>{item.accessoires.length > 0 ? item.accessoires.map((acc) => acc.naam).join(", ") : "Geen accessoires"}</td>
                 </tr>
               ))
             ) : (
