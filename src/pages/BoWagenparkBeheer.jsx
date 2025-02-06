@@ -1,8 +1,10 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import { Alert, Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
 import BoNavbar from '../components/BoNavbar';
 import axios from 'axios';
 
+// Backoffice Wagenparkbeheer pagina
 const BOWagenparkBeheer = () => {
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,6 +16,7 @@ const BOWagenparkBeheer = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
+    // Formulier voor toevoegen/wijzigen van voertuigen
     const [form, setForm] = useState({
         merk: '',
         type: '',
@@ -22,7 +25,7 @@ const BOWagenparkBeheer = () => {
         kenteken: '',
         soort: '',
     });
- // Fetch wagens
+    // Fetch wagens
     useEffect(() => {
         const fetchWagens = async () => {
             try {
@@ -33,15 +36,16 @@ const BOWagenparkBeheer = () => {
                 setVehicles(response.data);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching voertuigen:', error);
-                setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
+                console.error('Error fetching voertuigen:', error); // Log error
+                setError('Er is een fout opgetreden bij het ophalen van de voertuigen.'); // Set error message
                 setLoading(false);
             }
         };
-
+        // Fetch wagens methode aanroepen
         fetchWagens();
     }, []);
 
+    // Methode om input velden up te daten.
     const handleInputChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -55,12 +59,13 @@ const BOWagenparkBeheer = () => {
                 alert('Blokkeren geannuleerd. Opmerking is verplicht.');
                 return;
             }
-
+            //API aanroepen om voertuig te blokkeren
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/BlokkeerdVoertuig', null, {
                 params: { voertuigId: vehicleId, opmerking },
             });
+            // Pagina herladen
             window.location.reload();
-
+            // Voertuig status updaten
             setVehicles((prevVehicles) =>
                 prevVehicles.map((v) =>
                     v.voertuigId === vehicleId
@@ -68,7 +73,7 @@ const BOWagenparkBeheer = () => {
                         : v
                 )
             );
-            
+            // Foutmelding tonen
         } catch (error) {
             console.error('Error bij het blokkeren van voertuig:', error);
             setError('Er is een fout opgetreden bij het blokkeren van het voertuig.');
@@ -84,6 +89,7 @@ const BOWagenparkBeheer = () => {
             });
             window.location.reload();
 
+            // Voertuig status updaten
             setVehicles((prevVehicles) =>
                 prevVehicles.map((v) =>
                     v.voertuigId === vehicleId
@@ -91,7 +97,7 @@ const BOWagenparkBeheer = () => {
                         : v
                 )
             );
-            
+        // Foutmelding tonen
         } catch (error) {
             console.error('Error bij het deblokkeren van voertuig:', error);
             setError('Er is een fout opgetreden bij het deblokkeren van het voertuig.');
@@ -101,7 +107,7 @@ const BOWagenparkBeheer = () => {
     //Methode om voertuigen toe te voegen
     const handleAddVehicle = async () => {
         console.log('Voertuig toe te voegen:', form);
-
+        // newVehicle object aanmaken
         const newVehicle = {
             merk: form.merk,
             type: form.type,
@@ -110,13 +116,14 @@ const BOWagenparkBeheer = () => {
             kenteken: form.kenteken,
             soort: form.soort,
         };
-
+        // Validatie van input velden, alles moet ingevuld worden.
         if (!newVehicle.merk || !newVehicle.type || !newVehicle.kleur || !newVehicle.kenteken || !newVehicle.soort || isNaN(newVehicle.aanschafJaar)) {
             setError('Alle velden moeten ingevuld zijn met geldige waarden.');
             return;
         }
 
         try {
+            // Backend aanroepen om voertuig toe te voegen
             const response = await axios.post(
                 'https://localhost:7281/api/BackOfficeMedewerker/AddVoertuig',
                 newVehicle
@@ -125,7 +132,7 @@ const BOWagenparkBeheer = () => {
             console.log('Added Vehicle Response:', response.data);
 
             setVehicles(prevVehicles => [...prevVehicles, response.data]);
-
+            // Formulier resetten
             setForm({
                 merk: '',
                 type: '',
@@ -134,16 +141,15 @@ const BOWagenparkBeheer = () => {
                 kenteken: '',
                 soort: '',
             });
-
+            // Modal sluiten
             setModal(false);
-
             setSuccessMessage('Voertuig succesvol toegevoegd!');
             setShowSuccess(true);
-
+            // Pagina herladen
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
-
+            // Foutmelding tonen
         } catch (error) {
             console.error('Error adding voertuig:', error);
             setError('Er is een fout opgetreden bij het toevoegen van het voertuig.');
@@ -182,7 +188,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-     //Methode om wagens te verwijderen
+    //Methode om wagens te verwijderen
     const handleDeleteVehicle = async (vehicleId) => {
         try {
             if (!vehicleId) {
@@ -215,7 +221,7 @@ const BOWagenparkBeheer = () => {
         }
     };
 
-        //Zoekbalk code
+    //Zoekbalk code
     const filteredVehicles = vehicles.filter((vehicle) => {
         const matchesSearch =
             (vehicle.merk || '').toLowerCase().includes(searchQuery.toLowerCase()) ||

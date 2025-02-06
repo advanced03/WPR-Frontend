@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +17,7 @@ const BoRegister = () => {
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
+    // Functie om te registreren
     const handleRegister = async (e) => {
         e.preventDefault();
         setError(null);
@@ -26,7 +28,7 @@ const BoRegister = () => {
             setError('Wachtwoorden komen niet overeen.');
             return;
         }
-
+        // Probeer de volgende acties uit te voeren
         try {
             console.log('Payload:', {
                 username,
@@ -75,7 +77,7 @@ const BoRegister = () => {
                     '🔠 Uw wachtwoord bevat minimaal één hoofdletter (A-Z).\n' +
                     '🔢 Uw wachtwoord bevat minimaal één cijfer (0-9).\n' +
                     '🔒 Uw wachtwoord bevat minimaal één speciaal teken.';
-
+                // Laat de error zien
                 setError(serverError);
             } else if (err.request) {
                 setError('Er is geen verbinding met de server mogelijk. Controleer uw internetverbinding.');
@@ -100,6 +102,7 @@ const BoRegister = () => {
                                     👍 Uw account is succesvol aangemaakt! U wordt binnen 3 seconden teruggestuurd naar de wagenparkbeheer pagina.
                                 </Alert>
                             )}
+                            {/* Registratie formulier */}
                             <Form onSubmit={handleRegister}>
                                 <Form.Group controlId="formUsername" className="mb-3">
                                     <Form.Label>👤 Gebruikersnaam</Form.Label>

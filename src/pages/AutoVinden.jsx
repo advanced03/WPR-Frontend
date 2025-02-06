@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, ButtonGroup, Form } from 'react-bootstrap';
@@ -30,6 +31,7 @@ const AutoVinden = () => {
                 console.log('Response Data:', response.data);
                 setWagens(response.data);
                 setLoading(false);
+                // Foutmelding tonen als er geen voertuigen zijn
             } catch (error) {
                 setError('Er is een fout opgetreden bij het ophalen van de voertuigen.');
                 setLoading(false);
@@ -50,6 +52,7 @@ const AutoVinden = () => {
             }
         };
 
+        // Functies aanroepen
         fetchWagens();
         fetchUserRole();
     }, []);
@@ -61,16 +64,20 @@ const AutoVinden = () => {
             return;
         }
 
+        // Voertuigen ophalen op basis van de datums
         setLoading(true);
         try {
             const response = await axios.get('https://localhost:7281/api/voertuigen/GetVoertuigByDate', {
                 params: { startDate, endDate }
             });
+            // Als er geen voertuigen zijn, toon dan een foutmelding
             setWagens(response.data);
             setError(null);
+            // Als er geen voertuigen zijn, toon dan een foutmelding
         } catch (error) {
             setError('Er is een fout opgetreden bij het ophalen van voertuigen op basis van de datums.');
         } finally {
+            // Laadindicator uitschakelen
             setLoading(false);
         }
     };
@@ -108,6 +115,7 @@ const AutoVinden = () => {
         }
     };
 
+    // Functies voor het bijhouden van de start- en einddatum
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
 
@@ -182,7 +190,7 @@ const AutoVinden = () => {
                         <Button
                             className="knop"
                             onClick={handleFetchByDate}
-                            
+
                             disabled={!startDate || !endDate || startDate.trim() === '' || endDate.trim() === ''}
                         > {/*Knop uitschakelen als niet alles is ingevuld*/}
                             Zoek voertuigen op datum
@@ -190,6 +198,7 @@ const AutoVinden = () => {
                     </div>
                 </div>
 
+                {/*Voertuigen weergeven*/}
                 <Row className="my-5 p-5 autovinden">
                     {filteredWagens.length === 0 ? (
                         <div className="no-results">Geen voertuigen gevonden!</div>

@@ -1,9 +1,12 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import { Container, Table, InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 import BoNavbar from "../components/BoNavbar";
 import axios from 'axios';
 
+//  BoSchadeRegister Functie
 const BoSchadeRegister = () => {
+    // States initialiseren
     const [schadeMeldingen, setSchadeMeldingen] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,6 +15,7 @@ const BoSchadeRegister = () => {
     const [selectedMelding, setSelectedMelding] = useState(null);
     const [reparatieOpmerking, setReparatieOpmerking] = useState('');
 
+    // Schade meldingen ophalen
     useEffect(() => {
         const fetchSchadeMeldingen = async () => {
             try {
@@ -25,11 +29,12 @@ const BoSchadeRegister = () => {
                 } else {
                     setError('Er is een fout opgetreden bij het ophalen van de schade meldingen.');
                 }
+                // Zet de loading state op false
             } finally {
                 setLoading(false);
             }
         };
-
+        // Roep de schade melding functie aan
         fetchSchadeMeldingen();
     }, []);
 
@@ -40,22 +45,22 @@ const BoSchadeRegister = () => {
         setReparatieOpmerking('');
         setShowModal(true);
     };
-// Modal sluiten en bijhouden
+    // Modal sluiten en bijhouden
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedMelding(null);
         setReparatieOpmerking('');
     };
-//Behandel schade methode
+    //Behandel schade methode
     const handleBehandelSchade = async () => {
         if (!selectedMelding) return;
-
+        // Probeer de schade te behandelen
         try {
             await axios.put('https://localhost:7281/api/BackOfficeMedewerker/BehandelSchadeMelding', {
                 schadeFormulierId: selectedMelding.schadeFormulierID,
                 reparatieOpmerking: reparatieOpmerking || "Geen opmerkingen toegevoegd."
             });
-
+            // Geef een alert dat de schade succesvol is behandeld
             alert('Schade is succesvol behandeld!');
             setShowModal(false);
 
@@ -64,13 +69,13 @@ const BoSchadeRegister = () => {
                 (melding) => melding.schadeFormulierID !== selectedMelding.schadeFormulierID
             );
             setSchadeMeldingen(updatedSchadeMeldingen);
-
+            //  Zet de geselecteerde melding op null
         } catch (error) {
             console.error('Error bij het behandelen van schade:', error);
             alert(`Er is een fout opgetreden: ${error.response?.statusText || error.message}`);
         }
     };
-// Methode om schademeldingen te filteren.
+    // Methode om schademeldingen te filteren.
     const filteredSchadeMeldingen = schadeMeldingen.filter((melding) => {
         return (
             melding.schade.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,9 +83,8 @@ const BoSchadeRegister = () => {
             String(melding.voertuigId).toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
-    
-    
 
+    // Als de data aan het laden is, geef dan een laadscherm weer.
     if (loading) return <div>Gegevens worden geladen...</div>;
     if (error) return <div>{error}</div>;
 
@@ -93,6 +97,7 @@ const BoSchadeRegister = () => {
                     <InputGroup>
                         <FormControl
                             placeholder="Zoek schade meldingen..."
+                            // Voeg de zoekquery toe aan de state
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -103,6 +108,7 @@ const BoSchadeRegister = () => {
                     <div className="text-center my-4">
                         <h4>Geen schade meldingen gevonden.</h4>
                     </div>
+                    // Als er geen schademeldingen zijn, geef dan een melding weer.
                 ) : (
                     <Table className="schade-tabel" striped bordered hover>
                         <thead>

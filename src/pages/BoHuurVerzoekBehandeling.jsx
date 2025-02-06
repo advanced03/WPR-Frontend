@@ -1,9 +1,11 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import { Container, Col, Card, Button, Modal, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import '../style/backoffice.css';
 import BoNavbar from "../components/BoNavbar";
 
+//  BoHuurVerzoekBehandeling functie
 const BoHuurVerzoekBehandeling = () => {
     // Usestates initializeren
     const [verzoeken, setVerzoeken] = useState([]);
@@ -15,6 +17,7 @@ const BoHuurVerzoekBehandeling = () => {
     // Functie om datums op de juiste wijze te tonen
     const formatDatum = (datum) => {
         const date = new Date(datum);
+        // Geef de datum terug in het formaat: 1 januari 2025
         return date.toLocaleDateString('nl-NL', {
             year: 'numeric',
             month: 'long',
@@ -31,7 +34,9 @@ const BoHuurVerzoekBehandeling = () => {
             return;
         }
         try {
+            // Laat de loading spinner zien
             setLoading(true);
+            // Haal de verzoeken op
             const response = await axios.get(
                 'https://localhost:7281/api/verhuurVerzoek/GetAllPendingVerhuurVerzoeken',
                 {
@@ -40,8 +45,10 @@ const BoHuurVerzoekBehandeling = () => {
                     }
                 }
             );
+            // Zet de verzoeken in de state
             setVerzoeken(response.data);
             setError(null);
+            // Geef een error als er geen verzoeken zijn
         } catch (err) {
             setError('Er zijn geen huurverzoeken gevonden ❌ Wellicht heeft u alle verzoeken al behandeld? 🤔');
             console.error(err);
@@ -59,6 +66,7 @@ const BoHuurVerzoekBehandeling = () => {
     const postGoedkeuren = async () => {
         const token = sessionStorage.getItem('jwtToken');
 
+        // Geef een error als het JWT token mist.
         if (!token) {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
@@ -66,7 +74,7 @@ const BoHuurVerzoekBehandeling = () => {
         // Haal de juiste ID uit selectedVerzoek
         if (selectedVerzoek && selectedVerzoek.verzoek) {
             const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId;
-
+            // Goedkeuren van het verzoek
             try {
                 console.log('Payload:', { verzoekId });
                 await axios.post(
@@ -78,6 +86,7 @@ const BoHuurVerzoekBehandeling = () => {
                         }
                     }
                 );
+                // Laad de pagina opnieuw
                 window.location.reload();
                 console.log(`Verzoek met ID ${verzoekId} succesvol goedgekeurd.`);
                 fetchVerzoeken(); // Haal de verzoeken opnieuw op
@@ -99,6 +108,7 @@ const BoHuurVerzoekBehandeling = () => {
         if (selectedVerzoek && selectedVerzoek.verzoek) {
             const verzoekId = selectedVerzoek.verzoek.verhuurverzoekId;
 
+            // Afwijzen van het verzoek
             try {
                 await axios.post(
                     `https://localhost:7281/api/Reserveringen/KeurVerzoekAf/${verzoekId}`,
@@ -109,6 +119,7 @@ const BoHuurVerzoekBehandeling = () => {
                         }
                     }
                 );
+                //  Laad de pagina opnieuw
                 window.location.reload();
                 console.log(`Verzoek met ID ${verzoekId} succesvol afgewezen.`);
                 // Haal de verzoeken opnieuw op
@@ -119,12 +130,13 @@ const BoHuurVerzoekBehandeling = () => {
         }
     };
 
-    // Toon of verberg de modal
+    // Toon modal
     const handletoonModal = (verzoek, action) => {
         setSelectedVerzoek({ verzoek, action });
         setModal(true);
     };
 
+    // Sluit de modal
     const handleCloseModal = () => {
         setModal(false);
         setSelectedVerzoek(null);
@@ -156,6 +168,7 @@ const BoHuurVerzoekBehandeling = () => {
                 <Col md={8}>
                     <Card className="huren-box p-3 mt-5">
                         <Card.Body>
+                            {/*Laat een laadscherm zien als de verzoeken worden geladen*/}
                             {loading ? (
                                 <p className="text-center">Huurverzoeken worden geladen...</p>
                             ) : error ? (
@@ -172,6 +185,7 @@ const BoHuurVerzoekBehandeling = () => {
                                                     <Card.Text><strong>Aard van de reis:</strong> {verzoek.aardReis}</Card.Text>
                                                     <Card.Text><strong>Bestemming:</strong> {verzoek.bestemming}</Card.Text>
                                                     <Card.Text><strong>Verwachte kilometers:</strong> {verzoek.verwachtteKM}</Card.Text>
+                                                    {/*Laat de start- en einddatum zien in de juiste format*/}
                                                     <Card.Text><strong>Startdatum:</strong> {formatDatum(verzoek.startDatum)}</Card.Text>
                                                     <Card.Text><strong>Einddatum:</strong> {formatDatum(verzoek.eindDatum)}</Card.Text>
                                                     <Card.Text><strong>Accessoires:</strong> {verzoek.accessoires.join(", ") || 'Geen'}</Card.Text>
@@ -205,6 +219,7 @@ const BoHuurVerzoekBehandeling = () => {
                     </Card>
                 </Col>
             </Container>
+
             {/* Modal layout */}
             <Modal show={toonModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>

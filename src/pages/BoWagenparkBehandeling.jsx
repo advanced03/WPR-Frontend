@@ -1,3 +1,4 @@
+// Import statements
 import React, { useState, useEffect } from 'react';
 import { Container, Col, Card, Button, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
@@ -20,6 +21,7 @@ const BoWagenparkBehandeling = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+        // Probeer de verzoeken op te halen
         try {
             setLoading(true);
             const response = await axios.get(
@@ -30,11 +32,14 @@ const BoWagenparkBehandeling = () => {
                     }
                 }
             );
+            //  Zet de verzoeken in de state
             setVerzoeken(response.data);
             setError(null);
+            // Als er geen verzoeken zijn, geef dan een melding
         } catch (err) {
             setError('Er zijn geen nieuwe verzoeken gevonden. Mogelijk zijn er nog geen verzoeken ingediend, of u heeft ze al allemaal behandeld. 👍👍👍');
             console.error(err);
+            // Als er een fout optreedt, geef dan een foutmelding
         } finally {
             setLoading(false);
         }
@@ -52,16 +57,18 @@ const BoWagenparkBehandeling = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+        // Probeer het verzoek goed te keuren
         try {
             await axios.put(
                 'https://localhost:7281/api/BackOfficeMedewerker/AcceptVerzoek',
                 { id },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}` // Voeg token toe aan de headers
                     }
                 }
             );
+            // Als het goedkeuren lukt, geef dan een melding en haal de verzoeken opnieuw op
             console.log(`Verzoek met ID ${id} succesvol goedgekeurd.`);
             fetchVerzoeken();
         } catch (err) {
@@ -76,6 +83,7 @@ const BoWagenparkBehandeling = () => {
             console.error('JWT-token ontbreekt in sessionStorage.');
             return;
         }
+        // Probeer het verzoek af te wijzen
         try {
             await axios.put(
                 'https://localhost:7281/api/BackOfficeMedewerker/WeigerVerzoek',
@@ -119,6 +127,7 @@ const BoWagenparkBehandeling = () => {
                 postAfwijzen(verzoek.wagenparkVerzoekId, reden); // Voeg de reden toe
             }
         }
+        // Sluit de modal
         handleCloseModal();
     };
 // Filter methode
@@ -137,10 +146,10 @@ const BoWagenparkBehandeling = () => {
                             {loading ? (
                                 <p className="text-center">Wagenpark verzoeken worden geladen...</p>
                             ) : error ? (
-                                <p className="text-center">{error}</p>
+                                <p className="text-center">{error}</p> // Geef een foutmelding weer
                             ) : (
                                 <div className="tabel-container">
-                                    {onbehandeldeVerzoeken.length > 0 ? (
+                                    {onbehandeldeVerzoeken.length > 0 ? ( // Als er verzoeken zijn, geef ze dan weer
                                         onbehandeldeVerzoeken.map((verzoek) => (
                                             <Card key={verzoek.wagenparkVerzoekId} className="mb-3">
                                                 <Card.Body>
@@ -168,7 +177,7 @@ const BoWagenparkBehandeling = () => {
                                                 </Card.Body>
                                             </Card>
                                         ))
-                                    ) : (
+                                    ) : ( // Als er geen verzoeken zijn, geef dan een melding
                                         <p className="text-center">Er zijn geen openstaande verzoeken.</p>
                                     )}
                                 </div>

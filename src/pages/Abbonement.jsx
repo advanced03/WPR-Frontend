@@ -90,8 +90,10 @@ const Abbonement = () => {
                 setShowModal(false);
                 setShowAlert(true);
                 setTimeout(() => setShowAlert(false), 3000);
+                // Als er een error is, toon deze in de console.
             } else {
                 console.error("Er is iets misgegaan bij het wijzigen van het abonnement.");
+                // Als er een error is, toon deze in de console.
             }
         } catch (error) {
             console.error("Fout bij het versturen van de aanvraag:", error);
@@ -138,6 +140,8 @@ const Abbonement = () => {
                 <div className="text-center my-5 p-4 huren-box">
                     <h4>Huidig abonnement: {currentAbonnement || "Laden..."}</h4>
                 </div>
+
+                {/*Modal voor bevestiging van abbonement wijziging.*/}
                 <Modal show={toonModal} onHide={() => setShowModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Bevestig keuze</Modal.Title>
