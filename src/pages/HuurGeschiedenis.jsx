@@ -59,6 +59,8 @@ const HuurGeschiedenis = () => {
               <th>Verwachte afstand:</th>
               <th>Van:</th>
               <th>Tot:</th>
+              <th>Verzekering:</th>
+              <th>Accessoires:</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +72,8 @@ const HuurGeschiedenis = () => {
                   <td>{item.verwachtteKM} KM</td>
                   <td>{new Date(item.startDatum).toLocaleDateString()}</td>
                   <td>{new Date(item.eindDatum).toLocaleDateString()}</td>
+                  <td>{item.verzekering}</td>
+                  <td>{item.accessoires}</td>
                 </tr>
               ))
             ) : (

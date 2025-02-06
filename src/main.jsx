@@ -20,7 +20,6 @@ import WbStatus from './pages/WbStatus.jsx';
 import WbAbboBeheer from './pages/WbAbboBeheer.jsx';
 import RegZak from './pages/regZakelijk.jsx';
 import Privacy from './pages/Privacy.jsx';
-import Betaal from './pages/Betaal.jsx';
 import BoSchadeRegister from './pages/BoSchadeRegister.jsx';
 import Abbonement from './pages/Abbonement.jsx';
 import BoWagenparkBehandeling from './pages/BoWagenparkBehandeling.jsx';
@@ -51,7 +50,6 @@ const App = () => {
                 <Route path="/WbStatus" element={<WbStatus />} />
                 <Route path="/WbAbboBeheer" element={<WbAbboBeheer />} />
                 <Route path="/Privacy" element={<Privacy />} />
-                <Route path="/Betaal" element={<Betaal />} />
                 <Route path="/BoSchadeRegister" element={<BoSchadeRegister />} />
                 <Route path="/BoWagenparkBehandeling" element={<BoWagenparkBehandeling />} />
                 <Route path="/Abbonement" element={<Abbonement />} />
